@@ -1101,6 +1101,8 @@ function PoliticalLeaning({
   dotPercent=68,
   description="The U.S. still doesn't have a finalized national cybersecurity strategy Federal News Network, and responsibility is being pushed to states and the private sector just as funding is drying up."
 }) {
+  const p = useReveal(900);
+  const animDot = 50 + (dotPercent - 50) * p;
   return (
     <div style={{width:"100%",borderRadius:10,backgroundColor:T.warmBg,border:"1px solid "+T.creamBorder,padding:16,display:"flex",flexDirection:"column",gap:24,fontFamily:"Inter,sans-serif"}}>
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between"}}>
@@ -1110,7 +1112,7 @@ function PoliticalLeaning({
       <div style={{display:"flex",flexDirection:"column",gap:8,width:"100%"}}>
         <div style={{position:"relative",height:16}}>
           <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",left:0,right:0,height:6,borderRadius:50,background:"linear-gradient(to right, #0067ce, #8b3fce, #ff2827)"}}/>
-          <div style={{position:"absolute",top:"50%",left:`${dotPercent}%`,transform:"translate(-50%, -50%)",width:12,height:12,borderRadius:"50%",backgroundColor:T.slate,border:"2px solid white"}}/>
+          <div style={{position:"absolute",top:"50%",left:`${animDot}%`,transform:"translate(-50%, -50%)",width:12,height:12,borderRadius:"50%",backgroundColor:T.slate,border:"2px solid white",transition:"none"}}/>
         </div>
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <span style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Left</span>
@@ -1247,6 +1249,7 @@ function CommitteeBreakdownCard({
     {name:"Cybersecurity, Information Technology, and Government Innovation Subcommittee",code:"hsgo12 · House",percent:50}
   ]
 }) {
+  const p = useReveal(700);
   return (
     <div style={{width:"100%",borderRadius:10,backgroundColor:T.warmBg,border:"1px solid "+T.creamBorder,padding:16,display:"flex",flexDirection:"column",gap:16,fontFamily:"Inter,sans-serif"}}>
       <h3 style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>{title}</h3>
@@ -1259,10 +1262,10 @@ function CommitteeBreakdownCard({
                   <p style={{fontSize:16,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0,marginBottom:4}}>{c.name}</p>
                   <p style={{fontSize:14,fontWeight:400,color:T.gray,lineHeight:"130%",letterSpacing:-0.25,margin:0}}>{c.code}</p>
                 </div>
-                <p style={{fontSize:22,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-1,margin:0,flexShrink:0}}>{c.percent}%</p>
+                <p style={{fontSize:22,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-1,margin:0,flexShrink:0}}>{Math.round(c.percent * p)}%</p>
               </div>
               <div style={{width:"100%",height:6,borderRadius:50,backgroundColor:T.creamBorder,overflow:"hidden"}}>
-                <div style={{width:`${c.percent}%`,height:"100%",backgroundColor:T.slate,borderRadius:50}}/>
+                <div style={{width:`${c.percent * p}%`,height:"100%",backgroundColor:T.slate,borderRadius:50}}/>
               </div>
             </div>
             {i < committees.length - 1 && <div style={{height:1,backgroundColor:T.cream}}/>}
@@ -1645,7 +1648,7 @@ function ComponentPreview({ id }) {
   }
 }
 
-const ANIMATED_IDS = new Set(["PollCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail"]);
+const ANIMATED_IDS = new Set(["PollCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning"]);
 
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
