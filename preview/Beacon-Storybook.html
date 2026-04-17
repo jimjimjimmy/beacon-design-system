@@ -1443,23 +1443,7 @@ function ReactionInteraction() {
     setTimeout(() => setOpen(false), 380);
   };
 
-  const SendIcon = () => (
-    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9a9a8a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <line x1="22" y1="2" x2="11" y2="13"/>
-      <polygon points="22 2 15 22 11 13 2 9 22 2" fill="#9a9a8a" stroke="none"/>
-    </svg>
-  );
 
-  const SmileyPlusIcon = ({color}) => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color||"#141810"} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="11" cy="11" r="9"/>
-      <path d="M7.5 13.5s1.2 1.8 3.5 1.8 3.5-1.8 3.5-1.8"/>
-      <circle cx="8.5" cy="9" r="0.8" fill={color||"#141810"} stroke="none"/>
-      <circle cx="13.5" cy="9" r="0.8" fill={color||"#141810"} stroke="none"/>
-      <line x1="19" y1="5" x2="22" y2="5"/>
-      <line x1="20.5" y1="3.5" x2="20.5" y2="6.5"/>
-    </svg>
-  );
 
   return (
     <div style={{width:357,borderRadius:12,overflow:"hidden",position:"relative",boxShadow:T.shadow,fontFamily:"Inter,sans-serif"}}>
@@ -1515,7 +1499,7 @@ function ReactionInteraction() {
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
             <span style={{fontSize:12,fontWeight:500,color:T.gray,letterSpacing:-0.2}}>Takes ~ 1 min</span>
             <div style={{height:26,borderRadius:4,backgroundColor:"#e8e0d0",display:"flex",alignItems:"center",padding:"0 10px"}}>
-              <span style={{fontSize:9,fontWeight:700,color:T.slate,letterSpacing:0.8,textTransform:"uppercase"}}>Foreign Policy</span>
+              <span style={{fontSize:9,fontWeight:600,color:T.slate,letterSpacing:0.5,textTransform:"uppercase"}}>Foreign Policy</span>
             </div>
           </div>
 
@@ -1544,7 +1528,7 @@ function ReactionInteraction() {
         {/* Bottom bar */}
         <div style={{padding:"12px 18px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <SendIcon/>
+            <IconShareAction/>
             <span style={{fontSize:13,fontWeight:500,color:T.gray,letterSpacing:-0.25}}>842.3k</span>
           </div>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -1553,7 +1537,7 @@ function ReactionInteraction() {
             </span>
             <button onClick={toggle} style={{
               width:36,height:36,borderRadius:"50%",border:"none",cursor:"pointer",
-              backgroundColor: open ? T.slate : "#e8e0d0",
+              backgroundColor: open ? T.slate : selected ? "#e8e0d0" : "transparent",
               display:"flex",alignItems:"center",justifyContent:"center",
               transition:"background-color 200ms ease",flexShrink:0,
             }}>
@@ -1562,11 +1546,11 @@ function ReactionInteraction() {
                   <path d="M18 6L6 18M6 6l12 12"/>
                 </svg>
               ) : selected ? (
-                <div style={{width:22,height:22,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <div style={{width:22,height:22,display:"flex",alignItems:"center",justifyContent:"center",filter:"none"}}>
                   {REACTION_ICONS[selected]}
                 </div>
               ) : (
-                <SmileyPlusIcon color={T.slate}/>
+                <IconReactButton/>
               )}
             </button>
           </div>
@@ -1877,7 +1861,7 @@ function ComponentPreview({ id }) {
       </div>
     );
     case "ReactionInteraction": return (
-      <div className="canvas-wrap" style={{width:357}}><ReactionInteraction/></div>
+      <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><ReactionInteraction/></div>
     );
     default: return null;
   }
