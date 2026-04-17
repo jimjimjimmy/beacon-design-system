@@ -1078,8 +1078,7 @@ const SECTIONS = [
   {
     id: "Issues",
     components: [
-      { id:"ArticleCard",    label:"ArticleCard",    desc:"Hero image card · Hero (overlay) and Slim (image above, text below) variants" },
-      { id:"PostImageOnly",  label:"PostImageOnly",  desc:"Full-bleed image card · title + engagement overlaid on dark photo" },
+      { id:"IssueCard",      label:"IssueCard",      desc:"Issue cards · Hero (overlay), Slim (image + text), and Full-bleed image variants" },
       { id:"PollCard",       label:"PollCard",       desc:"Survey card · question + time estimate + article link + engagement" },
       { id:"AccordionItem",  label:"AccordionItem",  desc:"Expandable row · icon + title + plus/minus toggle" },
     ]
@@ -1155,7 +1154,7 @@ function ComponentPreview({ id }) {
         </div>
       </div>
     );
-    case "ArticleCard": return (
+    case "IssueCard": return (
       <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
         <div>
           <p className="variant-label">Hero — overlay text + description</p>
@@ -1169,20 +1168,10 @@ function ComponentPreview({ id }) {
             <PostArticle variant="slim" title="DOJ says it erroneously relied on ICE memo to justify immigration courthouse arrests" category="DOMESTIC POLICY" imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
           </div>
         </div>
-      </div>
-    );
-    case "PostImageOnly": return (
-      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
         <div>
-          <p className="variant-label">Foreign Policy</p>
+          <p className="variant-label">Full-bleed image</p>
           <div className="canvas-wrap">
             <PostImageOnly title="Justice Department official posts social media photo revealing investigation into..." category="FOREIGN POLICY" timeAgo="30m ago" imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
-          </div>
-        </div>
-        <div>
-          <p className="variant-label">Domestic Policy</p>
-          <div className="canvas-wrap">
-            <PostImageOnly title="Senate votes on sweeping immigration reform bill after 12-hour debate" category="DOMESTIC POLICY" timeAgo="2h ago" imgUrl="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=800"/>
           </div>
         </div>
       </div>
@@ -1190,27 +1179,15 @@ function ComponentPreview({ id }) {
     case "PollCard": return (
       <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
         <div>
-          <p className="variant-label">Active — Gun Policy</p>
+          <p className="variant-label">Active</p>
           <div className="canvas-wrap">
             <PollCard question="Do you think possession of guns should be allowed to everyone?" category="domestic policy" timeLabel="Takes ~ 1 min" subtext="At 10,000 responses, anonymous results are shared with your congressman." shares="842.3k"/>
           </div>
         </div>
         <div>
-          <p className="variant-label">Active — Foreign Policy</p>
-          <div className="canvas-wrap">
-            <PollCard question="Should the US continue military operations in the Middle East?" category="foreign policy" timeLabel="Takes ~ 2 min" subtext="Responses are compiled and shared with your elected representatives." shares="1.2m"/>
-          </div>
-        </div>
-        <div>
-          <p className="variant-label">Complete — 73% Oppose</p>
+          <p className="variant-label">Complete</p>
           <div className="canvas-wrap">
             <PollCard variant="complete" question="U.S. vs. Maduro: Smart Move or Crossing the Line?" category="foreign policy" subtext="At 10,000 responses, anonymous results are shared with your congressman." shares="842.3k" resultPct={73} resultLabel="Oppose" resultCount="6,876" resultTotal="10,000"/>
-          </div>
-        </div>
-        <div>
-          <p className="variant-label">Complete — 82% Support</p>
-          <div className="canvas-wrap">
-            <PollCard variant="complete" question="Should the government assist corporations in increasing employment?" category="foreign policy" subtext="At 10,000 responses, anonymous results are shared with your congressman." shares="842.3k" resultPct={82} resultLabel="Support" resultCount="6,876" resultTotal="10,000"/>
           </div>
         </div>
       </div>
@@ -1286,18 +1263,10 @@ function ComponentPreview({ id }) {
       </div>
     );
     case "StancesCard": return (
-      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
-        <div>
-          <p className="variant-label">Stances</p>
-          <div className="canvas-wrap">
-            <StancesCard title="Stances" subtitle="Top issue positions." stat1Label="Signals" stat1Value="1,234" stat2Label="Stances" stat2Value="16"/>
-          </div>
-        </div>
-        <div>
-          <p className="variant-label">Inconsistencies</p>
-          <div className="canvas-wrap">
-            <StancesCard title="Inconsistencies" subtitle="No Stance Inconsistencies Detected" stat1Label="Signals" stat1Value="6" stat2Label="Stances" stat2Value="16"/>
-          </div>
+      <div>
+        <p className="variant-label">Default</p>
+        <div className="canvas-wrap">
+          <StancesCard title="Stances" subtitle="Top issue positions." stat1Label="Signals" stat1Value="1,234" stat2Label="Stances" stat2Value="16"/>
         </div>
       </div>
     );
@@ -1308,13 +1277,9 @@ function ComponentPreview({ id }) {
       </div>
     );
     case "SurveyProgressBar": return (
-      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
-        {[[1,3],[2,3],[3,3],[1,4],[2,4]].map(([c,t])=>(
-          <div key={`${c}-${t}`}>
-            <p className="variant-label">Step {c} of {t}</p>
-            <div className="canvas-wrap"><SurveyProgressBar current={c} total={t}/></div>
-          </div>
-        ))}
+      <div>
+        <p className="variant-label">Step 1 of 4</p>
+        <div className="canvas-wrap"><SurveyProgressBar current={1} total={4}/></div>
       </div>
     );
     case "SurveyAnswerCard": return (
@@ -1341,15 +1306,9 @@ function ComponentPreview({ id }) {
       </div>
     );
     case "SurveyFooter": return (
-      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
-        <div>
-          <p className="variant-label">Default</p>
-          <div className="canvas-wrap"><SurveyFooter count={6876}/></div>
-        </div>
-        <div>
-          <p className="variant-label">Higher count</p>
-          <div className="canvas-wrap"><SurveyFooter count={12450}/></div>
-        </div>
+      <div>
+        <p className="variant-label">Default</p>
+        <div className="canvas-wrap"><SurveyFooter count={6876}/></div>
       </div>
     );
     default: return null;
