@@ -1155,6 +1155,7 @@ function ScoreDetail({
   source="Source: FEC filings and public disclosure records"
 }) {
   const fillPct = (score / maxScore) * 100;
+  const p = useReveal(700);
   return (
     <div style={{width:373,borderRadius:10,backgroundColor:T.warmBg,padding:18,display:"flex",flexDirection:"column",gap:14,fontFamily:"Inter,sans-serif"}}>
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between"}}>
@@ -1169,7 +1170,7 @@ function ScoreDetail({
         </div>
       </div>
       <div style={{width:"100%",height:6,borderRadius:50,backgroundColor:T.creamBorder,overflow:"hidden"}}>
-        <div style={{width:`${fillPct}%`,height:"100%",backgroundColor:T.slate,borderRadius:50}}/>
+        <div style={{width:`${fillPct * p}%`,height:"100%",backgroundColor:T.slate,borderRadius:50}}/>
       </div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <span style={{fontSize:12,fontWeight:700,color:T.slate,letterSpacing:-0.25}}>{deductedLabel}</span>
@@ -1641,6 +1642,39 @@ function ComponentPreview({ id }) {
   }
 }
 
+const ANIMATED_IDS = new Set(["PollCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail"]);
+
+function ComponentCard({comp}) {
+  const [replayKey, setReplayKey] = React.useState(0);
+  const hasAnim = ANIMATED_IDS.has(comp.id);
+  return (
+    <div style={{background:"#fff",borderRadius:16,padding:"24px",flex:"0 0 auto",maxWidth:"100%"}}>
+      <div style={{marginBottom:16,display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:16}}>
+        <div>
+          <h3 style={{fontSize:16,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>{comp.label}</h3>
+          <p style={{fontSize:12,color:T.gray,margin:"4px 0 0",letterSpacing:-0.25}}>{comp.desc}</p>
+        </div>
+        {hasAnim && (
+          <button onClick={()=>setReplayKey(k=>k+1)} style={{
+            display:"flex",alignItems:"center",gap:5,flexShrink:0,
+            fontSize:11,fontWeight:700,color:T.slate,letterSpacing:-0.25,
+            background:T.cream,border:"none",borderRadius:6,
+            padding:"6px 10px",cursor:"pointer",marginTop:1,
+            fontFamily:"Inter,sans-serif"
+          }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
+            Replay
+          </button>
+        )}
+      </div>
+      <ComponentPreview id={comp.id} key={replayKey}/>
+    </div>
+  );
+}
+
 function App() {
   return (
     <div style={{minHeight:"100vh",background:"#f5f4f0",fontFamily:"Inter,sans-serif"}}>
@@ -1670,13 +1704,7 @@ function App() {
             {/* Component grid */}
             <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
               {section.components.map(comp=>(
-                <div key={comp.id} style={{background:"#fff",borderRadius:16,padding:"24px",flex:"0 0 auto",maxWidth:"100%"}}>
-                  <div style={{marginBottom:16}}>
-                    <h3 style={{fontSize:16,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>{comp.label}</h3>
-                    <p style={{fontSize:12,color:T.gray,margin:"4px 0 0",letterSpacing:-0.25}}>{comp.desc}</p>
-                  </div>
-                  <ComponentPreview id={comp.id}/>
-                </div>
+                <ComponentCard key={comp.id} comp={comp}/>
               ))}
             </div>
           </div>
