@@ -1435,124 +1435,147 @@ function ReactionInteraction() {
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
   const [hovered, setHovered] = React.useState(null);
-
   const STRIP_W = 154;
 
   const toggle = () => setOpen(o => !o);
-
   const pick = (label) => {
     setSelected(label);
     setTimeout(() => setOpen(false), 380);
   };
 
+  const SendIcon = () => (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#9a9a8a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="22" y1="2" x2="11" y2="13"/>
+      <polygon points="22 2 15 22 11 13 2 9 22 2" fill="#9a9a8a" stroke="none"/>
+    </svg>
+  );
+
+  const SmileyPlusIcon = ({color}) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={color||"#141810"} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="11" cy="11" r="9"/>
+      <path d="M7.5 13.5s1.2 1.8 3.5 1.8 3.5-1.8 3.5-1.8"/>
+      <circle cx="8.5" cy="9" r="0.8" fill={color||"#141810"} stroke="none"/>
+      <circle cx="13.5" cy="9" r="0.8" fill={color||"#141810"} stroke="none"/>
+      <line x1="19" y1="5" x2="22" y2="5"/>
+      <line x1="20.5" y1="3.5" x2="20.5" y2="6.5"/>
+    </svg>
+  );
+
   return (
-    <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"flex-start",fontFamily:"Inter,sans-serif"}}>
-      <p style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:0.25,margin:0,textTransform:"uppercase"}}>
-        {selected ? `Reacted: ${selected}` : "Tap the smiley ↓"}
-      </p>
+    <div style={{width:357,borderRadius:12,overflow:"hidden",position:"relative",boxShadow:T.shadow,fontFamily:"Inter,sans-serif"}}>
 
-      {/* Clip container — card slides left to reveal reactions */}
-      <div style={{width:357,borderRadius:10,overflow:"hidden",position:"relative",boxShadow:T.shadow}}>
-
-        {/* Reaction strip — sits on the RIGHT, always present, revealed when card slides */}
-        <div style={{
-          position:"absolute",top:0,right:0,bottom:0,width:STRIP_W,
-          backgroundColor:T.warmBg,
-          display:"flex",flexDirection:"column",justifyContent:"center",gap:0,
-          zIndex:1,
-        }}>
-          {REACTION_LABELS.map((label) => {
-            const isSelected = selected === label;
-            const isHovered  = hovered  === label;
-            return (
-              <button key={label} onClick={() => pick(label)}
-                onMouseEnter={() => setHovered(label)}
-                onMouseLeave={() => setHovered(null)}
-                style={{
-                  display:"flex",alignItems:"center",justifyContent:"flex-end",
-                  gap:8,padding:"11px 14px",
-                  background: isSelected ? T.cream : isHovered ? "#f5f0e8" : "transparent",
-                  border:"none",cursor:"pointer",width:"100%",
-                  fontFamily:"Inter,sans-serif",
-                }}>
-                <span style={{
-                  fontSize:13,fontWeight: isSelected ? 700 : 400,
-                  color: isSelected ? T.slate : T.gray,
-                  letterSpacing:-0.25,lineHeight:"110%",
-                }}>{label}</span>
-                <div style={{
-                  width:40,height:40,borderRadius:"50%",flexShrink:0,
-                  backgroundColor: isSelected ? T.slate : T.cream,
-                  display:"flex",alignItems:"center",justifyContent:"center",
-                  filter: isSelected ? "invert(1)" : "none",
-                }}>
+      {/* Reaction strip — fixed on RIGHT, revealed when card slides left */}
+      <div style={{
+        position:"absolute",top:0,right:0,bottom:0,width:STRIP_W,
+        backgroundColor:T.warmBg,
+        display:"flex",flexDirection:"column",justifyContent:"center",
+        zIndex:1,borderLeft:"1px solid #e8e0d0",
+      }}>
+        {REACTION_LABELS.map((label) => {
+          const isSel = selected === label;
+          const isHov = hovered === label;
+          return (
+            <button key={label} onClick={() => pick(label)}
+              onMouseEnter={() => setHovered(label)}
+              onMouseLeave={() => setHovered(null)}
+              style={{
+                display:"flex",alignItems:"center",justifyContent:"flex-end",
+                gap:10,padding:"9px 14px",border:"none",cursor:"pointer",
+                width:"100%",fontFamily:"Inter,sans-serif",
+                background: isSel ? "#e4dccb" : isHov ? "#ede6d6" : "transparent",
+              }}>
+              <span style={{fontSize:12,fontWeight:isSel?700:500,color:isSel?T.slate:T.gray,letterSpacing:-0.25}}>
+                {label}
+              </span>
+              <div style={{
+                width:42,height:42,borderRadius:"50%",flexShrink:0,
+                backgroundColor: isSel ? T.slate : "#e8e0d0",
+                display:"flex",alignItems:"center",justifyContent:"center",
+              }}>
+                <div style={{width:24,height:24,display:"flex",alignItems:"center",justifyContent:"center",filter:isSel?"invert(1)":"none"}}>
                   {REACTION_ICONS[label]}
                 </div>
-              </button>
-            );
-          })}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Card — slides LEFT */}
+      <div style={{
+        position:"relative",zIndex:2,backgroundColor:T.warmBg,
+        transform: open ? `translateX(-${STRIP_W}px)` : "translateX(0)",
+        transition:"transform 300ms cubic-bezier(0.4,0,0.2,1)",
+      }}>
+
+        {/* Body */}
+        <div style={{padding:"18px 18px 16px",display:"flex",flexDirection:"column",gap:14}}>
+
+          {/* Top row */}
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <span style={{fontSize:12,fontWeight:500,color:T.gray,letterSpacing:-0.2}}>Takes ~ 1 min</span>
+            <div style={{height:26,borderRadius:4,backgroundColor:"#e8e0d0",display:"flex",alignItems:"center",padding:"0 10px"}}>
+              <span style={{fontSize:9,fontWeight:700,color:T.slate,letterSpacing:0.8,textTransform:"uppercase"}}>Foreign Policy</span>
+            </div>
+          </div>
+
+          {/* Title */}
+          <h2 style={{fontSize:21,fontWeight:900,lineHeight:"122%",letterSpacing:-0.6,margin:0,color:T.slate}}>
+            U.S. vs. Maduro: Smart Move or Crossing the Line?
+          </h2>
+
+          {/* Body */}
+          <p style={{fontSize:13,color:T.gray,lineHeight:"145%",letterSpacing:-0.2,margin:0}}>
+            At 10,000 responses, anonymous results are shared with your congressman.
+          </p>
+
+          {/* Link row */}
+          <div style={{display:"flex",alignItems:"center",gap:9}}>
+            <div style={{width:28,height:28,borderRadius:6,backgroundColor:"#e8e0d0",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <IconLink/>
+            </div>
+            <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.4}}>Link to News Article</span>
+          </div>
         </div>
 
-        {/* Card — slides LEFT to reveal the reaction strip behind it */}
-        <div style={{
-          position:"relative",zIndex:2,
-          backgroundColor:T.warmBg,
-          transform: open ? `translateX(-${STRIP_W}px)` : "translateX(0)",
-          transition:"transform 300ms cubic-bezier(0.4,0,0.2,1)",
-        }}>
-          {/* Card body */}
-          <div style={{padding:"18px 18px 0",display:"flex",flexDirection:"column",gap:20}}>
-            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-              <span style={{fontSize:13,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Takes ~ 1 min</span>
-              <div style={{height:29,borderRadius:3,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 14px"}}>
-                <span style={{fontSize:9,fontWeight:600,color:T.slate,letterSpacing:0.5,textTransform:"uppercase"}}>Foreign Policy</span>
-              </div>
-            </div>
-            <h2 style={{fontSize:20,fontWeight:900,lineHeight:"130%",letterSpacing:-0.5,margin:0,color:T.slate,paddingRight:40}}>U.S. vs. Maduro: Smart Move or Crossing the Line?</h2>
-            <p style={{fontSize:13,fontWeight:400,color:T.gray,lineHeight:"140%",letterSpacing:-0.25,margin:0}}>At 10,000 responses, anonymous results are shared with your congressman.</p>
+        {/* Divider */}
+        <div style={{height:1,backgroundColor:"#e4dcd0",margin:"0 18px"}}/>
+
+        {/* Bottom bar */}
+        <div style={{padding:"12px 18px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <SendIcon/>
+            <span style={{fontSize:13,fontWeight:500,color:T.gray,letterSpacing:-0.25}}>842.3k</span>
           </div>
-          {/* Reactions row */}
-          <div style={{padding:"12px 18px 0",display:"flex",alignItems:"center",gap:6}}>
-            <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>
-              {selected ? REACTION_ICONS[selected] : REACTION_ICONS.Reassured}
-            </div>
-            <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>{REACTION_ICONS.Surprised}</div>
-            <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>{REACTION_ICONS.Skeptical}</div>
-            <span style={{fontSize:13,fontWeight:500,color:T.gray,letterSpacing:-0.25,marginLeft:4}}>1.4k Reactions</span>
-          </div>
-          {/* Link + react button */}
-          <div style={{padding:"10px 18px 18px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <div style={{width:24,height:24,borderRadius:5,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-                <IconLink/>
-              </div>
-              <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5}}>Link to News Article</span>
-            </div>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <span style={{fontSize:13,fontWeight:500,color:T.gray,letterSpacing:-0.25}}>
+              {selected ? selected : "Reaction"}
+            </span>
             <button onClick={toggle} style={{
               width:36,height:36,borderRadius:"50%",border:"none",cursor:"pointer",
-              backgroundColor: open ? T.slate : T.cream,
+              backgroundColor: open ? T.slate : "#e8e0d0",
               display:"flex",alignItems:"center",justifyContent:"center",
-              transition:"background-color 200ms ease", flexShrink:0,
+              transition:"background-color 200ms ease",flexShrink:0,
             }}>
-              {open
-                ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.warmBg} strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                : <div style={{width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",filter:"none"}}>
-                    {selected ? REACTION_ICONS[selected] : REACTION_ICONS.Reassured}
-                  </div>
-              }
+              {open ? (
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={T.warmBg} strokeWidth="2.5" strokeLinecap="round">
+                  <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+              ) : selected ? (
+                <div style={{width:22,height:22,display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  {REACTION_ICONS[selected]}
+                </div>
+              ) : (
+                <SmileyPlusIcon color={T.slate}/>
+              )}
             </button>
           </div>
         </div>
-      </div>
 
-      {selected && (
-        <button onClick={() => { setSelected(null); setOpen(false); }}
-          style={{fontSize:11,fontWeight:600,color:T.gray,background:"none",border:"none",cursor:"pointer",letterSpacing:-0.25,padding:0}}>
-          ↺ Reset
-        </button>
-      )}
+      </div>
     </div>
   );
+}
 }
 
 
@@ -1861,7 +1884,7 @@ function ComponentPreview({ id }) {
   }
 }
 
-const ANIMATED_IDS = new Set(["PollCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning"]);
+const ANIMATED_IDS = new Set(["PollCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","ReactionInteraction"]);
 
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
@@ -1885,7 +1908,7 @@ function ComponentCard({comp}) {
               <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
               <path d="M3 3v5h5"/>
             </svg>
-            Replay
+            {comp.id === "ReactionInteraction" ? "Reset" : "Replay"}
           </button>
         )}
       </div>
