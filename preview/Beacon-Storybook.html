@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beacon Design System</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f5f4f0; color: #141810; }
+    #root { min-height: 100vh; }
+    .variant-label { font-size: 10px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.75px; margin-bottom: 10px; }
+    .canvas-wrap { background: #f0e8d8; border-radius: 12px; padding: 20px; display: inline-flex; flex-direction: column; gap: 16px; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState } = React;
+
+/* ═══════════════════════════════════════════════
+   DESIGN TOKENS
+   ═══════════════════════════════════════════════ */
+const T = {
+  cream:"#f0e8d8", slate:"#141810", white:"#fafafa", red:"#de0100",
+  orange:"#f80", deepGreen:"#39503d", gray:"#999", warmBg:"#fff9ed",
+  creamBorder:"#e9e1d3", shadow:"0 4px 15px rgba(0,0,0,0.15)", radius:10,
+};
+
+/* ═══════════════════════════════════════════════
+   SVG ICONS (Figma-extracted)
+   ═══════════════════════════════════════════════ */
+function IconBeaconDot(){return <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#FF8800"/></svg>}
+function IconChevronForward({color="#999"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.47021 20.0001L16.4476 12L8.47021 4.00006" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+function IconChevronBack({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M16.4478 20.0001L8.47038 12L16.4478 4.00006" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+function IconChevronDown({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M4.45898 8.01135L12.459 15.9887L20.459 8.01135" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+function IconChevronUp({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.459 15.9887L12.4589 8.01134L4.45898 15.9887" stroke={color} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+function IconPlus({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><g clipPath="url(#addclip)"><path d="M12.0001 17.6569V6.34315" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M6.34326 12H17.657" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/></g><defs><clipPath id="addclip"><rect width="9" height="9" fill="white" transform="translate(5.63623 12) rotate(-45)"/></clipPath></defs></svg>}
+function IconGlobe({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11.7475 20.2739C16.4565 20.2739 20.2738 16.4566 20.2738 11.7476C20.2738 7.03867 16.4565 3.22131 11.7475 3.22131C7.03855 3.22131 3.22119 7.03867 3.22119 11.7476C3.22119 16.4566 7.03855 20.2739 11.7475 20.2739Z" stroke={color} strokeLinejoin="round"/><path d="M11.7475 20.2739C14.0758 20.2739 15.9633 16.4566 15.9633 11.7476C15.9633 7.03867 14.0758 3.22131 11.7475 3.22131C9.41921 3.22131 7.53174 7.03867 7.53174 11.7476C7.53174 16.4566 9.41921 20.2739 11.7475 20.2739Z" stroke={color} strokeLinejoin="round"/><path d="M3.22119 11.7477H20.2738" stroke={color} strokeLinejoin="round"/><path d="M4.21582 7.4751H19.279" stroke={color} strokeLinejoin="round"/><path d="M4.21582 16.0203H19.279" stroke={color} strokeLinejoin="round"/></svg>}
+function IconCrossed({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><g clipPath="url(#closeclip)"><path d="M6 18L18 6" stroke={color} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round"/><path d="M6 6L18 18" stroke={color} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round"/></g><defs><clipPath id="closeclip"><rect width="13.5" height="13.5" fill="white" transform="translate(5.25 5.25)"/></clipPath></defs></svg>}
+function IconContention({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><circle cx="12.2812" cy="12.1046" r="2" transform="rotate(45 12.2812 12.1046)" fill={color}/><path d="M9.64327 6.6379L9.64199 9.54014L6.74232 9.53885" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M9.51709 9.41443L5.44961 5.34695" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M6.7424 14.9693L9.64463 14.9706L9.64335 17.8702" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M9.51904 15.0957L5.45156 19.1632" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M17.9744 14.9693L15.0722 14.9706L15.0735 17.8702" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M15.1978 15.0957L19.2652 19.1632" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M15.0735 6.6379L15.0748 9.54014L17.9745 9.53885" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M15.1997 9.41443L19.2672 5.34695" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/></svg>}
+function IconUpDown({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 17.001L16.0035 21.001L20 17.001" stroke={color} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round"/><path d="M16.0029 20.6549V9.76295" stroke={color} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round"/><path d="M4 7.00098L8.00354 3.00098L12 7.00098" stroke={color} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round"/><path d="M8.00293 3.34705V14.239" stroke={color} strokeWidth="1.2" strokeMiterlimit="10" strokeLinecap="round"/></svg>}
+function IconInfo({color="#999"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11.9486 11.0398C11.7893 11.0398 11.6369 11.1031 11.5244 11.2156C11.4119 11.3281 11.3486 11.4804 11.3486 11.6398V15.4055C11.3486 15.7366 11.617 16.0055 11.9486 16.0055C12.2803 16.0055 12.5486 15.7366 12.5486 15.4055V11.6398C12.5486 11.4804 12.4854 11.3281 12.3728 11.2156C12.2603 11.1031 12.108 11.0398 11.9486 11.0398Z" fill={color}/><path d="M12.7489 8.86303C12.7489 9.92943 11.1489 9.92943 11.1489 8.86303C11.1489 7.79663 12.7489 7.79663 12.7489 8.86303Z" fill={color}/><circle cx="11.7817" cy="11.7817" r="7.5" stroke={color}/></svg>}
+function IconExpert({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M11.8024 15.5622C15.4843 15.5622 18.4691 12.5774 18.4691 8.89555C18.4691 5.21365 15.4843 2.22888 11.8024 2.22888C8.12051 2.22888 5.13574 5.21365 5.13574 8.89555C5.13574 12.5774 8.12051 15.5622 11.8024 15.5622Z" stroke={color} strokeMiterlimit="10"/><path d="M8.46875 14.5822V20.2488L11.8021 18.2488L15.1354 20.2488V14.5822" stroke={color} strokeMiterlimit="10"/><path d="M11.8021 10.2955L9.74208 11.7288L10.4687 9.32879L8.46875 7.81546L10.9754 7.76213L11.8021 5.38879L12.6287 7.76213L15.1354 7.81546L13.1354 9.32879L13.8621 11.7288L11.8021 10.2955Z" stroke={color} strokeLinejoin="round"/></svg>}
+function IconSearch({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M10.6377 17.6637C14.6337 17.6637 17.8731 14.4244 17.8731 10.4284C17.8731 6.43238 14.6337 3.19299 10.6377 3.19299C6.64173 3.19299 3.40234 6.43238 3.40234 10.4284C3.40234 14.4244 6.64173 17.6637 10.6377 17.6637Z" stroke={color} strokeWidth="1.3" strokeMiterlimit="10"/><path d="M15.7749 15.5656L20.5985 20.3891" stroke={color} strokeWidth="1.3" strokeMiterlimit="10" strokeLinecap="round"/></svg>}
+function IconVerify({color="#141810"}){return <svg width="24" height="25" viewBox="0 0 24 25" fill="none"><path d="M18.0091 14.2817L20.6455 11.6454L18.0091 9.00902V5.28175H14.2819L11.6455 2.64539L9.00914 5.28175H5.28187V9.00902L2.64551 11.6454L5.28187 14.2817V18.009H9.00914L11.6455 20.6454L14.2819 18.009H18.0091V14.2817Z" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M8.36377 11.2182L10.9638 13.8182L15.5092 9.27271" stroke={color} strokeWidth="0.909091" strokeMiterlimit="10" strokeLinecap="round"/></svg>}
+function IconMagicShield({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3.12183L4 5.87389C4 18.2656 12 21.1218 12 21.1218C12 21.1218 20 18.2656 20 5.87389L12 3.12183Z" stroke={color} strokeWidth="1.3" strokeLinejoin="round"/><path d="M12 8.81702C12.5192 9.79225 13.3198 10.5936 14.2949 11.1129C13.32 11.6321 12.5192 12.4329 12 13.4078C11.4807 12.4327 10.6793 11.6321 9.7041 11.1129C10.6796 10.5936 11.4807 9.79249 12 8.81702Z" stroke={color} strokeWidth="1.3"/></svg>}
+function IconGroup({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M16.1528 14.022C18.7707 14.262 20.8195 16.4615 20.8198 19.1422H18.2485C18.2483 17.1774 17.454 15.3834 16.1528 14.022ZM15.6772 6.28571C17.0972 6.28586 18.2485 7.43699 18.2485 8.85699C18.2485 10.2771 17.0973 11.4281 15.6772 11.4283C15.3807 11.4283 15.0966 11.3752 14.8315 11.2828C15.253 10.5614 15.4976 9.73854 15.4976 8.85699C15.4975 7.97755 15.2602 7.15008 14.8433 6.42633C15.1049 6.33661 15.3852 6.28571 15.6772 6.28571Z" fill={color}/><path d="M4.83887 19.1429C4.83887 16.3014 7.1403 14 9.98172 14C12.8232 14 15.1246 16.3014 15.1246 19.1429" stroke={color} strokeWidth="1.3" strokeMiterlimit="10"/><path d="M9.98158 11.4286C11.4017 11.4286 12.553 10.2773 12.553 8.85713C12.553 7.43697 11.4017 6.28571 9.98158 6.28571C8.56142 6.28571 7.41016 7.43697 7.41016 8.85713C7.41016 10.2773 8.56142 11.4286 9.98158 11.4286Z" stroke={color} strokeWidth="1.3" strokeMiterlimit="10"/></svg>}
+
+/* Nav icons — exact Figma behavior:
+   ALL icons are OUTLINES (never filled).
+   Inactive: stroke #999. Active: stroke #141810 + orange branding dot (#f80).
+   Home always uses #141810 stroke + orange dot. */
+function IconNavHome({active}){
+  const c = active ? "#141810" : "#999";
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M10.0698 2.86367L3.13978 8.49993C2.35978 9.12957 1.85978 10.46 2.02978 11.4552L3.35978 19.5389C3.59978 20.9809 4.95978 22.1488 6.39978 22.1488H17.5998C19.0298 22.1488 20.3998 20.9708 20.6398 19.5389L21.9698 11.4552C22.1298 10.46 21.6298 9.12957 20.8598 8.49993L13.9298 2.87384C12.8598 2.00047 11.1298 2.00046 10.0698 2.86367Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      {active
+        ? <circle cx="12" cy="13" r="3" fill="#FF8800"/>
+        : <path d="M12 15.7411C13.3807 15.7411 14.5 14.6044 14.5 13.2022C14.5 11.8 13.3807 10.6633 12 10.6633C10.6193 10.6633 9.5 11.8 9.5 13.2022C9.5 14.6044 10.6193 15.7411 12 15.7411Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      }
+    </svg>
+  );
+}
+function IconNavIssues({active}){
+  const c = active ? "#141810" : "#999";
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M22 10V13C22 17 20 19 16 19H15.5C15.19 19 14.89 19.15 14.7 19.4L13.2 21.4C12.54 22.28 11.46 22.28 10.8 21.4L9.3 19.4C9.14 19.18 8.77 19 8.5 19H8C4 19 2 18 2 13V8C2 4 4 2 8 2H14" stroke={c} strokeMiterlimit="10" strokeLinecap="round" strokeLinejoin="round"/>
+      {active
+        ? <><circle cx="19.5" cy="4.5" r="3" fill="#FF8800"/><path d="M19.5 7C20.8807 7 22 5.88071 22 4.5C22 3.11929 20.8807 2 19.5 2C18.1193 2 17 3.11929 17 4.5C17 5.88071 18.1193 7 19.5 7Z" stroke="#FF8800" strokeLinecap="round" strokeLinejoin="round"/></>
+        : <path d="M19.5 7C20.8807 7 22 5.88071 22 4.5C22 3.11929 20.8807 2 19.5 2C18.1193 2 17 3.11929 17 4.5C17 5.88071 18.1193 7 19.5 7Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      }
+      <path d="M15.9966 11H16.0055" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M11.9956 11H12.0046" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M7.99463 11H8.00361" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function IconNavPulse({active}){
+  const c = active ? "#141810" : "#999";
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M8.96973 22H14.9698C19.9698 22 21.9698 20 21.9698 15V9C21.9698 4 19.9698 2 14.9698 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M1.96973 12.7001L7.96973 12.6801C8.71973 12.6801 9.55973 13.2501 9.83973 13.9501L10.9798 16.8301C11.2398 17.4801 11.6498 17.4801 11.9098 16.8301L14.1998 11.0201C14.4198 10.4601 14.8298 10.4401 15.1098 10.9701L16.1498 12.9401C16.4598 13.5301 17.2598 14.0101 17.9198 14.0101H21.9798" stroke={active ? "#FF8800" : "#999"} strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function IconNavOfficials({active}){
+  const c = active ? "#141810" : "#999";
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M17 21H7C3 21 2 20 2 16V8C2 4 3 3 7 3H17C21 3 22 4 22 8V16C22 20 21 21 17 21Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M14 8H19" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M15 12H19" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M17 16H19" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      {active
+        ? <><circle cx="8.5" cy="9.5" r="2" fill="#FF8800"/><path d="M8.49994 11.2899C9.49958 11.2899 10.3099 10.4796 10.3099 9.47992C10.3099 8.48029 9.49958 7.66992 8.49994 7.66992C7.50031 7.66992 6.68994 8.48029 6.68994 9.47992C6.68994 10.4796 7.50031 11.2899 8.49994 11.2899Z" stroke="#FF8800" strokeLinecap="round" strokeLinejoin="round"/></>
+        : <path d="M8.49994 11.2899C9.49958 11.2899 10.3099 10.4796 10.3099 9.47992C10.3099 8.48029 9.49958 7.66992 8.49994 7.66992C7.50031 7.66992 6.68994 8.48029 6.68994 9.47992C6.68994 10.4796 7.50031 11.2899 8.49994 11.2899Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      }
+      <path d="M12 16.3298C11.86 14.8798 10.71 13.7398 9.26 13.6098C8.76 13.5598 8.25 13.5598 7.74 13.6098C6.29 13.7498 5.14 14.8798 5 16.3298" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function IconNavAccount({active}){
+  const c = active ? "#141810" : "#999";
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M8.96973 22H14.9698C19.9698 22 21.9698 20 21.9698 15V9C21.9698 4 19.9698 2 14.9698 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      {active
+        ? <circle cx="12.2949" cy="9.5" r="2.5" fill="#FF8800"/>
+        : <path d="M12.2949 12C13.6756 12 14.7949 10.8807 14.7949 9.5C14.7949 8.11929 13.6756 7 12.2949 7C10.9142 7 9.79492 8.11929 9.79492 9.5C9.79492 10.8807 10.9142 12 12.2949 12Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+      }
+      <path d="M16.59 18C16.59 16.065 14.665 14.5 12.295 14.5C9.925 14.5 8 16.065 8 18" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   COMPONENTS (Figma pixel-matched)
+   ═══════════════════════════════════════════════ */
+
+/* ── 1. SectionTitle ── */
+/* Figma: orange dot + Inter ExtraBold 18px title + Medium 13px subtitle + optional "View All" */
+function SectionTitle({title, subtitle, showViewAll}) {
+  return (
+    <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",width:"100%",fontFamily:"Inter,sans-serif"}}>
+      <div style={{display:"flex",flexDirection:"column",gap:2,flex:1}}>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <IconBeaconDot/>
+          <h2 style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>{title}</h2>
+        </div>
+        {subtitle && <p style={{fontSize:13,fontWeight:500,color:T.gray,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>{subtitle}</p>}
+      </div>
+      {showViewAll && (
+        <div style={{display:"flex",alignItems:"center",gap:4,cursor:"pointer"}}>
+          <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5,whiteSpace:"nowrap"}}>View All</span>
+          <IconChevronForward color={T.slate}/>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── 2. BottomTabBar ── */
+/* Figma: white bg, shadow 0px -1px 20px rgba(34,34,34,0.3), pt 14, 284px centered row,
+   tabs 68px (account 72px), gap 4px, pb 8, active = 4px solid #141810 bottom border,
+   label: Inter SemiBold 10px, lh 15px, ls -0.25, inactive #999, active #141810 */
+function BottomTabBar({activeTab="home"}) {
+  const tabs = [
+    {id:"home",label:"Home",Icon:IconNavHome},
+    {id:"issues",label:"Issues",Icon:IconNavIssues},
+    {id:"pulse",label:"Pulse",Icon:IconNavPulse},
+    {id:"officials",label:"Officials",Icon:IconNavOfficials},
+    {id:"account",label:"Account",Icon:IconNavAccount},
+  ];
+  return (
+    <div style={{width:393,height:75,background:"#fff",paddingTop:14,boxShadow:"0px -1px 20px rgba(34,34,34,0.3)",display:"flex",justifyContent:"center",alignItems:"flex-start"}}>
+      <div style={{display:"flex",justifyContent:"space-around",width:"100%",height:"100%"}}>
+        {tabs.map(({id,label,Icon})=>{
+          const a = activeTab===id;
+          return (
+            <div key={id} style={{display:"flex",flexDirection:"column",alignItems:"center",paddingTop:4,gap:4,cursor:"pointer",height:"100%",justifyContent:"flex-start",borderBottom:a?"4px solid #141810":"4px solid transparent",boxSizing:"border-box",minWidth:68}}>
+              <Icon active={a}/>
+              <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:10,lineHeight:"15px",letterSpacing:-0.25,color:a?"#141810":"#999",textAlign:"center",whiteSpace:"nowrap"}}>{label}</span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/* ── 3. BackHeader ── */
+/* Figma: cream bg, 393px wide, height 48, px 18,
+   title: Inter Bold 18px, color #a19a8b, centered, ls -0.5,
+   back chevron left, 24px spacer right */
+function BackHeader({title}) {
+  return (
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"0 18px",height:48,width:393,backgroundColor:T.cream,fontFamily:"Inter,sans-serif"}}>
+      <div style={{width:24,height:24,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><IconChevronBack color="#a19a8b"/></div>
+      <span style={{fontSize:18,fontWeight:700,color:"#a19a8b",lineHeight:"130%",letterSpacing:-0.5,textAlign:"center"}}>{title}</span>
+      <div style={{width:24,height:24}}/>
+    </div>
+  );
+}
+
+/* ── 4. ZipCodeCTA ── */
+/* Figma: #39503d bg, px-36 py-24, ExtraBold 18px headline, Regular 16px subtitle,
+   #141810 rounded location icon, input #fafafa/#d0d2d5, button opacity 0.5 default → 1.0 active */
+function ZipCodeCTA({active=false}) {
+  return (
+    <div style={{width:393,backgroundColor:"#39503d",padding:"24px 36px",display:"flex",flexDirection:"column",gap:20,boxSizing:"border-box",fontFamily:"Inter,sans-serif"}}>
+      {/* Row 1: Headline + location icon */}
+      <div style={{display:"flex",gap:20,alignItems:"flex-start",width:"100%"}}>
+        {/* Text column */}
+        <div style={{flex:1,display:"flex",flexDirection:"column",gap:8,minWidth:0}}>
+          <div style={{paddingRight:40}}>
+            <p style={{fontSize:18,fontWeight:800,color:"#fff9ed",lineHeight:1.3,letterSpacing:-0.5,margin:0}}>Politics hits different when it's local.</p>
+          </div>
+          <p style={{fontSize:16,fontWeight:400,color:"#fff9ed",lineHeight:1.3,letterSpacing:-0.5,margin:0,width:"100%"}}>Enter your zip to see what's happening in your district.</p>
+        </div>
+        {/* Location icon */}
+        <div style={{backgroundColor:"#141810",borderRadius:100,padding:16,flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <path d="M19.5 10.4681C19.5 16.6106 12 20.9681 12 20.9681C12 20.9681 4.5 16.6106 4.5 10.4681C4.5 6.32808 7.86 2.96808 12 2.96808C16.14 2.96808 19.5 6.32808 19.5 10.4681Z" stroke="#FF8800" strokeMiterlimit="10"/>
+            <path d="M12 14.2181C14.0711 14.2181 15.75 12.5392 15.75 10.4681C15.75 8.39707 14.0711 6.71814 12 6.71814C9.92893 6.71814 8.25 8.39707 8.25 10.4681C8.25 12.5392 9.92893 14.2181 12 14.2181Z" stroke="#FF8800" strokeMiterlimit="10"/>
+          </svg>
+        </div>
+      </div>
+      {/* Row 2: Zip input + button */}
+      <div style={{display:"flex",gap:16,alignItems:"center",width:"100%"}}>
+        <div style={{flex:1,backgroundColor:"#fafafa",border:"1px solid #d0d2d5",borderRadius:5,padding:"8px 10px",minWidth:0}}>
+          <p style={{fontSize:14,fontWeight:500,color:active?"#141810":"rgba(0,0,0,0.4)",lineHeight:1.3,letterSpacing:-0.5,margin:0,whiteSpace:"nowrap"}}>
+            {active ? "90066" : "Enter your zip code"}
+          </p>
+        </div>
+        <div style={{backgroundColor:"rgba(20,24,16,0.6)",border:"1px solid #f0e8d8",borderRadius:5,height:34,padding:"4px 10px",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,opacity:active?1:0.5,cursor:active?"pointer":"default"}}>
+          <p style={{fontSize:14,fontWeight:900,color:"#fafafa",lineHeight:1.1,letterSpacing:-0.5,margin:0,whiteSpace:"nowrap"}}>Update</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 5. EngagementBar ── */
+/* Figma (7484:13252):
+   Stats row: Medium 11px #999 ls -0.25, gap 24 between left/right.
+     Left: "{n} Pulses • {n}Shares". Right: 3 reaction icons (16px, gap 1.333) + "{n} Reactions".
+   Divider: 1px solid #f0e8d8 (T.cream).
+   Actions row: gap 24, each = icon 24px + label SemiBold 11px #999 ls -0.25, gap 4.
+     Pulses (pulse waveform icon), Share (send icon), React (cream circle + smiley, right-aligned). */
+/* ── Shared: IconReactButton — cream circle bg + slate smiley+plus ── */
+function IconReactButton() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0.5" y="0.5" width="25" height="25" rx="12.5" fill="#F0E8D8"/>
+      <rect x="0.5" y="0.5" width="25" height="25" rx="12.5" stroke="#F0E8D8"/>
+      <path d="M16.6343 16.6343C15.7 17.5686 14.4143 18.1428 13 18.1428C11.5857 18.1428 10.2914 17.5686 9.36572 16.6343" stroke="#141810" strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M14.4744 4.56573C13.9944 4.48002 13.5059 4.42859 13.0001 4.42859C8.26871 4.42859 4.42871 8.26859 4.42871 13C4.42871 17.7314 8.26871 21.5714 13.0001 21.5714C17.7316 21.5714 21.5716 17.7314 21.5716 13C21.5716 12.4943 21.5201 12.0057 21.4344 11.5257" stroke="#141810" strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M16.4287 7H21.5716" stroke="#141810" strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M19 9.57145V4.42859" stroke="#141810" strokeMiterlimit="10" strokeLinecap="round"/>
+    </svg>
+  );
+}
+
+/* ── Shared: IconShareAction — slate paper plane ── */
+function IconShareAction() {
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g clipPath="url(#sha)">
+        <path d="M20.0493 2.65901L3.80687 6.93449C2.39641 7.30914 2.1099 9.10529 3.26693 10.2623L7.7628 14.7582L13.8895 10.1962L9.32754 16.3229L13.8234 20.8188C14.9804 21.9758 16.7766 21.6893 17.1512 20.2788L21.4267 4.03642C21.6471 3.20997 20.8868 2.44964 20.0603 2.67002L20.0493 2.65901Z" stroke="#141810" strokeLinejoin="round"/>
+      </g>
+      <defs><clipPath id="sha"><rect width="20" height="20" fill="white" transform="translate(2 2.07495)"/></clipPath></defs>
+    </svg>
+  );
+}
+
+/* ── 5. EngagementBar ──
+   variant="full"  — stats row (Pulses • Shares | reaction icons + count) + divider + Pulses + Share + React
+   variant="slim"  — share count + Share btn + React btn (PollCard style, no stats row)
+*/
+function EngagementBar({pulses=6, shares=421, reactions="1.4k", variant="full"}) {
+  if (variant === "slim") {
+    return (
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",borderTop:`1px solid ${T.creamBorder}`,padding:"5px 18px",backgroundColor:T.warmBg,fontFamily:"Inter,sans-serif"}}>
+        <div style={{display:"flex",gap:4,alignItems:"center",padding:"4px 0"}}>
+          <IconShareAction/>
+          <span style={{fontWeight:500,fontSize:13,color:T.gray,letterSpacing:-0.25,lineHeight:"1"}}>{shares}</span>
+        </div>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+          <span style={{fontWeight:500,fontSize:13,color:T.gray,letterSpacing:-0.25,lineHeight:"1"}}>Reaction</span>
+          <IconReactButton/>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:8,width:"100%",fontFamily:"Inter,sans-serif"}}>
+      {/* Stats row */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}>
+          <span style={{fontSize:11,fontWeight:500,color:T.gray,lineHeight:"15px",letterSpacing:-0.25,whiteSpace:"nowrap"}}>{pulses} Pulses</span>
+          <span style={{fontSize:11,fontWeight:500,color:T.gray,lineHeight:"15px",letterSpacing:-0.25}}>•</span>
+          <span style={{fontSize:11,fontWeight:500,color:T.gray,lineHeight:"15px",letterSpacing:-0.25,whiteSpace:"nowrap"}}>{shares} Shares</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:6}}>
+          <div style={{display:"flex",alignItems:"center",gap:"1.333px"}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M7.5 10.686C7.5 9.63295 7.905 8.77795 8.4 8.77795C8.895 8.77795 9.3 9.63295 9.3 10.686" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+              <path d="M14.7002 10.686C14.7002 9.63295 15.1052 8.77795 15.6002 8.77795C16.0952 8.77795 16.5002 9.63295 16.5002 10.686" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+              <path d="M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" stroke="#999" strokeMiterlimit="10"/>
+              <path d="M16.1311 13.782C15.4381 15.375 13.8541 16.5 12.0001 16.5C10.1461 16.5 8.56214 15.384 7.86914 13.782" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <g clipPath="url(#sk1)">
+                <circle cx="8.39103" cy="9.27097" r="0.90225" fill="#999"/>
+                <circle cx="13.8046" cy="9.27097" r="0.90225" fill="#999"/>
+                <path d="M12.6499 6.99394C13.4258 6.71494 14.8334 6.62494 15.6995 7.22794" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M9.70801 12.8171C11.1516 12.5651 13.6418 12.8531 14.9682 14.1581" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M9.93367 6.36401C9.22089 5.95001 7.84946 5.62601 6.89307 6.06701" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M10.3039 19.909C10.8542 20.017 11.4227 20.071 12.0001 20.071C16.9805 20.071 21.0227 16.039 21.0227 11.071C21.0227 6.10304 16.9805 2.07104 12.0001 2.07104C7.01964 2.07104 2.97754 6.10304 2.97754 11.071C2.97754 13.123 3.67228 15.004 4.82716 16.516" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M4.82703 16.5161C4.69169 17.5511 4.79996 18.7931 4.89019 19.3061C5.02553 20.1161 5.78342 20.8541 6.31575 21.0791C6.88417 21.3221 9.69921 21.3041 10.2225 20.4221C10.2947 20.2961 10.3127 20.1071 10.2947 19.9001" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M4.82666 16.5161C4.90786 15.9131 5.07027 15.3821 5.37704 15.0941C6.22516 14.3111 6.63117 16.8671 6.93794 16.8851C7.25373 16.9031 10.4928 15.3551 11.4492 15.4271C12.4056 15.4991 11.4492 17.2181 9.68982 17.9651C9.68982 17.9651 10.2312 19.1171 10.2853 19.9001" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+              </g>
+              <defs><clipPath id="sk1"><rect width="20" height="21" fill="white" transform="translate(2 1)"/></clipPath></defs>
+            </svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <g clipPath="url(#co1)">
+                <path d="M15.7745 15.467C15.7745 16.5946 14.1809 16.2871 12.2144 16.2871C10.248 16.2871 8.6543 16.604 8.6543 15.467C8.6543 14.33 10.248 13.4166 12.2144 13.4166C14.1809 13.4166 15.7745 14.33 15.7745 15.467Z" stroke="#999" strokeMiterlimit="10"/>
+                <path d="M8.48665 11.7857C9.00136 11.7857 9.41862 11.3684 9.41862 10.8537C9.41862 10.339 9.00136 9.92175 8.48665 9.92175C7.97194 9.92175 7.55469 10.339 7.55469 10.8537C7.55469 11.3684 7.97194 11.7857 8.48665 11.7857Z" fill="#999"/>
+                <path d="M15.9422 11.7857C16.4569 11.7857 16.8742 11.3684 16.8742 10.8537C16.8742 10.339 16.4569 9.92175 15.9422 9.92175C15.4275 9.92175 15.0103 10.339 15.0103 10.8537C15.0103 11.3684 15.4275 11.7857 15.9422 11.7857Z" fill="#999"/>
+                <path d="M3.34241 14.6467C3.0535 13.7427 2.88574 12.7828 2.88574 11.7856C2.89506 6.64115 7.06095 2.46594 12.2147 2.46594C17.3685 2.46594 21.5344 6.64115 21.5344 11.7856C21.5344 16.9301 17.3592 21.1053 12.2147 21.1053C9.83821 21.1053 7.67605 20.2106 6.02647 18.7474" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M3.34187 14.6467C2.86657 15.4203 2.46582 16.2311 2.46582 16.7716C2.46582 18.0577 3.50962 19.1015 4.79574 19.1015C5.2524 19.1015 5.67179 18.9711 6.02593 18.7474" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M3.3418 14.6467C4.00349 13.5656 4.79566 12.5778 4.79566 12.5778C4.79566 12.5778 7.12558 15.4855 7.12558 16.7716C7.12558 17.6011 6.68756 18.328 6.02586 18.7474" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M5.77441 9.43709C6.6225 9.33458 7.95522 8.75676 8.47712 7.80615" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+                <path d="M18.4215 9.43709C17.5734 9.33458 16.2407 8.75676 15.7188 7.80615" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+              </g>
+              <defs><clipPath id="co1"><rect width="20" height="20" fill="white" transform="translate(2 2)"/></clipPath></defs>
+            </svg>
+          </div>
+          <span style={{fontSize:11,fontWeight:500,color:T.gray,lineHeight:"15px",letterSpacing:-0.25,whiteSpace:"nowrap"}}>{reactions} Reactions</span>
+        </div>
+      </div>
+      {/* Divider */}
+      <div style={{height:1,backgroundColor:T.cream,width:"100%"}}/>
+      {/* Actions row */}
+      <div style={{display:"flex",gap:24,alignItems:"center"}}>
+        <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M8.97 22H14.97C19.97 22 21.97 20 21.97 15V9C21.97 4 19.97 2 14.97 2H8.97C3.97 2 1.97 4 1.97 9V15C1.97 20 3.97 22 8.97 22Z" stroke="#141810" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M1.97 12.7L7.97 12.68C8.72 12.68 9.56 13.25 9.84 13.95L10.98 16.83C11.24 17.48 11.65 17.48 11.91 16.83L14.2 11.02C14.42 10.46 14.83 10.44 15.11 10.97L16.15 12.94C16.46 13.53 17.26 14.01 17.92 14.01H21.98" stroke="#141810" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <span style={{fontSize:11,fontWeight:600,color:T.gray,lineHeight:"15px",letterSpacing:-0.25}}>Pulses</span>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
+          <IconShareAction/>
+          <span style={{fontSize:11,fontWeight:600,color:T.gray,lineHeight:"15px",letterSpacing:-0.25}}>Share</span>
+        </div>
+        <div style={{flex:1,display:"flex",justifyContent:"flex-end"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
+            <IconReactButton/>
+            <span style={{fontSize:11,fontWeight:600,color:T.gray,lineHeight:"15px",letterSpacing:-0.25}}>React</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 6. PostArticle ── */
+/* Figma (5935:34517) Mobile variant:
+   Card w:373 radius:10 overflow:hidden.
+   IMAGE SECTION h:275 — bg cover, gradient: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 75%).
+     pt:18 px:18. Badge top-right: h:29 w:120 r:3 bg rgba(20,24,16,0.5) border 0.5px #f0e8d8,
+     text SemiBold 9px #f0e8d8 ls:0.5 uppercase.
+     Headline bottom: pr:80 pb:18 gap:8.
+       Title: Black 28px white ls:-0.5 lh:1.1.
+       Time: SemiBold 13px #f0e8d8 ls:-0.5 lh:1.1.
+   BOTTOM SECTION bg warmBg p:18 gap:20.
+     Description: SemiBold 13px slate lh:1.3 ls:-0.5 pr:40.
+     EngagementBar.
+   HOME SLIM variant: image top (h:200 no overlay text), text section below (title + date + engagement). */
+function PostArticle({
+  title="US and Israel Attack Iran for 10th Day",
+  category="FOREIGN POLICY",
+  timeAgo="1h ago",
+  description="The ongoing war has involved strikes on Iranian sites and retaliatory actions, with reports of casualties among U.S. service members.",
+  imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800",
+  variant="mobile"
+}) {
+  if (variant === "slim") {
+    return (
+      <div style={{width:373,borderRadius:10,overflow:"hidden",fontFamily:"Inter,sans-serif",backgroundColor:T.warmBg}}>
+        {/* Image — 128px, badge top-right, subtle bottom gradient */}
+        <div style={{position:"relative",height:128,backgroundImage:`url('${imgUrl}')`,backgroundSize:"cover",backgroundPosition:"center"}}>
+          <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 80%)"}}/>
+          <div style={{position:"absolute",top:18,right:18,height:29,width:120,borderRadius:3,backgroundColor:"rgba(20,24,16,0.5)",border:"0.5px solid #f0e8d8",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <span style={{fontSize:9,fontWeight:600,color:"#f0e8d8",letterSpacing:0.5,textTransform:"uppercase",lineHeight:"15px"}}>{category}</span>
+          </div>
+        </div>
+        {/* Text section */}
+        <div style={{padding:18,display:"flex",flexDirection:"column",gap:20}}>
+          <div style={{display:"flex",flexDirection:"column",gap:10,paddingRight:40}}>
+            <p style={{fontSize:14,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0,overflow:"hidden",display:"-webkit-box",WebkitLineClamp:3,WebkitBoxOrient:"vertical"}}>{title}</p>
+            <span style={{fontSize:11,fontWeight:600,color:T.gray,lineHeight:1.3,letterSpacing:-0.5}}>Mar 11, 2026</span>
+          </div>
+          <EngagementBar/>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div style={{width:373,borderRadius:10,overflow:"hidden",fontFamily:"Inter,sans-serif"}}>
+      {/* Image section */}
+      <div style={{position:"relative",height:275,backgroundImage:`url('${imgUrl}')`,backgroundSize:"cover",backgroundPosition:"center",display:"flex",flexDirection:"column",padding:"18px 18px 0",boxSizing:"border-box"}}>
+        <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 75%)"}}/>
+        {/* Badge top-right */}
+        <div style={{display:"flex",justifyContent:"flex-end",position:"relative",zIndex:1}}>
+          <div style={{height:29,width:120,borderRadius:3,backgroundColor:"rgba(20,24,16,0.5)",border:"0.5px solid #f0e8d8",display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <span style={{fontSize:9,fontWeight:600,color:"#f0e8d8",letterSpacing:0.5,textTransform:"uppercase",lineHeight:"15px"}}>{category}</span>
+          </div>
+        </div>
+        {/* Headline + time at bottom */}
+        <div style={{flex:1,display:"flex",flexDirection:"column",justifyContent:"flex-end",gap:8,position:"relative",zIndex:1,paddingBottom:18,paddingRight:80}}>
+          <p style={{color:"#fff",fontSize:28,fontWeight:900,lineHeight:1.1,letterSpacing:-0.5,margin:0}}>{title}</p>
+          <p style={{color:"#f0e8d8",fontSize:13,fontWeight:600,lineHeight:1.1,letterSpacing:-0.5,margin:0}}>{timeAgo}</p>
+        </div>
+      </div>
+      {/* Bottom section */}
+      <div style={{backgroundColor:T.warmBg,padding:18,display:"flex",flexDirection:"column",gap:20}}>
+        <p style={{fontSize:13,fontWeight:600,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0,paddingRight:40}}>{description}</p>
+        <EngagementBar/>
+      </div>
+    </div>
+  );
+}
+
+/* ── 6. AccordionItem ── */
+/* Figma: warmBg bg, radius 10, header padding 16/18,
+   icon + title: Inter ExtraBold 18px slate, ls -0.5,
+   toggle: plus icon, rotates 45deg when open */
+function AccordionItem({icon, title, defaultOpen=false}) {
+  const [open, setOpen] = useState(defaultOpen);
+  const [height, setHeight] = React.useState(defaultOpen ? null : 0);
+  const contentRef = React.useRef(null);
+
+  const toggle = () => {
+    if (!open) {
+      // Opening: set height to scrollHeight to animate in
+      setHeight(contentRef.current.scrollHeight);
+      setOpen(true);
+    } else {
+      // Closing: snap from scrollHeight back to 0
+      setHeight(contentRef.current.scrollHeight);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setHeight(0));
+      });
+      setTimeout(() => setOpen(false), 280);
+    }
+  };
+
+  const handleTransitionEnd = () => {
+    if (open) setHeight(null); // allow natural height after open
+  };
+
+  return (
+    <div style={{width:357,borderRadius:10,backgroundColor:T.warmBg,overflow:"hidden",fontFamily:"Inter,sans-serif"}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"16px 18px",cursor:"pointer"}} onClick={toggle}>
+        <div style={{display:"flex",alignItems:"center",gap:12}}>
+          {icon && <span style={{display:"flex",alignItems:"center"}}>{icon}</span>}
+          <span style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:"130%",letterSpacing:-0.5}}>{title}</span>
+        </div>
+        <span style={{display:"flex",transform:open?"rotate(45deg)":"rotate(0deg)",transition:"transform 0.25s ease"}}><IconPlus/></span>
+      </div>
+      <div
+        ref={contentRef}
+        onTransitionEnd={handleTransitionEnd}
+        style={{
+          overflow:"hidden",
+          height: height === null ? "auto" : height,
+          transition: "height 0.28s ease",
+        }}
+      >
+        <div style={{padding:"0 18px 18px",fontSize:14,fontWeight:500,color:T.slate,lineHeight:"150%",letterSpacing:-0.5}}>
+          Expandable content area. This is where consensus analysis, contention points, or other detailed information appears when the user expands this section.
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 7. ScoreItem ── */
+/* Figma: padding 16/0, border-bottom cream,
+   icon + title: Inter ExtraBold 18px, ls -0.5,
+   score: Inter Bold 22px, ls -1, maxScore: same in #999,
+   chevron: #141810,
+   avg marker: orange 2px wide 8px tall line + "Avg" label 9px SemiBold orange */
+function ScoreItem({icon, title, score, maxScore, avgPercent}) {
+  const fillPct = (score / maxScore) * 100;
+  return (
+    <div style={{padding:"16px 0",borderBottom:`1px solid ${T.creamBorder}`,cursor:"pointer",fontFamily:"Inter,sans-serif"}}>
+      {/* Top row: icon + title + score/max + chevron */}
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10}}>
+          {icon && <span style={{display:"flex"}}>{icon}</span>}
+          <span style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:"130%",letterSpacing:-0.5}}>{title}</span>
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:16}}>
+          <span style={{fontSize:22,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-1,whiteSpace:"nowrap"}}>
+            {score}<span style={{color:T.gray}}> /{maxScore}</span>
+          </span>
+          <IconChevronForward color={T.gray}/>
+        </div>
+      </div>
+      {/* Bar + Avg. marginRight:40 = Figma pr-[40px]. Height 32 = 4 peek + 6 bar + 8 gap + 14 label */}
+      <div style={{marginTop:14,marginRight:40,position:"relative",height:32}}>
+        {/* Bar: top:4 so tick can peek 4px above it (matches Figma top:[-4px] on Average wrapper) */}
+        <div style={{position:"absolute",top:4,left:0,right:0,height:6,borderRadius:16,backgroundColor:T.creamBorder,overflow:"hidden"}}>
+          <div style={{width:`${fillPct}%`,height:"100%",backgroundColor:T.slate,borderRadius:50}}/>
+        </div>
+        {/* Avg marker: top:0 = starts 4px above bar.
+            1px dark #111 tick (23px). White "Reverse Color" at top:4 h:6
+            inverts the tick on the dark bar — exactly as Figma. */}
+        {avgPercent != null && (
+          <div style={{position:"absolute",left:`${avgPercent}%`,top:0,transform:"translateX(-50%)"}}>
+            <div style={{position:"absolute",top:0,left:0,width:1,height:23,backgroundColor:"#111"}}/>
+            <div style={{position:"absolute",top:4,left:0,width:1,height:6,backgroundColor:"white"}}/>
+            <span style={{position:"absolute",top:24,left:"50%",transform:"translateX(-50%)",fontSize:12,fontWeight:500,color:"#111",letterSpacing:-0.5,lineHeight:"1.3",whiteSpace:"nowrap"}}>Avg</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── 8. StateRow ── */
+/* Figma: flag 48x32 + state name Inter SemiBold 16px + chevron,
+   padding 16/18, border-bottom cream, full-width */
+const STATE_FLAGS = {
+  "Alabama":"Flag_of_Alabama.svg","Alaska":"Flag_of_Alaska.svg",
+  "Arizona":"Flag_of_Arizona.svg","Arkansas":"Flag_of_Arkansas.svg",
+  "California":"Flag_of_California.svg","Colorado":"Flag_of_Colorado.svg",
+  "Connecticut":"Flag_of_Connecticut.svg","Delaware":"Flag_of_Delaware.svg",
+  "Florida":"Flag_of_Florida.svg","Georgia":"Flag_of_Georgia_(U.S._state).svg",
+  "Hawaii":"Flag_of_Hawaii.svg","Idaho":"Flag_of_Idaho.svg",
+  "Illinois":"Flag_of_Illinois.svg","Indiana":"Flag_of_Indiana.svg",
+  "Iowa":"Flag_of_Iowa.svg","Kansas":"Flag_of_Kansas.svg",
+  "Kentucky":"Flag_of_Kentucky.svg","Louisiana":"Flag_of_Louisiana.svg",
+  "Maine":"Flag_of_Maine.svg","Maryland":"Flag_of_Maryland.svg",
+  "Massachusetts":"Flag_of_Massachusetts.svg","Michigan":"Flag_of_Michigan.svg",
+  "Minnesota":"Flag_of_Minnesota.svg","Mississippi":"Flag_of_Mississippi.svg",
+  "Missouri":"Flag_of_Missouri.svg","Montana":"Flag_of_Montana.svg",
+  "Nebraska":"Flag_of_Nebraska.svg","Nevada":"Flag_of_Nevada.svg",
+  "New Hampshire":"Flag_of_New_Hampshire.svg","New Jersey":"Flag_of_New_Jersey.svg",
+  "New Mexico":"Flag_of_New_Mexico.svg","New York":"Flag_of_New_York.svg",
+  "North Carolina":"Flag_of_North_Carolina.svg","North Dakota":"Flag_of_North_Dakota.svg",
+  "Ohio":"Flag_of_Ohio.svg","Oklahoma":"Flag_of_Oklahoma.svg",
+  "Oregon":"Flag_of_Oregon.svg","Pennsylvania":"Flag_of_Pennsylvania.svg",
+  "Rhode Island":"Flag_of_Rhode_Island.svg","South Carolina":"Flag_of_South_Carolina.svg",
+  "South Dakota":"Flag_of_South_Dakota.svg","Tennessee":"Flag_of_Tennessee.svg",
+  "Texas":"Flag_of_Texas.svg","Utah":"Flag_of_Utah.svg",
+  "Vermont":"Flag_of_Vermont.svg","Virginia":"Flag_of_Virginia.svg",
+  "Washington":"Flag_of_Washington_(state).svg","West Virginia":"Flag_of_West_Virginia.svg",
+  "Wisconsin":"Flag_of_Wisconsin.svg","Wyoming":"Flag_of_Wyoming.svg",
+};
+function StateRow({name}) {
+  const flagFile = STATE_FLAGS[name];
+  const flagUrl = flagFile ? `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(flagFile)}` : null;
+  return (
+    <div style={{display:"flex",alignItems:"center",gap:16,padding:"16px 18px",width:393,borderBottom:`1px solid ${T.creamBorder}`,cursor:"pointer",fontFamily:"Inter,sans-serif",boxSizing:"border-box"}}>
+      <div style={{width:48,height:32,borderRadius:2,flexShrink:0,overflow:"hidden",backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center"}}>
+        {flagUrl && <img src={flagUrl} alt={name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>}
+      </div>
+      <span style={{flex:1,fontSize:16,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-0.5}}>{name}</span>
+      <IconChevronForward color={T.gray}/>
+    </div>
+  );
+}
+
+/* ── 9. StancesCard ── */
+/* Figma: warmBg, radius 10, padding 16, gap 16,
+   title: Inter ExtraBold 18px, subtitle: SemiBold 16px lh 200%,
+   stat boxes: border creamBorder, radius 5, padding 12,
+   label: SemiBold 16px, value: SemiBold 22px ls -1 */
+function StancesCard({title, subtitle, stat1Label, stat1Value, stat2Label, stat2Value}) {
+  return (
+    <div style={{width:357,borderRadius:10,backgroundColor:T.warmBg,padding:16,display:"flex",flexDirection:"column",gap:16,fontFamily:"Inter,sans-serif"}}>
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",cursor:"pointer"}}>
+        <div style={{flex:1}}>
+          <h3 style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>{title}</h3>
+          {subtitle && <p style={{fontSize:14,fontWeight:500,color:T.slate,lineHeight:"1.3",letterSpacing:-0.5,margin:0}}>{subtitle}</p>}
+        </div>
+        <IconChevronForward color={T.gray}/>
+      </div>
+      <div style={{display:"flex",gap:16}}>
+        <div style={{flex:1,borderRadius:5,border:`1px solid ${T.creamBorder}`,backgroundColor:T.warmBg,padding:12,display:"flex",flexDirection:"column",gap:8}}>
+          <span style={{fontSize:16,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-0.5}}>{stat1Label}</span>
+          <span style={{fontSize:22,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-1}}>{stat1Value}</span>
+        </div>
+        <div style={{flex:1,borderRadius:5,border:`1px solid ${T.creamBorder}`,backgroundColor:T.warmBg,padding:12,display:"flex",flexDirection:"column",gap:8}}>
+          <span style={{fontSize:16,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-0.5}}>{stat2Label}</span>
+          <span style={{fontSize:22,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-1}}>{stat2Value}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 10. SurveyProgressBar ── */
+/* Figma (5935:33602): single continuous track bar, fill = current/total %.
+   Track: bg #e9e1d3 (creamBorder), h 6px, radius 50px, full width.
+   Fill:  bg #141810 (slate), width = (current/total)*100%, radius 50px.
+   Counter below: Inter Bold 16px #999, centered, gap 4px from bar. */
+function SurveyProgressBar({current=1, total=3}) {
+  const pct = (current / total) * 100;
+  return (
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:4,width:357,fontFamily:"Inter,sans-serif"}}>
+      <div style={{width:"100%",height:6,borderRadius:50,backgroundColor:T.creamBorder,overflow:"hidden"}}>
+        <div style={{width:`${pct}%`,height:"100%",backgroundColor:T.slate,borderRadius:50}}/>
+      </div>
+      <span style={{fontSize:16,fontWeight:700,color:T.gray,lineHeight:"1.3"}}>{current}/{total}</span>
+    </div>
+  );
+}
+
+/* ── 11. SurveyAnswerCard ── */
+/* Figma single-select (5935:33602) + multi-select (5935:33621):
+   UNSELECTED: warmBg (#fff9ed), NO border, shadow: 0px 4px 15px 0px rgba(0,0,0,0.15)
+   SELECTED:   white (#ffffff),  NO border, same shadow.
+   Padding: 18px 12px. Radius: 10px.
+   Text: Inter ExtraBold 800, 18px, ls -0.5, lh 1.3.
+   Multi-select adds 22px circle on right:
+     unselected = transparent + 1.5px stroke #c8c0b8
+     selected   = slate fill + white checkmark SVG */
+function SurveyAnswerCard({text, selected=false, type="single"}) {
+  const [sel, setSel] = useState(selected);
+  const bgColor = sel ? "#ffffff" : T.warmBg;
+  return (
+    <div onClick={()=>setSel(!sel)} style={{width:357,borderRadius:10,backgroundColor:bgColor,padding:"18px 12px",cursor:"pointer",border:"none",boxShadow:"0px 4px 15px 0px rgba(0,0,0,0.15)",display:"flex",alignItems:"center",gap:8,fontFamily:"Inter,sans-serif",boxSizing:"border-box",transition:"background-color 0.15s"}}>
+      <p style={{flex:1,fontSize:18,fontWeight:800,color:T.slate,lineHeight:"1.3",letterSpacing:-0.5,margin:0}}>{text}</p>
+      {type==="multi" && (
+        <div style={{width:22,height:22,borderRadius:"50%",flexShrink:0,backgroundColor:sel?T.slate:"transparent",border:sel?"none":"1.5px solid #c8c0b8",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          {sel && <svg width="12" height="9" viewBox="0 0 12 9" fill="none"><path d="M1 4.5L4.33 8L11 1" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── 12. SurveyFooter ── */
+/* Figma: headline: Inter Bold 16px slate, ls -0.5,
+   subtext: Medium 14px #999, ls -0.5 */
+function SurveyFooter({count=6876}) {
+  return (
+    <div style={{display:"flex",flexDirection:"column",gap:4,fontFamily:"Inter,sans-serif",padding:"16px 0",width:357}}>
+      <p style={{fontSize:16,fontWeight:700,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>Be Part of the Signal</p>
+      <p style={{fontSize:14,fontWeight:500,color:T.gray,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>Join {count.toLocaleString()} others by sharing your voice</p>
+    </div>
+  );
+}
+
+/* ── 13. NewsArticleCard ── */
+/* Figma (7798:28134): 357px card, image h:275, scrim gradient, FOREIGN POLICY badge,
+   headline 28px Black, timestamp, warm-bg body with description + EngagementBar */
+function IconLink(){
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M8.08387 10.0419L6.75435 11.3714C6.16769 11.9581 5.21529 11.9581 4.62862 11.3714C4.04196 10.7847 4.04196 9.83235 4.62862 9.24569L6.39624 7.47806C6.98291 6.89139 7.93531 6.89139 8.52197 7.47806" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M7.91613 5.95809L9.24565 4.62857C9.83231 4.0419 10.7847 4.0419 11.3714 4.62857C11.958 5.21523 11.958 6.16762 11.3714 6.75428L9.60374 8.52191C9.01708 9.10858 8.06468 9.10858 7.47802 8.52191" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+    </svg>
+  );
+}
+function IconShareSmall(){
+  return (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M20.0493 2.65901L3.80687 6.93449C2.39641 7.30914 2.1099 9.10529 3.26693 10.2623L7.7628 14.7582L13.8895 10.1962L9.32754 16.3229L13.8234 20.8188C14.9804 21.9758 16.7766 21.6893 17.1512 20.2788L21.4267 4.03642C21.6471 3.20997 20.8868 2.44964 20.0603 2.67002L20.0493 2.65901Z" stroke="#141810" strokeLinejoin="round"/>
+    </svg>
+  );
+}
+function IconAddReaction({color=T.slate}){
+  return (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <path d="M15.634 15.634C14.7 16.569 13.414 17.143 12 17.143C10.586 17.143 9.291 16.569 8.366 15.634" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M13.474 3.566C12.994 3.48 12.506 3.429 12 3.429C7.268 3.429 3.428 7.269 3.428 12C3.428 16.731 7.268 20.571 12 20.571C16.731 20.571 20.571 16.731 20.571 12C20.571 11.494 20.52 11.006 20.434 10.526" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M15.429 6H20.572" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M18 8.571V3.429" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/>
+    </svg>
+  );
+}
+/* Donut chart SVG — green (#39503d) is "oppose/majority", gold (#c89b3c) is minority */
+function DonutChart({pct=73, size=121}) {
+  const r = 44; const cx = size/2; const cy = size/2;
+  const circ = 2 * Math.PI * r;
+  const greenDash = (pct / 100) * circ;
+  const goldDash  = circ - greenDash;
+  const innerR = 28;
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {/* gold segment (minority) */}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#c89b3c" strokeWidth={16}
+        strokeDasharray={`${goldDash} ${greenDash}`}
+        strokeDashoffset={0} transform={`rotate(-90 ${cx} ${cy})`}/>
+      {/* green segment (majority) — starts after gold */}
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke="#39503d" strokeWidth={16}
+        strokeDasharray={`${greenDash} ${goldDash}`}
+        strokeDashoffset={-goldDash} transform={`rotate(-90 ${cx} ${cy})`}/>
+      {/* hollow center */}
+      <circle cx={cx} cy={cy} r={innerR} fill={T.warmBg}/>
+    </svg>
+  );
+}
+
+function PollCard({
+  question="Do you think possession of guns should be allowed to everyone?",
+  category="domestic policy",
+  timeLabel="Takes ~ 1 min",
+  subtext="At 10,000 responses, anonymous results are shared with your congressman.",
+  shares="842.3k",
+  variant="active",
+  resultPct=73,
+  resultLabel="Oppose",
+  resultCount="6,876",
+  resultTotal="10,000",
+}) {
+  const ShareBar = () => <EngagementBar variant="slim" shares={shares}/>;
+
+  const LinkRow = () => (
+    <div style={{padding:"10px 18px",backgroundColor:T.warmBg}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{width:24,height:24,borderRadius:5,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,padding:4}}>
+          <IconLink/>
+        </div>
+        <span style={{fontSize:13,fontWeight:600,color:T.slate,lineHeight:"110%",letterSpacing:-0.5}}>Link to News Article</span>
+      </div>
+    </div>
+  );
+
+  if (variant === "complete") {
+    return (
+      <div style={{width:333,borderRadius:10,overflow:"hidden",backgroundColor:T.warmBg,boxShadow:"0 4px 15px rgba(0,0,0,0.15)",display:"flex",flexDirection:"column",fontFamily:"Inter,sans-serif"}}>
+        <div style={{padding:"18px 18px 16px",display:"flex",flexDirection:"column",gap:20}}>
+          {/* Top row: Complete badge + category */}
+          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <div style={{display:"flex",alignItems:"center",gap:4}}>
+              {/* Checkmark circle */}
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="#141810"/>
+                <path d="M7.5 12.5L10.5 15.5L16.5 9" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+              <span style={{fontSize:16,fontWeight:800,color:T.slate,letterSpacing:-0.5,lineHeight:"130%"}}>Complete</span>
+            </div>
+            <div style={{height:29,borderRadius:3,backgroundColor:T.cream,border:`0.5px solid ${T.cream}`,display:"flex",alignItems:"center",justifyContent:"center",padding:"10px 15px",boxSizing:"border-box",flexShrink:0}}>
+              <span style={{fontSize:9,fontWeight:600,color:T.slate,letterSpacing:0.5,lineHeight:"15px",textTransform:"uppercase",whiteSpace:"nowrap"}}>{category}</span>
+            </div>
+          </div>
+          {/* Title */}
+          <h2 style={{fontSize:20,fontWeight:900,lineHeight:"130%",letterSpacing:-0.5,margin:0,color:T.slate,paddingRight:40}}>{question}</h2>
+          {/* Chart + result */}
+          <div style={{display:"flex",gap:12,alignItems:"center"}}>
+            <DonutChart pct={resultPct} size={121}/>
+            <div style={{flex:1,display:"flex",flexDirection:"column",gap:8}}>
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                <div style={{display:"flex",gap:4,alignItems:"center"}}>
+                  <span style={{fontSize:20,fontWeight:800,color:T.slate,letterSpacing:-0.5,lineHeight:"none"}}>{resultPct}%</span>
+                  <span style={{fontSize:20,fontWeight:800,color:T.slate,letterSpacing:-0.5,lineHeight:"none"}}>{resultLabel}</span>
+                </div>
+                <div style={{display:"flex",gap:4,alignItems:"center",fontSize:14,fontWeight:800,lineHeight:"130%"}}>
+                  <span style={{color:T.slate,letterSpacing:-1}}>{resultCount}</span>
+                  <span style={{color:T.gray}}>/</span>
+                  <span style={{color:T.gray,letterSpacing:-1}}>{resultTotal}</span>
+                </div>
+              </div>
+              <p style={{fontSize:13,fontWeight:400,color:T.gray,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>{subtext}</p>
+            </div>
+          </div>
+        </div>
+        <LinkRow/>
+        <ShareBar/>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{width:333,borderRadius:10,overflow:"hidden",backgroundColor:T.warmBg,boxShadow:"0 4px 15px rgba(0,0,0,0.15)",display:"flex",flexDirection:"column",fontFamily:"Inter,sans-serif"}}>
+      {/* Main content */}
+      <div style={{padding:"18px 18px 16px 18px",display:"flex",flexDirection:"column",gap:20,flex:1}}>
+        {/* Header row: time + tag */}
+        <div style={{display:"flex",alignItems:"center",gap:0}}>
+          <div style={{flex:1,display:"flex",alignItems:"center"}}>
+            <span style={{fontSize:13,fontWeight:600,color:T.gray,lineHeight:"110%",letterSpacing:-0.5,whiteSpace:"nowrap"}}>{timeLabel}</span>
+          </div>
+          <div style={{height:29,borderRadius:3,backgroundColor:T.cream,border:`0.5px solid ${T.cream}`,display:"flex",alignItems:"center",justifyContent:"center",padding:"10px 15px",boxSizing:"border-box",flexShrink:0}}>
+            <span style={{fontSize:9,fontWeight:600,color:T.slate,letterSpacing:0.5,lineHeight:"15px",textTransform:"uppercase",whiteSpace:"nowrap"}}>{category}</span>
+          </div>
+        </div>
+        {/* Question + subtext */}
+        <div style={{display:"flex",flexDirection:"column",gap:8,paddingRight:24,flex:1,justifyContent:"flex-end"}}>
+          <h2 style={{fontSize:20,fontWeight:900,lineHeight:"130%",letterSpacing:-0.5,margin:0,color:T.slate}}>{question}</h2>
+          <p style={{fontSize:13,fontWeight:500,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0}}>{subtext}</p>
+        </div>
+      </div>
+      <LinkRow/>
+      <ShareBar/>
+    </div>
+  );
+}
+
+/* ── 15. PoliticianProfileCard ── */
+/* Figma (7798:28232): red header, avatar, name/bio, term badges, time tabs, Beacon Score, engagement */
+function TermBadge({label, value}) {
+  return (
+    <div style={{flex:1,backgroundColor:"rgba(20,24,16,0.24)",borderRadius:5,padding:"0 12px",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,height:48,textAlign:"center",letterSpacing:-0.5}}>
+      <span style={{fontSize:10,fontWeight:400,color:"rgba(250,250,250,0.8)",lineHeight:"130%",letterSpacing:-0.5}}>{label}</span>
+      <span style={{fontSize:13,fontWeight:600,color:"#fafafa",lineHeight:"130%",letterSpacing:-0.5}}>{value}</span>
+    </div>
+  );
+}
+function PoliticianProfileCard({
+  name="Lauren Boebert",
+  role="U.S. Representative · House",
+  location="Colorado",
+  district="4th Congressional District",
+  party="Republican",
+  termServed="3rd",
+  officeSince="Jan 2021",
+  nextElection="Nov 2026",
+  score=81,
+  imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200",
+  headerColor="#de0100",
+}) {
+  const [activeTab, setActiveTab] = useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  return (
+    <div style={{width:357,borderRadius:10,overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",paddingBottom:8,backgroundColor:"#fff",fontFamily:"Inter,sans-serif"}}>
+      {/* Red header */}
+      <div style={{backgroundColor:headerColor,padding:18,display:"flex",flexDirection:"column",gap:16,borderRadius:"10px 10px 0 0",width:"100%"}}>
+        <div style={{display:"flex",gap:17,alignItems:"flex-start"}}>
+          <div style={{width:79,height:79,borderRadius:"50%",backgroundColor:"#c44",backgroundImage:`url('${imgUrl}')`,backgroundSize:"cover",backgroundPosition:"center",flexShrink:0}}/>
+          <div style={{display:"flex",flexDirection:"column",color:"#fff"}}>
+            <h2 style={{fontSize:22,fontWeight:700,lineHeight:"130%",letterSpacing:-1,margin:0,color:"#fff"}}>{name}</h2>
+            <p style={{fontSize:13,fontWeight:600,lineHeight:"130%",letterSpacing:-0.5,color:"rgba(250,250,250,0.8)",margin:0}}>{role}</p>
+            <p style={{fontSize:13,fontWeight:400,lineHeight:"240%",letterSpacing:-0.5,color:"rgba(250,250,250,0.8)",margin:0}}>{location}</p>
+            <p style={{fontSize:13,fontWeight:400,lineHeight:"140%",letterSpacing:-0.5,color:"rgba(250,250,250,0.8)",margin:0}}>{district}</p>
+            <p style={{fontSize:13,fontWeight:400,lineHeight:"140%",letterSpacing:-0.5,color:"rgba(250,250,250,0.8)",margin:0}}>{party}</p>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:4,width:"100%"}}>
+          <TermBadge label="Term Served" value={termServed}/>
+          <TermBadge label="Office Since" value={officeSince}/>
+          <TermBadge label="Next Election" value={nextElection}/>
+        </div>
+      </div>
+      {/* Tab row */}
+      <div style={{display:"flex",gap:28,backgroundColor:"#fff",borderBottom:"1px solid #141810",height:37,alignItems:"center",justifyContent:"center",overflow:"hidden",width:"100%"}}>
+        {tabs.map(tab=>(
+          <button key={tab} onClick={()=>setActiveTab(tab)} style={{padding:8,fontSize:16,fontWeight:600,color:"#141810",backgroundColor:"transparent",border:"none",borderBottom:activeTab===tab?"4px solid #141810":"4px solid transparent",cursor:"pointer",textAlign:"center",lineHeight:"130%",letterSpacing:-0.5}}>
+            {tab}
+          </button>
+        ))}
+      </div>
+      {/* Score section */}
+      <div style={{padding:18,backgroundColor:"#fff",display:"flex",flexDirection:"column",gap:7,borderRadius:"0 0 10px 10px",boxShadow:"0 4px 15px rgba(0,0,0,0.15)",width:"100%"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8}}>
+          <IconBeaconDot/>
+          <span style={{fontSize:22,fontWeight:800,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,flex:1}}>Beacon Score™</span>
+          <IconInfo/>
+        </div>
+        <div style={{display:"flex",gap:16,alignItems:"center",width:"100%"}}>
+          <p style={{fontSize:14,fontWeight:600,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,margin:0,width:146}}>Calculated from participation, consistency, and conduct.</p>
+          <div style={{flex:1,display:"flex",alignItems:"baseline",justifyContent:"flex-end"}}>
+            <span style={{fontSize:32,fontWeight:700,color:"#141810",lineHeight:"130%",letterSpacing:-1}}>{score} </span>
+            <span style={{fontSize:32,fontWeight:700,color:T.gray,lineHeight:"130%",letterSpacing:-1}}>/100</span>
+          </div>
+        </div>
+        <div style={{height:24}}/>
+        <EngagementBar/>
+      </div>
+    </div>
+  );
+}
+
+/* ── 16. PostImageOnly ── */
+/* Figma: 357×400px, dark image card with full overlay, engagement row on dark bg */
+function PostImageOnly({
+  title="Justice Department official posts social media photo revealing investigation into...",
+  category="FOREIGN POLICY",
+  timeAgo="30m ago",
+  imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800",
+}) {
+  return (
+    <div style={{width:357,height:400,borderRadius:10,overflow:"hidden",position:"relative",display:"flex",flexDirection:"column",gap:8,padding:"18px 18px 16px 18px",boxShadow:"0 4px 15px rgba(0,0,0,0.15)",fontFamily:"Inter,sans-serif",boxSizing:"border-box"}}>
+      {/* BG image */}
+      <div style={{position:"absolute",inset:0,zIndex:0,background:`url('${imgUrl}') center/cover`}}/>
+      {/* Gradient overlay */}
+      <div style={{position:"absolute",inset:0,zIndex:0,background:"linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 75%)"}}/>
+      {/* Badge */}
+      <div style={{display:"flex",justifyContent:"flex-end",position:"relative",zIndex:1}}>
+        <div style={{width:120,height:29,borderRadius:3,backgroundColor:"rgba(20,24,16,0.5)",border:"0.5px solid rgba(240,232,216,1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#f0e8d8",fontSize:9,fontWeight:600,letterSpacing:0.5,textTransform:"uppercase",lineHeight:"15px"}}>
+          {category}
+        </div>
+      </div>
+      {/* Headline */}
+      <div style={{flex:1,display:"flex",alignItems:"flex-end",paddingBottom:18,position:"relative",zIndex:1}}>
+        <div style={{display:"flex",flexDirection:"column",gap:8,paddingRight:40,lineHeight:"110%",letterSpacing:-0.5}}>
+          <h2 style={{color:"#fff",fontSize:20,fontWeight:900,lineHeight:"110%",letterSpacing:-0.5,margin:0}}>{title}</h2>
+          <span style={{color:"#f0e8d8",fontSize:13,fontWeight:600,lineHeight:"110%",letterSpacing:-0.5}}>{timeAgo}</span>
+        </div>
+      </div>
+      {/* Engagement on dark bg — white/light text */}
+      <div style={{display:"flex",flexDirection:"column",gap:8,position:"relative",zIndex:1}}>
+        {/* Stats row */}
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div style={{display:"flex",gap:8,alignItems:"center"}}>
+            <span style={{fontSize:11,fontWeight:500,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25,whiteSpace:"nowrap"}}>6 Pulses</span>
+            <span style={{fontSize:11,fontWeight:500,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25}}>•</span>
+            <span style={{fontSize:11,fontWeight:500,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25,whiteSpace:"nowrap"}}>421 Shares</span>
+          </div>
+          <span style={{fontSize:11,fontWeight:500,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25,whiteSpace:"nowrap"}}>1.4k Reactions</span>
+        </div>
+        {/* Divider */}
+        <div style={{width:"100%",height:1,backgroundColor:"rgba(240,232,216,0.5)"}}/>
+        {/* Actions */}
+        <div style={{display:"flex",gap:24,alignItems:"center"}}>
+          <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.97 22H14.97C19.97 22 21.97 20 21.97 15V9C21.97 4 19.97 2 14.97 2H8.97C3.97 2 1.97 4 1.97 9V15C1.97 20 3.97 22 8.97 22Z" stroke="#fafafa" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1.97 12.7L7.97 12.68C8.72 12.68 9.56 13.25 9.84 13.95L10.98 16.83C11.24 17.48 11.65 17.48 11.91 16.83L14.2 11.02C14.42 10.46 14.83 10.44 15.11 10.97L16.15 12.94C16.46 13.53 17.26 14.01 17.92 14.01H21.98" stroke="#fafafa" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span style={{fontSize:11,fontWeight:600,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25}}>Pulses</span>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.0493 2.65901L3.80687 6.93449C2.39641 7.30914 2.1099 9.10529 3.26693 10.2623L7.7628 14.7582L13.8895 10.1962L9.32754 16.3229L13.8234 20.8188C14.9804 21.9758 16.7766 21.6893 17.1512 20.2788L21.4267 4.03642C21.6471 3.20997 20.8868 2.44964 20.0603 2.67002L20.0493 2.65901Z" stroke="#fafafa" strokeLinejoin="round"/></svg>
+            <span style={{fontSize:11,fontWeight:600,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25}}>Share</span>
+          </div>
+          <div style={{flex:1,display:"flex",justifyContent:"flex-end"}}>
+            <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
+              <IconReactButton/>
+              <span style={{fontSize:11,fontWeight:600,color:"#fafafa",lineHeight:"15px",letterSpacing:-0.25}}>React</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 17. PostHomeSlim ── */
+/* Figma: 333px wide, 128px image top, warm-bg body, title + date + engagement */
+/* ── 18. OfficialCard ── */
+/* Figma: 357×100px, color swatch left (102px), avatar circle 64px, name + status badge + role text, score right */
+function IconCheck(){
+  return <svg width="8" height="8" viewBox="0 0 8 8" fill="none"><path d="M1.33 4.33l1.67 1.67 3.33-3.33" stroke="#999" strokeWidth="0.8" strokeLinecap="round" strokeLinejoin="round"/></svg>;
+}
+function OfficialCard({
+  name="Suzanne Bonamici",
+  role="U.S. Representative",
+  location="Oregon",
+  party="D",
+  status="tracked",
+  score=91,
+  bgColor="#036",
+  imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200",
+}) {
+  const isTracked = status === "tracked";
+  return (
+    <div style={{width:357,height:100,borderRadius:10,overflow:"hidden",backgroundColor:"#fff",boxShadow:"0 4px 15px rgba(0,0,0,0.15)",display:"flex",gap:16,alignItems:"center",paddingRight:16,fontFamily:"Inter,sans-serif"}}>
+      {/* Color swatch */}
+      <div style={{width:102,height:100,backgroundColor:bgColor,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+        <div style={{width:64,height:64,borderRadius:"50%",backgroundImage:`url('${imgUrl}')`,backgroundSize:"cover",backgroundPosition:"center"}}/>
+      </div>
+      {/* Content */}
+      <div style={{flex:1,display:"flex",alignItems:"center"}}>
+        <div style={{flex:1,display:"flex",flexDirection:"column",gap:2}}>
+          <p style={{fontSize:14,fontWeight:700,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,margin:0,height:20}}>{name}</p>
+          <div style={{paddingBottom:4}}>
+            {isTracked ? (
+              <div style={{backgroundColor:"rgba(153,153,153,0.25)",borderRadius:2,padding:"0 4px",display:"inline-flex",gap:2,alignItems:"center"}}>
+                <span style={{opacity:0.5}}><IconCheck/></span>
+                <span style={{fontSize:9,fontWeight:600,color:"#141810",opacity:0.5,letterSpacing:-0.2,textTransform:"uppercase",lineHeight:"1.2"}}>Tracked</span>
+              </div>
+            ) : (
+              <div style={{border:"0.8px solid rgba(153,153,153,0.5)",borderRadius:2,padding:"0 4px",display:"inline-flex",gap:2,alignItems:"center"}}>
+                <span style={{fontSize:9,fontWeight:600,color:T.gray,opacity:0.8,letterSpacing:-0.2,textTransform:"uppercase",lineHeight:"1.2"}}>Pending</span>
+              </div>
+            )}
+          </div>
+          <div style={{fontSize:13,fontWeight:400,color:"rgba(20,24,16,0.6)",lineHeight:"130%",letterSpacing:-0.5}}>
+            <p style={{margin:0}}>{role} - {party}</p>
+            <p style={{margin:0}}>{location}</p>
+          </div>
+        </div>
+        {score != null && (
+          <div style={{width:48,display:"flex",flexDirection:"column",alignItems:"flex-end"}}>
+            <span style={{fontSize:22,fontWeight:700,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,textAlign:"right"}}>{score}</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── 19. DataDetails ── */
+/* Figma: 325px, warmBg, Participation title + icon + score/chevron, bar chart, formula boxes */
+function DataDetails() {
+  return (
+    <div style={{width:325,borderRadius:10,backgroundColor:T.warmBg,display:"flex",flexDirection:"column",gap:24,padding:16,overflow:"hidden",fontFamily:"Inter,sans-serif"}}>
+      {/* Top row: icon + title/desc + score + chevron */}
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end"}}>
+        <div style={{flex:1,display:"flex",gap:10,alignItems:"flex-start"}}>
+          <div style={{display:"flex",alignItems:"flex-start",justifyContent:"center"}}>
+            <IconVerify/>
+          </div>
+          <div style={{flex:1,display:"flex",flexDirection:"column",gap:8,paddingRight:40}}>
+            <div style={{display:"flex",gap:8,alignItems:"center"}}>
+              <span style={{fontSize:18,fontWeight:800,color:"#141810",lineHeight:"130%",letterSpacing:-0.5}}>Participation</span>
+              <div style={{flex:1,display:"flex",alignItems:"center"}}><IconInfo/></div>
+            </div>
+            <p style={{fontSize:14,fontWeight:500,color:"#141810",lineHeight:"120%",letterSpacing:-0.5,margin:0}}>Participation score is a blend of voting participation (50%) and committee participation (50%)</p>
+          </div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:16,alignItems:"flex-end",alignSelf:"stretch"}}>
+          <IconChevronForward color={T.gray}/>
+          <div style={{flex:1,display:"flex",alignItems:"flex-end",justifyContent:"flex-end",paddingRight:6}}>
+            <span style={{fontSize:22,fontWeight:700,color:"#141810",lineHeight:"130%",letterSpacing:-1,textAlign:"right"}}>17</span>
+            <span style={{fontSize:22,fontWeight:700,color:T.gray,lineHeight:"130%",letterSpacing:-1}}> /20</span>
+          </div>
+        </div>
+      </div>
+      {/* Divider */}
+      <div style={{width:"100%",height:1,backgroundColor:"#141810"}}/>
+      {/* Bar chart */}
+      <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center"}}>
+        <div style={{width:"100%",height:24,position:"relative",backgroundColor:"#39503d",overflow:"hidden"}}>
+          <div style={{position:"absolute",left:0,top:0,height:24,width:"calc(100% - 128px)",backgroundColor:"#f80"}}/>
+          <span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:"#fafafa",lineHeight:"1"}}>49</span>
+          <span style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:"#fafafa",lineHeight:"1",textAlign:"right"}}>36</span>
+        </div>
+        <div style={{display:"flex",justifyContent:"space-between",width:"100%",padding:"0 8px"}}>
+          <div style={{display:"flex",flexDirection:"column"}}>
+            <span style={{fontSize:11,fontWeight:700,color:"#141810",lineHeight:"140%"}}>Voting</span>
+            <span style={{fontSize:11,fontWeight:500,color:T.gray,lineHeight:"140%"}}>(50% x 97%)</span>
+          </div>
+          <div style={{display:"flex",flexDirection:"column",textAlign:"right"}}>
+            <span style={{fontSize:11,fontWeight:700,color:"#141810",lineHeight:"140%"}}>Committees</span>
+            <span style={{fontSize:11,fontWeight:500,color:T.gray,lineHeight:"140%"}}>(50% x 71%)</span>
+          </div>
+        </div>
+      </div>
+      {/* Formula row */}
+      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",width:"100%"}}>
+        <div style={{width:72,display:"flex",flexDirection:"column",gap:6,alignItems:"center"}}>
+          <div style={{width:"100%",height:32,borderRadius:5,border:`1px solid ${T.cream}`,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <span style={{fontSize:16,fontWeight:600,color:"#141810",lineHeight:"130%",textAlign:"center"}}>85</span>
+          </div>
+          <span style={{fontSize:10,fontWeight:500,color:T.gray,lineHeight:"110%",letterSpacing:-0.5,textAlign:"center",whiteSpace:"pre-line"}}>{"Overall\nParticipation"}</span>
+        </div>
+        <span style={{fontSize:16,fontWeight:400,color:"#141810",display:"flex",alignItems:"center",height:29,marginTop:1}}>×</span>
+        <div style={{width:72,display:"flex",flexDirection:"column",gap:6,alignItems:"center"}}>
+          <div style={{width:"100%",height:32,borderRadius:5,border:`1px solid ${T.cream}`,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <span style={{fontSize:16,fontWeight:600,color:"#141810",lineHeight:"130%",textAlign:"center"}}>20%</span>
+          </div>
+          <span style={{fontSize:10,fontWeight:500,color:T.gray,lineHeight:"110%",letterSpacing:-0.5,textAlign:"center",whiteSpace:"pre-line"}}>{"Participation\nWeight"}</span>
+        </div>
+        <span style={{fontSize:16,fontWeight:400,color:"#141810",display:"flex",alignItems:"center",height:29,marginTop:1}}>=</span>
+        <div style={{width:72,display:"flex",flexDirection:"column",gap:6,alignItems:"center"}}>
+          <div style={{width:"100%",height:32,borderRadius:5,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center"}}>
+            <span style={{fontSize:16,fontWeight:600,color:"#141810",lineHeight:"130%",textAlign:"center"}}>17</span>
+          </div>
+          <span style={{fontSize:10,fontWeight:500,color:T.gray,lineHeight:"110%",letterSpacing:-0.5,textAlign:"center",whiteSpace:"pre-line"}}>{"Rounded\nScore"}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════
+   STORYBOOK APP
+   ═══════════════════════════════════════════════ */
+
+/* ═══════════════════════════════════════════════
+   GRID APP — section-based layout, no sidebar
+   ═══════════════════════════════════════════════ */
+
+const SECTIONS = [
+  {
+    id: "Shared",
+    components: [
+      { id:"SectionTitle",   label:"SectionTitle",   desc:"Orange dot · ExtraBold title · optional subtitle + View All link" },
+      { id:"BottomTabBar",   label:"BottomTabBar",   desc:"5-tab nav bar · active: bold underline + icon fill" },
+      { id:"BackHeader",     label:"BackHeader",     desc:"Back chevron + centered page title for detail screens" },
+      { id:"ZipCodeCTA",     label:"ZipCodeCTA",     desc:"Deep green card · zip input + Update button" },
+    ]
+  },
+  {
+    id: "Issues",
+    components: [
+      { id:"ArticleCard",    label:"ArticleCard",    desc:"Hero image card · Hero (overlay) and Slim (image above, text below) variants" },
+      { id:"PostImageOnly",  label:"PostImageOnly",  desc:"Full-bleed image card · title + engagement overlaid on dark photo" },
+      { id:"PollCard",       label:"PollCard",       desc:"Survey card · question + time estimate + article link + engagement" },
+      { id:"AccordionItem",  label:"AccordionItem",  desc:"Expandable row · icon + title + plus/minus toggle" },
+    ]
+  },
+  {
+    id: "Officials",
+    components: [
+      { id:"OfficialCard",           label:"OfficialCard",           desc:"Compact list row · color swatch + avatar + name + optional score" },
+      { id:"PoliticianProfileCard",  label:"PoliticianProfileCard",  desc:"Full detail card · header + avatar + bio + score + time-range tabs" },
+      { id:"ScoreItem",              label:"ScoreItem",              desc:"Score breakdown row · icon + title + bar + score/max + Avg marker" },
+      { id:"StateRow",               label:"StateRow",               desc:"State flag + name + chevron · for browsing officials by state" },
+      { id:"StancesCard",            label:"StancesCard",            desc:"Title + subtitle + two stat boxes · consistency detail screen" },
+      { id:"DataDetails",            label:"DataDetails",            desc:"Score dimension breakdown · bar chart + formula boxes" },
+    ]
+  },
+  {
+    id: "Pulse",
+    components: [
+      { id:"SurveyProgressBar",  label:"SurveyProgressBar",  desc:"Continuous fill bar + step counter for survey flows" },
+      { id:"SurveyAnswerCard",   label:"SurveyAnswerCard",   desc:"Answer card · single-select (bg toggle) or multi-select (circle checkbox)" },
+      { id:"SurveyFooter",       label:"SurveyFooter",       desc:'"Be Part of the Signal" CTA with participant count' },
+    ]
+  },
+];
+
+function ComponentPreview({ id }) {
+  switch(id) {
+    case "SectionTitle": return (
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        <div>
+          <p className="variant-label">Default</p>
+          <div className="canvas-wrap" style={{width:393}}><SectionTitle title="Active Issues" subtitle="Most discussed in your area this week"/></div>
+        </div>
+        <div>
+          <p className="variant-label">With View All</p>
+          <div className="canvas-wrap" style={{width:393}}><SectionTitle title="Elected Officials" subtitle="Track who represents you" showViewAll/></div>
+        </div>
+        <div>
+          <p className="variant-label">Title Only</p>
+          <div className="canvas-wrap" style={{width:393}}><SectionTitle title="Pulse Surveys"/></div>
+        </div>
+      </div>
+    );
+    case "BottomTabBar": return (
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        {[["home","Home"],["issues","Issues"],["pulse","Pulse"],["officials","Officials"],["account","Account"]].map(([tab,label])=>(
+          <div key={tab}>
+            <p className="variant-label">{label} Active</p>
+            <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><BottomTabBar activeTab={tab}/></div>
+          </div>
+        ))}
+      </div>
+    );
+    case "BackHeader": return (
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        {[["Consistency"],["Officials"],["Participation"]].map(([t])=>(
+          <div key={t}>
+            <p className="variant-label">{t}</p>
+            <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><BackHeader title={t}/></div>
+          </div>
+        ))}
+      </div>
+    );
+    case "ZipCodeCTA": return (
+      <div style={{display:"flex",flexDirection:"column",gap:16}}>
+        <div>
+          <p className="variant-label">Default — no zip entered</p>
+          <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><ZipCodeCTA active={false}/></div>
+        </div>
+        <div>
+          <p className="variant-label">Active — zip entered</p>
+          <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><ZipCodeCTA active={true}/></div>
+        </div>
+      </div>
+    );
+    case "ArticleCard": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Hero — overlay text + description</p>
+          <div className="canvas-wrap">
+            <PostArticle variant="mobile" title="US and Israel Attack Iran for 10th Day" category="FOREIGN POLICY" timeAgo="1h ago" description="The ongoing war has involved strikes on Iranian sites and retaliatory actions, with reports of casualties among U.S. service members." imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Slim — image top, text below</p>
+          <div className="canvas-wrap">
+            <PostArticle variant="slim" title="DOJ says it erroneously relied on ICE memo to justify immigration courthouse arrests" category="DOMESTIC POLICY" imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "PostImageOnly": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Foreign Policy</p>
+          <div className="canvas-wrap">
+            <PostImageOnly title="Justice Department official posts social media photo revealing investigation into..." category="FOREIGN POLICY" timeAgo="30m ago" imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Domestic Policy</p>
+          <div className="canvas-wrap">
+            <PostImageOnly title="Senate votes on sweeping immigration reform bill after 12-hour debate" category="DOMESTIC POLICY" timeAgo="2h ago" imgUrl="https://images.pexels.com/photos/1181406/pexels-photo-1181406.jpeg?auto=compress&cs=tinysrgb&w=800"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "PollCard": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Active — Gun Policy</p>
+          <div className="canvas-wrap">
+            <PollCard question="Do you think possession of guns should be allowed to everyone?" category="domestic policy" timeLabel="Takes ~ 1 min" subtext="At 10,000 responses, anonymous results are shared with your congressman." shares="842.3k"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Active — Foreign Policy</p>
+          <div className="canvas-wrap">
+            <PollCard question="Should the US continue military operations in the Middle East?" category="foreign policy" timeLabel="Takes ~ 2 min" subtext="Responses are compiled and shared with your elected representatives." shares="1.2m"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Complete — 73% Oppose</p>
+          <div className="canvas-wrap">
+            <PollCard variant="complete" question="U.S. vs. Maduro: Smart Move or Crossing the Line?" category="foreign policy" subtext="At 10,000 responses, anonymous results are shared with your congressman." shares="842.3k" resultPct={73} resultLabel="Oppose" resultCount="6,876" resultTotal="10,000"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Complete — 82% Support</p>
+          <div className="canvas-wrap">
+            <PollCard variant="complete" question="Should the government assist corporations in increasing employment?" category="foreign policy" subtext="At 10,000 responses, anonymous results are shared with your congressman." shares="842.3k" resultPct={82} resultLabel="Support" resultCount="6,876" resultTotal="10,000"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "AccordionItem": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Closed</p>
+          <div className="canvas-wrap"><AccordionItem icon={<IconGlobe/>} title="Consensus View"/></div>
+        </div>
+        <div>
+          <p className="variant-label">Open</p>
+          <div className="canvas-wrap"><AccordionItem icon={<IconContention/>} title="Contention Points" defaultOpen/></div>
+        </div>
+      </div>
+    );
+    case "OfficialCard": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Tracked — with score</p>
+          <div className="canvas-wrap">
+            <OfficialCard name="Suzanne Bonamici" role="U.S. Representative" location="Oregon" party="D" status="tracked" score={91} bgColor="#036" imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Pending — no score yet</p>
+          <div className="canvas-wrap">
+            <OfficialCard name="Lauren Boebert" role="U.S. Representative" location="Colorado" party="R" status="pending" score={null} bgColor="#de0100" imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "PoliticianProfileCard": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Republican</p>
+          <div className="canvas-wrap">
+            <PoliticianProfileCard name="Lauren Boebert" role="U.S. Representative · House" location="Colorado" district="4th Congressional District" party="Republican" termServed="3rd" officeSince="Jan 2021" nextElection="Nov 2026" score={81} headerColor="#de0100" imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Democrat</p>
+          <div className="canvas-wrap">
+            <PoliticianProfileCard name="Suzanne Bonamici" role="U.S. Representative · House" location="Oregon" district="1st Congressional District" party="Democrat" termServed="7th" officeSince="Jan 2013" nextElection="Nov 2026" score={94} headerColor="#036" imgUrl="https://images.pexels.com/photos/1181519/pexels-photo-1181519.jpeg?auto=compress&cs=tinysrgb&w=200"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "ScoreItem": return (
+      <div>
+        <p className="variant-label">Score list</p>
+        <div className="canvas-wrap">
+          <div style={{backgroundColor:T.warmBg,borderRadius:10,padding:"0 18px",width:393}}>
+            <ScoreItem icon={<IconVerify/>} title="Participation" score={16} maxScore={20} avgPercent={45}/>
+            <ScoreItem icon={<IconUpDown/>} title="Consistency" score={34} maxScore={40} avgPercent={55}/>
+            <ScoreItem icon={<IconMagicShield/>} title="Conduct" score={31} maxScore={40} avgPercent={40}/>
+          </div>
+        </div>
+      </div>
+    );
+    case "StateRow": return (
+      <div>
+        <p className="variant-label">State list</p>
+        <div className="canvas-wrap">
+          <div style={{backgroundColor:T.warmBg,borderRadius:10,overflow:"hidden"}}>
+            <StateRow name="Alabama"/>
+            <StateRow name="Alaska"/>
+            <StateRow name="Arizona"/>
+            <StateRow name="California"/>
+            <StateRow name="Colorado"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "StancesCard": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Stances</p>
+          <div className="canvas-wrap">
+            <StancesCard title="Stances" subtitle="Top issue positions." stat1Label="Signals" stat1Value="1,234" stat2Label="Stances" stat2Value="16"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Inconsistencies</p>
+          <div className="canvas-wrap">
+            <StancesCard title="Inconsistencies" subtitle="No Stance Inconsistencies Detected" stat1Label="Signals" stat1Value="6" stat2Label="Stances" stat2Value="16"/>
+          </div>
+        </div>
+      </div>
+    );
+    case "DataDetails": return (
+      <div>
+        <p className="variant-label">Participation breakdown</p>
+        <div className="canvas-wrap"><DataDetails/></div>
+      </div>
+    );
+    case "SurveyProgressBar": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        {[[1,3],[2,3],[3,3],[1,4],[2,4]].map(([c,t])=>(
+          <div key={`${c}-${t}`}>
+            <p className="variant-label">Step {c} of {t}</p>
+            <div className="canvas-wrap"><SurveyProgressBar current={c} total={t}/></div>
+          </div>
+        ))}
+      </div>
+    );
+    case "SurveyAnswerCard": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Single-select</p>
+          <div className="canvas-wrap" style={{display:"flex",flexDirection:"column",gap:20}}>
+            <SurveyAnswerCard type="single" text="Not at all"/>
+            <SurveyAnswerCard type="single" text="Slightly"/>
+            <SurveyAnswerCard type="single" text="Somewhat" selected/>
+            <SurveyAnswerCard type="single" text="Closely"/>
+            <SurveyAnswerCard type="single" text="Very Closely"/>
+          </div>
+        </div>
+        <div>
+          <p className="variant-label">Multi-select</p>
+          <div className="canvas-wrap" style={{display:"flex",flexDirection:"column",gap:20}}>
+            <SurveyAnswerCard type="multi" text="The President acting under executive authority"/>
+            <SurveyAnswerCard type="multi" text="Congress with explicit authorization"/>
+            <SurveyAnswerCard type="multi" text="Joint approval between Congress and the Executive" selected/>
+            <SurveyAnswerCard type="multi" text="Multinational or UN-backed authorization" selected/>
+          </div>
+        </div>
+      </div>
+    );
+    case "SurveyFooter": return (
+      <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+        <div>
+          <p className="variant-label">Default</p>
+          <div className="canvas-wrap"><SurveyFooter count={6876}/></div>
+        </div>
+        <div>
+          <p className="variant-label">Higher count</p>
+          <div className="canvas-wrap"><SurveyFooter count={12450}/></div>
+        </div>
+      </div>
+    );
+    default: return null;
+  }
+}
+
+function App() {
+  return (
+    <div style={{minHeight:"100vh",background:"#f5f4f0",fontFamily:"Inter,sans-serif"}}>
+      {/* Top header */}
+      <div style={{background:"#fff",borderBottom:"1px solid #e8e4de",padding:"24px 48px",position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div>
+          <h1 style={{fontSize:18,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>Beacon</h1>
+          <p style={{fontSize:11,color:T.gray,margin:0,marginTop:2}}>Component Library · {SECTIONS.reduce((n,s)=>n+s.components.length,0)} components</p>
+        </div>
+        <div style={{display:"flex",gap:24}}>
+          {SECTIONS.map(s=>(
+            <a key={s.id} href={`#section-${s.id}`} style={{fontSize:13,fontWeight:600,color:T.gray,textDecoration:"none",letterSpacing:-0.25}}>{s.id}</a>
+          ))}
+        </div>
+      </div>
+
+      {/* Sections */}
+      <div style={{padding:"48px 48px 96px"}}>
+        {SECTIONS.map(section=>(
+          <div key={section.id} id={`section-${section.id}`} style={{marginBottom:72}}>
+            {/* Section header */}
+            <div style={{display:"flex",alignItems:"baseline",gap:12,marginBottom:28,paddingBottom:12,borderBottom:"2px solid #141810"}}>
+              <h2 style={{fontSize:22,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>{section.id}</h2>
+              <span style={{fontSize:12,fontWeight:600,color:T.gray,letterSpacing:0.5,textTransform:"uppercase"}}>{section.components.length} components</span>
+            </div>
+
+            {/* Component grid */}
+            <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+              {section.components.map(comp=>(
+                <div key={comp.id} style={{background:"#fff",borderRadius:16,padding:"24px",flex:"0 0 auto",maxWidth:"100%"}}>
+                  <div style={{marginBottom:16}}>
+                    <h3 style={{fontSize:16,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>{comp.label}</h3>
+                    <p style={{fontSize:12,color:T.gray,margin:"4px 0 0",letterSpacing:-0.25}}>{comp.desc}</p>
+                  </div>
+                  <ComponentPreview id={comp.id}/>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>

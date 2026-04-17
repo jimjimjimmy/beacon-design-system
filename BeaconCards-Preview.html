@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Beacon Cards — Figma → React Preview</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #f0f0f0; font-family: 'Inter', sans-serif; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState } = React;
+
+    /* ── SVG Icons extracted from Figma ── */
+
+    function IconPulse() {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M8.97 22H14.97C19.97 22 21.97 20 21.97 15V9C21.97 4 19.97 2 14.97 2H8.97C3.97 2 1.97 4 1.97 9V15C1.97 20 3.97 22 8.97 22Z" stroke="#999" strokeLinecap="round" strokeLinejoin="round"/>
+          <path d="M1.97 12.7L7.97 12.68C8.72 12.68 9.56 13.25 9.84 13.95L10.98 16.83C11.24 17.48 11.65 17.48 11.91 16.83L14.2 11.02C14.42 10.46 14.83 10.44 15.11 10.97L16.15 12.94C16.46 13.53 17.26 14.01 17.92 14.01H21.98" stroke="#999" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+
+    function IconShare() {
+      return (
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M20.05 2.659L3.807 6.934C2.396 7.309 2.11 9.105 3.267 10.262L7.763 14.758L13.889 10.196L9.327 16.323L13.823 20.819C14.98 21.976 16.776 21.689 17.151 20.279L21.427 4.036C21.647 3.21 20.887 2.45 20.06 2.67L20.05 2.659Z" stroke="#999" strokeLinejoin="round"/>
+        </svg>
+      );
+    }
+
+    function IconReactionHappy() {
+      return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M5 7.124C5 6.422 5.27 5.852 5.6 5.852C5.93 5.852 6.2 6.422 6.2 7.124" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M9.8 7.124C9.8 6.422 10.07 5.852 10.4 5.852C10.73 5.852 11 6.422 11 7.124" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M8 14C11.314 14 14 11.314 14 8C14 4.686 11.314 2 8 2C4.686 2 2 4.686 2 8C2 11.314 4.686 14 8 14Z" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10"/>
+          <path d="M10.754 9.188C10.292 10.25 9.236 11 8 11C6.764 11 5.708 10.256 5.246 9.188" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+        </svg>
+      );
+    }
+
+    function IconReactionAngry() {
+      return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 13.333C11.314 13.333 14 10.647 14 7.333C14 4.02 11.314 1.333 8 1.333C4.686 1.333 2 4.02 2 7.333C2 10.647 4.686 13.333 8 13.333Z" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10"/>
+          <circle cx="5.6" cy="6.133" r="0.6" fill="#999"/>
+          <circle cx="9.2" cy="6.133" r="0.6" fill="#999"/>
+          <path d="M8.432 4.615C8.948 4.429 9.884 4.369 10.46 4.771" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M6.476 8.497C7.436 8.329 9.092 8.521 9.974 9.391" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M6.62 4.195C6.146 3.919 5.234 3.703 4.598 3.997" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M3.272 12.829C3.182 12.289 3.038 10.543 3.602 10.021C4.166 9.499 4.436 11.203 4.64 11.215C4.844 11.227 7.004 10.195 7.64 10.243C8.276 10.291 7.64 11.437 6.47 11.935C6.47 11.935 7.058 13.171 6.818 13.573C6.47 14.161 4.598 14.173 4.22 14.011C3.866 13.861 3.356 13.369 3.272 12.829Z" fill="#FFF9ED" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10"/>
+        </svg>
+      );
+    }
+
+    function IconReactionSad() {
+      return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M10.295 10.37C10.295 11.096 9.269 10.898 8.003 10.898C6.737 10.898 5.711 11.102 5.711 10.37C5.711 9.638 6.737 9.05 8.003 9.05C9.269 9.05 10.295 9.638 10.295 10.37Z" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10"/>
+          <path d="M8.003 14C11.316 14 14.003 11.314 14.003 8C14.003 4.686 11.316 2 8.003 2C4.689 2 2.003 4.686 2.003 8C2.003 11.314 4.689 14 8.003 14Z" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10"/>
+          <circle cx="5.603" cy="7.4" r="0.6" fill="#999"/>
+          <circle cx="10.403" cy="7.4" r="0.6" fill="#999"/>
+          <path d="M4.727 11.21C4.727 12.038 4.055 12.71 3.227 12.71C2.399 12.71 1.727 12.038 1.727 11.21C1.727 10.382 3.227 8.51 3.227 8.51C3.227 8.51 4.727 10.382 4.727 11.21Z" fill="white" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10"/>
+          <path d="M3.857 6.488C4.403 6.422 5.261 6.05 5.597 5.438" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M11.999 6.488C11.453 6.422 10.595 6.05 10.259 5.438" stroke="#999" strokeWidth="0.8" strokeMiterlimit="10" strokeLinecap="round"/>
+        </svg>
+      );
+    }
+
+    function IconAddReaction() {
+      return (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M15.634 15.634C14.7 16.569 13.414 17.143 12 17.143C10.586 17.143 9.291 16.569 8.366 15.634" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M13.474 3.566C12.994 3.48 12.506 3.429 12 3.429C7.268 3.429 3.428 7.269 3.428 12C3.428 16.731 7.268 20.571 12 20.571C16.731 20.571 20.571 16.731 20.571 12C20.571 11.494 20.52 11.006 20.434 10.526" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M15.429 6H20.572" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M18 8.571V3.429" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+        </svg>
+      );
+    }
+
+    function IconLink() {
+      return (
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.08387 10.0419L6.75435 11.3714C6.16769 11.9581 5.21529 11.9581 4.62862 11.3714C4.04196 10.7847 4.04196 9.83235 4.62862 9.24569L6.39624 7.47806C6.98291 6.89139 7.93531 6.89139 8.52197 7.47806" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+          <path d="M7.91613 5.95809L9.24565 4.62857C9.83231 4.0419 10.7847 4.0419 11.3714 4.62857C11.958 5.21523 11.958 6.16762 11.3714 6.75428L9.60374 8.52191C9.01708 9.10858 8.06468 9.10858 7.47802 8.52191" stroke="#999" strokeMiterlimit="10" strokeLinecap="round"/>
+        </svg>
+      );
+    }
+
+    /* ── Shared: Responses Row (top row of engagement) ── */
+    function ResponsesRow() {
+      return (
+        <div style={styles.responsesRow}>
+          <div style={styles.responsesLeft}>
+            <span style={styles.responseText}>6 Pulses</span>
+            <span style={styles.responseText}>•</span>
+            <span style={styles.responseText}>421Shares</span>
+          </div>
+          <div style={styles.responsesRight}>
+            <div style={styles.reactionIcons}>
+              <IconReactionHappy />
+              <IconReactionAngry />
+              <IconReactionSad />
+            </div>
+            <span style={styles.responseText}>1.4k Reactions</span>
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Shared: Post Actions Row (bottom row of engagement) ── */
+    function PostActionsRow({ showPulses = true }) {
+      return (
+        <div style={styles.postActionsRow}>
+          {showPulses && (
+            <div style={styles.actionButton}>
+              <IconPulse />
+              <span style={styles.actionLabel}>Pulses</span>
+            </div>
+          )}
+          <div style={styles.actionButton}>
+            <IconShare />
+            <span style={styles.actionLabel}>Share</span>
+          </div>
+          <div style={styles.actionSpacer} />
+          <div style={styles.actionButton}>
+            <div style={styles.reactCircle}>
+              <IconAddReaction />
+            </div>
+            <span style={styles.actionLabel}>React</span>
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Shared: Full Engagement Bar (for News + Profile cards) ── */
+    function EngagementBar() {
+      return (
+        <div style={styles.engagementSection}>
+          <ResponsesRow />
+          <div style={styles.engagementDivider} />
+          <PostActionsRow showPulses={true} />
+        </div>
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       CARD 1 — NEWS ARTICLE (Figma node 7798:28134)
+       ───────────────────────────────────────── */
+    function NewsArticleCard() {
+      return (
+        <div style={styles.newsCard}>
+          {/* Image area: vertical layout, gap 8, padding 18 top/right/left */}
+          <div style={styles.newsImageContainer}>
+            <div style={styles.newsGradientOverlay} />
+            <div style={styles.newsTopRow}>
+              <div style={styles.newsTag}>FOREIGN POLICY</div>
+            </div>
+            <div style={styles.newsContent}>
+              <h2 style={styles.newsHeadline}>US and Israel Attack Iran for 10th Day</h2>
+              <span style={styles.newsTimestamp}>1h ago</span>
+            </div>
+          </div>
+          {/* Bottom: cream bg, padding 18, contains description + engagement */}
+          <div style={styles.newsBody}>
+            <div style={styles.newsTextWrap}>
+              <p style={styles.newsDescription}>
+                The ongoing war has involved strikes on Iranian sites and retaliatory actions, with reports of casualties among U.S. service members.
+              </p>
+            </div>
+            <EngagementBar />
+          </div>
+        </div>
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       CARD 2 — POLL / SURVEY (Figma node 7798:27891)
+       ───────────────────────────────────────── */
+    function PollCard() {
+      return (
+        <div style={styles.pollCard}>
+          {/* Main content: padding 18/18/16/18, gap 20 */}
+          <div style={styles.pollMain}>
+            <div style={styles.pollHeader}>
+              <div style={styles.pollDuration}>
+                <span style={styles.pollTime}>Takes ~ 1 min</span>
+              </div>
+              <div style={styles.pollTag}>
+                <span style={styles.pollTagText}>domestic policy</span>
+              </div>
+            </div>
+            <div style={styles.pollHeadlineSection}>
+              <h2 style={styles.pollQuestion}>Do you think possession of guns should be allowed to everyone?</h2>
+              <p style={styles.pollSubtext}>
+                At 10,000 responses, anonymous results are shared with your congressman.
+              </p>
+            </div>
+          </div>
+          {/* Link section */}
+          <div style={styles.pollLinkSection}>
+            <div style={styles.pollLinkRow}>
+              <div style={styles.pollLinkIcon}><IconLink /></div>
+              <span style={styles.pollLinkText}>Link to News Article</span>
+            </div>
+          </div>
+          {/* Poll engagement: simplified — share + reaction only */}
+          <div style={styles.pollEngagementBar}>
+            <div style={styles.pollEngagementLeft}>
+              <div style={styles.pollActionItem}>
+                <IconShare />
+                <span style={styles.pollActionCount}>842.3k</span>
+              </div>
+            </div>
+            <div style={styles.pollEngagementRight}>
+              <span style={styles.pollReactionText}>Reaction</span>
+              <div style={styles.reactCircle}>
+                <IconAddReaction />
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       CARD 3 — POLITICIAN PROFILE (Figma node 7798:28232)
+       ───────────────────────────────────────── */
+    function TermBadge({ label, value }) {
+      return (
+        <div style={styles.termBadge}>
+          <span style={styles.termBadgeLabel}>{label}</span>
+          <span style={styles.termBadgeValue}>{value}</span>
+        </div>
+      );
+    }
+
+    function PoliticianProfileCard() {
+      const [activeTab, setActiveTab] = useState("6M");
+      const tabs = ["6M", "1Y", "2Y", "4Y", "All"];
+
+      return (
+        <div style={styles.profileCardWrap}>
+          {/* Info Card: red bg */}
+          <div style={styles.profileHeader}>
+            <div style={styles.imageBio}>
+              <div style={styles.avatar} />
+              <div style={styles.profileInfo}>
+                <h2 style={styles.profileName}>Lauren Boebert</h2>
+                <p style={styles.profileBioLine}>
+                  <span style={styles.profileRole}>U.S. Representative · House</span>
+                  <br />
+                  <span style={styles.profileLocation}>Colorado</span>
+                  <br />
+                  <span style={styles.profileDetail}>4th Congressional District</span>
+                  <br />
+                  <span style={styles.profileDetail}>Republican</span>
+                </p>
+              </div>
+            </div>
+            <div style={styles.badgeRow}>
+              <TermBadge label="Term Served" value="3rd" />
+              <TermBadge label="Office Since" value="Jan 2021" />
+              <TermBadge label="Next Election" value="Nov 2026" />
+            </div>
+          </div>
+          {/* Tab Menu */}
+          <div style={styles.tabRow}>
+            {tabs.map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                style={{
+                  ...styles.tab,
+                  ...(activeTab === tab ? styles.tabActive : {}),
+                }}
+              >
+                {tab}
+              </button>
+            ))}
+          </div>
+          {/* Beacon Score section with shadow */}
+          <div style={styles.scoreSection}>
+            <div style={styles.scoreHeader}>
+              <span style={styles.scoreDotWrap}>
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="9" fill="#FF8800"/></svg>
+              </span>
+              <span style={styles.scoreTitle}>Beacon Score™</span>
+              <span style={styles.infoIcon}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M11.949 11.04c-.16 0-.312.063-.424.176a.6.6 0 0 0-.176.424v3.766a.6.6 0 0 0 1.2 0v-3.766a.6.6 0 0 0-.6-.6Z" fill="#999"/>
+                  <path d="M12.749 8.863c0 1.066-1.6 1.066-1.6 0s1.6-1.066 1.6 0Z" fill="#999"/>
+                  <circle cx="11.782" cy="11.782" r="7.5" stroke="#999"/>
+                </svg>
+              </span>
+            </div>
+            <div style={styles.scoreBody}>
+              <p style={styles.scoreDescription}>
+                Calculated from participation, consistency, and conduct.
+              </p>
+              <div style={styles.scoreValue}>
+                <span style={styles.scoreBig}>81 </span>
+                <span style={styles.scoreMax}>/100</span>
+              </div>
+            </div>
+            {/* 24px spacer before engagement */}
+            <div style={{ height: 24 }} />
+            {/* Engagement section inside score area */}
+            <div style={styles.profileEngagementSection}>
+              <ResponsesRow />
+              <div style={styles.profileEngagementDivider} />
+              <PostActionsRow showPulses={true} />
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Main App ── */
+    function App() {
+      return (
+        <div style={styles.container}>
+          <NewsArticleCard />
+          <PollCard />
+          <PoliticianProfileCard />
+        </div>
+      );
+    }
+
+    /* ─────────────────────────────────────────
+       STYLES
+       ───────────────────────────────────────── */
+    const styles = {
+      container: {
+        display: "flex", gap: 24, padding: 32, backgroundColor: "#f0f0f0",
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        flexWrap: "wrap", justifyContent: "center", minHeight: "100vh", alignItems: "flex-start",
+      },
+
+      /* ── Shared: Responses Row ── */
+      responsesRow: {
+        display: "flex", gap: 24, alignItems: "center", justifyContent: "flex-end", width: "100%",
+      },
+      responsesLeft: {
+        flex: 1, display: "flex", gap: 8, alignItems: "center",
+        fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: 11,
+        color: "#999", letterSpacing: -0.25, lineHeight: "15px", whiteSpace: "nowrap",
+      },
+      responsesRight: {
+        flex: 1, display: "flex", gap: 8, alignItems: "center", justifyContent: "flex-end",
+      },
+      responseText: {
+        fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: 11,
+        color: "#999", letterSpacing: -0.25, lineHeight: "15px", whiteSpace: "nowrap",
+      },
+      reactionIcons: {
+        display: "flex", alignItems: "center", gap: 1.333,
+      },
+
+      /* ── Shared: Post Actions Row ── */
+      postActionsRow: {
+        display: "flex", gap: 24, alignItems: "center", justifyContent: "flex-end", width: "100%",
+      },
+      actionButton: {
+        display: "flex", flexDirection: "column", gap: 4, alignItems: "center", justifyContent: "center",
+      },
+      actionLabel: {
+        fontFamily: "'Inter', sans-serif", fontWeight: 600, fontSize: 11,
+        color: "#999", letterSpacing: -0.25, lineHeight: "15px", whiteSpace: "nowrap",
+      },
+      actionSpacer: {
+        flex: 1,
+      },
+      reactCircle: {
+        width: 24, height: 24, borderRadius: 48,
+        backgroundColor: "#f0e8d8",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        overflow: "hidden",
+      },
+
+      /* ── Shared: Engagement divider ── */
+      engagementDivider: {
+        width: "100%", height: 1, backgroundColor: "#f0e8d8",
+      },
+      engagementSection: {
+        display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start", width: "100%",
+      },
+
+      /* ── News Card ── */
+      newsCard: {
+        width: 357, borderRadius: 10, overflow: "hidden",
+        backgroundColor: "rgba(255, 249, 237, 1)",
+      },
+      newsImageContainer: {
+        position: "relative", width: "100%", minHeight: 275,
+        background: "url('https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800') center/cover",
+        display: "flex", flexDirection: "column", gap: 8,
+        padding: "18px 18px 0 18px",
+      },
+      newsGradientOverlay: {
+        position: "absolute", inset: 0, pointerEvents: "none",
+        background: "linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 75%)",
+      },
+      newsTopRow: {
+        display: "flex", justifyContent: "flex-end", position: "relative", zIndex: 1,
+      },
+      newsTag: {
+        width: 120, height: 29, borderRadius: 3,
+        backgroundColor: "rgba(20, 24, 16, 0.25)",
+        border: "0.5px solid rgba(240, 232, 216, 1)",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        color: "rgba(240, 232, 216, 1)", fontSize: 9, fontWeight: 600,
+        letterSpacing: 0.5, textTransform: "uppercase", lineHeight: "15px",
+      },
+      newsContent: {
+        position: "relative", zIndex: 1, flex: 1,
+        display: "flex", flexDirection: "column", justifyContent: "flex-end",
+        gap: 8, paddingRight: 80, paddingBottom: 18,
+        lineHeight: "110%", letterSpacing: -0.5,
+      },
+      newsHeadline: {
+        color: "#fff", fontSize: 28, fontWeight: 900,
+        lineHeight: "110%", letterSpacing: -0.5, margin: 0,
+      },
+      newsTimestamp: {
+        color: "rgba(240, 232, 216, 1)", fontSize: 13, fontWeight: 600,
+        lineHeight: "110%", letterSpacing: -0.5, display: "block",
+      },
+      newsBody: {
+        padding: 18,
+        backgroundColor: "#fff9ed",
+        display: "flex", flexDirection: "column", gap: 20,
+      },
+      newsTextWrap: {
+        paddingRight: 40,
+      },
+      newsDescription: {
+        fontSize: 13, fontWeight: 600, color: "#141810",
+        lineHeight: "130%", letterSpacing: -0.5, margin: 0,
+      },
+
+      /* ── Poll Card ── */
+      pollCard: {
+        width: 333, borderRadius: 10, overflow: "hidden",
+        backgroundColor: "#fff9ed",
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.15)",
+        display: "flex", flexDirection: "column",
+      },
+      pollMain: {
+        padding: "18px 18px 16px 18px",
+        display: "flex", flexDirection: "column", gap: 20,
+        flex: 1,
+      },
+      pollHeader: { display: "flex", alignItems: "center", gap: 0 },
+      pollDuration: { flex: 1, display: "flex", alignItems: "center" },
+      pollTime: {
+        fontSize: 13, fontWeight: 600, color: "#999",
+        lineHeight: "110%", letterSpacing: -0.5, whiteSpace: "nowrap",
+      },
+      pollTag: {
+        width: 120, height: 29, borderRadius: 3,
+        backgroundColor: "#f0e8d8",
+        border: "0.5px solid #f0e8d8",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        padding: "10px 15px", boxSizing: "border-box",
+      },
+      pollTagText: {
+        fontSize: 9, fontWeight: 600, color: "#141810",
+        letterSpacing: 0.5, lineHeight: "15px", textTransform: "uppercase",
+      },
+      pollHeadlineSection: {
+        display: "flex", flexDirection: "column", gap: 8, paddingRight: 24,
+        flex: 1, justifyContent: "flex-end",
+      },
+      pollQuestion: {
+        fontSize: 20, fontWeight: 900, lineHeight: "130%",
+        letterSpacing: -0.5, margin: 0, color: "#141810",
+      },
+      pollSubtext: {
+        fontSize: 13, fontWeight: 500, color: "#141810",
+        lineHeight: "130%", letterSpacing: -0.5, margin: 0,
+      },
+      pollLinkSection: {
+        padding: "10px 18px",
+        backgroundColor: "#fff9ed",
+      },
+      pollLinkRow: { display: "flex", alignItems: "center", gap: 8 },
+      pollLinkIcon: {
+        width: 24, height: 24, borderRadius: 5,
+        backgroundColor: "#f0e8d8",
+        display: "flex", alignItems: "center", justifyContent: "center",
+        flexShrink: 0, padding: 4,
+      },
+      pollLinkText: {
+        fontSize: 13, fontWeight: 600, color: "#141810",
+        lineHeight: "110%", letterSpacing: -0.5,
+      },
+      /* Poll engagement: simplified layout */
+      pollEngagementBar: {
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        borderTop: "1px solid #e9e1d3",
+        padding: "5px 18px",
+        backgroundColor: "#fff9ed",
+      },
+      pollEngagementLeft: {
+        display: "flex", gap: 16, alignItems: "center",
+      },
+      pollActionItem: {
+        display: "flex", gap: 4, alignItems: "center", padding: "4px 0",
+      },
+      pollActionCount: {
+        fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: 13,
+        color: "#999", letterSpacing: -0.25, lineHeight: "1",
+      },
+      pollEngagementRight: {
+        display: "flex", gap: 8, alignItems: "center",
+      },
+      pollReactionText: {
+        fontFamily: "'Inter', sans-serif", fontWeight: 500, fontSize: 13,
+        color: "#999", letterSpacing: -0.25, lineHeight: "1", textAlign: "right",
+      },
+
+      /* ── Profile Card ── */
+      profileCardWrap: {
+        width: 357, borderRadius: 10, overflow: "hidden",
+        display: "flex", flexDirection: "column", alignItems: "center",
+        paddingBottom: 8,
+        backgroundColor: "#fff",
+      },
+      profileHeader: {
+        backgroundColor: "#de0100", padding: 18,
+        display: "flex", flexDirection: "column", gap: 16,
+        borderRadius: "10px 10px 0 0", width: "100%",
+      },
+      imageBio: { display: "flex", gap: 17, alignItems: "flex-start" },
+      avatar: {
+        width: 79, height: 79, borderRadius: "50%", backgroundColor: "#c44",
+        backgroundImage: "url('https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200')",
+        backgroundSize: "cover", backgroundPosition: "center", flexShrink: 0,
+      },
+      profileInfo: { display: "flex", flexDirection: "column", color: "#fff" },
+      profileName: {
+        fontSize: 22, fontWeight: 700, lineHeight: "130%",
+        letterSpacing: -1, margin: 0, color: "#fff",
+      },
+      profileBioLine: {
+        fontSize: 0, lineHeight: 0, margin: 0,
+        color: "rgba(250, 250, 250, 0.8)",
+      },
+      profileRole: {
+        fontSize: 13, fontWeight: 600, lineHeight: "130%", letterSpacing: -0.5,
+      },
+      profileLocation: {
+        fontSize: 13, fontWeight: 400, lineHeight: "240%", letterSpacing: -0.5,
+      },
+      profileDetail: {
+        fontSize: 13, fontWeight: 400, lineHeight: "140%", letterSpacing: -0.5,
+      },
+      badgeRow: { display: "flex", gap: 4, width: "100%" },
+      termBadge: {
+        flex: 1, backgroundColor: "rgba(20, 24, 16, 0.24)", borderRadius: 5,
+        padding: "0 12px", display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center", gap: 2, height: 48,
+        textAlign: "center", letterSpacing: -0.5,
+      },
+      termBadgeLabel: {
+        fontSize: 10, fontWeight: 400, color: "rgba(250, 250, 250, 0.8)",
+        lineHeight: "130%", letterSpacing: -0.5,
+      },
+      termBadgeValue: {
+        fontSize: 13, fontWeight: 600, color: "#fafafa",
+        lineHeight: "130%", letterSpacing: -0.5,
+      },
+      tabRow: {
+        display: "flex", gap: 28, backgroundColor: "#fff",
+        borderBottom: "1px solid #141810",
+        height: 37, alignItems: "center", justifyContent: "center",
+        overflow: "hidden", width: "100%",
+      },
+      tab: {
+        padding: 8, fontSize: 16, fontWeight: 600, color: "#141810",
+        backgroundColor: "transparent", border: "none",
+        borderBottom: "4px solid transparent",
+        cursor: "pointer", textAlign: "center",
+        lineHeight: "130%", letterSpacing: -0.5,
+      },
+      tabActive: { borderBottomColor: "#141810" },
+      scoreSection: {
+        padding: 18, backgroundColor: "#fff",
+        display: "flex", flexDirection: "column", gap: 7,
+        borderRadius: "0 0 10px 10px",
+        boxShadow: "0 4px 15px rgba(0, 0, 0, 0.15)",
+        width: "100%",
+      },
+      scoreHeader: { display: "flex", alignItems: "center", gap: 8 },
+      scoreDotWrap: {
+        width: 23, height: 23, display: "flex", alignItems: "center", justifyContent: "center",
+      },
+      scoreTitle: {
+        fontSize: 22, fontWeight: 800, color: "#141810",
+        lineHeight: "130%", letterSpacing: -0.5, flex: 1,
+      },
+      infoIcon: { display: "flex", alignItems: "center" },
+      scoreBody: {
+        display: "flex", gap: 16, alignItems: "center", width: "100%",
+      },
+      scoreDescription: {
+        fontSize: 14, fontWeight: 600, color: "#141810",
+        lineHeight: "130%", letterSpacing: -0.5, margin: 0, width: 146,
+      },
+      scoreValue: {
+        flex: 1, display: "flex", alignItems: "baseline", justifyContent: "flex-end",
+      },
+      scoreBig: {
+        fontSize: 32, fontWeight: 700, color: "#141810",
+        lineHeight: "130%", letterSpacing: -1,
+      },
+      scoreMax: {
+        fontSize: 32, fontWeight: 700, color: "#999",
+        lineHeight: "130%", letterSpacing: -1,
+      },
+
+      /* Profile engagement */
+      profileEngagementSection: {
+        display: "flex", flexDirection: "column", gap: 8, width: "100%",
+      },
+      profileEngagementDivider: {
+        width: "100%", height: 1, backgroundColor: "#999", opacity: 0.25,
+      },
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
