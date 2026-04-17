@@ -698,12 +698,16 @@ function IconAddReaction({color=T.slate}){
 function DonutChart({pct=73, size=121}) {
   const r = 44; const cx = size/2; const cy = size/2;
   const circ = 2 * Math.PI * r;
-  const greenDash = (pct / 100) * circ;
-  const goldDash  = circ - greenDash;
+  const greenDash = (pct / 100) * circ;   // green = majority, starts at 12 o'clock
+  const goldDash  = circ - greenDash;      // gold  = minority, follows green
   const innerR = 28;
   const clipId = React.useRef('dc_' + Math.random().toString(36).slice(2,7)).current;
-  const p = useReveal(1000);
-  const deg = p * 360;
+  const p = useReveal(1200);
+  // Phase 1 (0→0.72): green sweeps in   Phase 2 (0.72→1): gold staggers in
+  const SPLIT = 0.72;
+  const greenP = Math.min(p / SPLIT, 1);
+  const goldP  = Math.max(0, (p - SPLIT) / (1 - SPLIT));
+  const deg = greenP * (pct / 100) * 360 + goldP * ((100 - pct) / 100) * 360;
   const rad = (deg - 90) * Math.PI / 180;
   const clipR = r + 20;
   const ex = cx + clipR * Math.cos(rad);
@@ -716,12 +720,12 @@ function DonutChart({pct=73, size=121}) {
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       <defs>{fanPath && <clipPath id={clipId}><path d={fanPath}/></clipPath>}</defs>
       <g clipPath={fanPath ? `url(#${clipId})` : undefined}>
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#c89b3c" strokeWidth={16}
-          strokeDasharray={`${goldDash} ${greenDash}`}
-          strokeDashoffset={0} transform={`rotate(-90 ${cx} ${cy})`}/>
         <circle cx={cx} cy={cy} r={r} fill="none" stroke="#39503d" strokeWidth={16}
           strokeDasharray={`${greenDash} ${goldDash}`}
-          strokeDashoffset={-goldDash} transform={`rotate(-90 ${cx} ${cy})`}/>
+          strokeDashoffset={0} transform={`rotate(-90 ${cx} ${cy})`}/>
+        <circle cx={cx} cy={cy} r={r} fill="none" stroke="#c89b3c" strokeWidth={16}
+          strokeDasharray={`${goldDash} ${greenDash}`}
+          strokeDashoffset={-greenDash} transform={`rotate(-90 ${cx} ${cy})`}/>
       </g>
       <circle cx={cx} cy={cy} r={innerR} fill={T.warmBg}/>
     </svg>
