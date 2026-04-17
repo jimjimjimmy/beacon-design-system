@@ -1356,22 +1356,87 @@ function ConductDrillDownCard({
    GRID APP — section-based layout, no sidebar
    ═══════════════════════════════════════════════ */
 
+
 /* ═══════════════════════════════════════════════
    INTERACTIONS
    ═══════════════════════════════════════════════ */
 
-const REACTIONS = [
-  { label:"Reassured", emoji:"😌" },
-  { label:"Surprised", emoji:"😮" },
-  { label:"Skeptical", emoji:"🤔" },
-  { label:"Concerned", emoji:"😟" },
-  { label:"Outraged",  emoji:"😡" },
-];
+const REACTION_ICONS = {
+  Reassured: (<React.Fragment><svg preserveAspectRatio="none" width="24" height="24" overflow="visible" style={{display:"block"}} viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group">
+<path id="Vector" d="M5 8.18598C5 7.13298 5.405 6.27798 5.9 6.27798C6.395 6.27798 6.8 7.13298 6.8 8.18598" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_2" d="M12.2 8.18598C12.2 7.13298 12.605 6.27798 13.1 6.27798C13.595 6.27798 14 7.13298 14 8.18598" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_3" d="M9.5 18.5C14.4706 18.5 18.5 14.4706 18.5 9.5C18.5 4.52944 14.4706 0.5 9.5 0.5C4.52944 0.5 0.5 4.52944 0.5 9.5C0.5 14.4706 4.52944 18.5 9.5 18.5Z" stroke="#141810" stroke-miterlimit="10"/>
+<path id="Vector_4" d="M13.6311 11.282C12.9381 12.875 11.3541 14 9.50014 14C7.64614 14 6.06214 12.884 5.36914 11.282" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+</g>
+</svg></React.Fragment>),
+  Surprised:  (<React.Fragment><svg preserveAspectRatio="none" width="24" height="24" overflow="visible" style={{display:"block"}} viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group">
+<path id="Vector" d="M9.5 18.5C14.4706 18.5 18.5 14.4706 18.5 9.5C18.5 4.52944 14.4706 0.5 9.5 0.5C4.52944 0.5 0.5 4.52944 0.5 9.5C0.5 14.4706 4.52944 18.5 9.5 18.5Z" stroke="#141810" stroke-miterlimit="10"/>
+<path id="Vector_2" d="M5.9 7.7C6.39706 7.7 6.8 7.29706 6.8 6.8C6.8 6.30294 6.39706 5.9 5.9 5.9C5.40294 5.9 5 6.30294 5 6.8C5 7.29706 5.40294 7.7 5.9 7.7Z" fill="#141810"/>
+<path id="Vector_3" d="M9.5 14.9C10.9912 14.9 12.2 13.6912 12.2 12.2C12.2 10.7088 10.9912 9.5 9.5 9.5C8.00883 9.5 6.8 10.7088 6.8 12.2C6.8 13.6912 8.00883 14.9 9.5 14.9Z" stroke="#141810" stroke-miterlimit="10"/>
+<path id="Vector_4" d="M13.1 7.7C13.5971 7.7 14 7.29706 14 6.8C14 6.30294 13.5971 5.9 13.1 5.9C12.6029 5.9 12.2 6.30294 12.2 6.8C12.2 7.29706 12.6029 7.7 13.1 7.7Z" fill="#141810"/>
+</g>
+</svg></React.Fragment>),
+  Skeptical:  (<React.Fragment><svg preserveAspectRatio="none" width="24" height="24" overflow="visible" style={{display:"block"}} viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Layer_1" clip-path="url(#clip0_7821_85128)">
+<path id="Vector" d="M6.39098 9.171C6.88928 9.171 7.29323 8.76806 7.29323 8.271C7.29323 7.77394 6.88928 7.371 6.39098 7.371C5.89268 7.371 5.48872 7.77394 5.48872 8.271C5.48872 8.76806 5.89268 9.171 6.39098 9.171Z" fill="#141810"/>
+<path id="Vector_2" d="M11.8045 9.171C12.3028 9.171 12.7068 8.76806 12.7068 8.271C12.7068 7.77394 12.3028 7.371 11.8045 7.371C11.3062 7.371 10.9023 7.77394 10.9023 8.271C10.9023 8.76806 11.3062 9.171 11.8045 9.171Z" fill="#141810"/>
+<path id="Vector_3" d="M10.6498 5.99397C11.4258 5.71497 12.8333 5.62497 13.6994 6.22797" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_4" d="M7.70824 11.817C9.15184 11.565 11.6421 11.853 12.9684 13.158" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_5" d="M7.93369 5.36395C7.22091 4.94995 5.84948 4.62595 4.89309 5.06695" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<g id="Group">
+<path id="Vector_6" d="M8.30376 18.909C8.85414 19.017 9.42256 19.071 10 19.071C14.9805 19.071 19.0226 15.039 19.0226 10.071C19.0226 5.103 14.9805 1.071 10 1.071C5.01955 1.071 0.977444 5.103 0.977444 10.071C0.977444 12.123 1.67218 14.004 2.82707 15.516" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_7" d="M2.82671 15.516C2.69137 16.551 2.79964 17.793 2.88987 18.306C3.02521 19.116 3.7831 19.854 4.31543 20.079C4.88385 20.322 7.69889 20.304 8.2222 19.422C8.29438 19.296 8.31242 19.107 8.29438 18.9" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_8" d="M2.82674 15.516C2.90795 14.913 3.07035 14.382 3.37712 14.094C4.22524 13.311 4.63126 15.867 4.93802 15.885C5.25381 15.903 8.49291 14.355 9.4493 14.427C10.4057 14.499 9.4493 16.218 7.6899 16.965C7.6899 16.965 8.23126 18.117 8.28539 18.9" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_7821_85128">
+<rect width="20" height="21" fill="white"/>
+</clipPath>
+</defs>
+</svg></React.Fragment>),
+  Concerned:  (<React.Fragment><svg preserveAspectRatio="none" width="24" height="24" overflow="visible" style={{display:"block"}} viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Layer_1" clip-path="url(#clip0_7946_572811)">
+<path id="Vector" d="M13.7746 13.4669C13.7746 14.5946 12.1809 14.287 10.2145 14.287C8.24805 14.287 6.65439 14.6039 6.65439 13.4669C6.65439 12.3299 8.24805 11.4166 10.2145 11.4166C12.1809 11.4166 13.7746 12.3299 13.7746 13.4669Z" stroke="#141810" stroke-miterlimit="10"/>
+<path id="Vector_2" d="M6.48647 9.78564C7.00118 9.78564 7.41844 9.36839 7.41844 8.85368C7.41844 8.33897 7.00118 7.92171 6.48647 7.92171C5.97176 7.92171 5.5545 8.33897 5.5545 8.85368C5.5545 9.36839 5.97176 9.78564 6.48647 9.78564Z" fill="#141810"/>
+<path id="Vector_3" d="M13.9422 9.78564C14.4569 9.78564 14.8742 9.36839 14.8742 8.85368C14.8742 8.33897 14.4569 7.92171 13.9422 7.92171C13.4275 7.92171 13.0102 8.33897 13.0102 8.85368C13.0102 9.36839 13.4275 9.78564 13.9422 9.78564Z" fill="#141810"/>
+<g id="Group">
+<path id="Vector_4" d="M1.34241 12.6468C1.05351 11.7428 0.885751 10.7829 0.885751 9.78568C0.895071 4.64123 5.06096 0.466017 10.2147 0.466017C15.3685 0.466017 19.5344 4.64123 19.5344 9.78568C19.5344 14.9301 15.3592 19.1053 10.2147 19.1053C7.83822 19.1053 5.67606 18.2107 4.02648 16.7475" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_5" d="M1.34223 12.6468C0.86693 13.4203 0.466184 14.2311 0.466184 14.7717C0.466184 16.0578 1.50999 17.1016 2.7961 17.1016C3.25276 17.1016 3.67215 16.9711 4.0263 16.7474" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_6" d="M1.34218 12.6468C2.00387 11.5657 2.79605 10.5778 2.79605 10.5778C2.79605 10.5778 5.12596 13.4856 5.12596 14.7717C5.12596 15.6011 4.68794 16.3281 4.02624 16.7474" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+</g>
+<path id="Vector_7" d="M3.7743 7.43707C4.62239 7.33455 5.9551 6.75674 6.477 5.80613" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_8" d="M16.4215 7.43707C15.5734 7.33455 14.2407 6.75674 13.7188 5.80613" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+</g>
+<defs>
+<clipPath id="clip0_7946_572811">
+<rect width="20" height="20" fill="white"/>
+</clipPath>
+</defs>
+</svg></React.Fragment>),
+  Outraged:   (<React.Fragment><svg preserveAspectRatio="none" width="24" height="24" overflow="visible" style={{display:"block"}} viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Group">
+<path id="Vector" d="M9.50001 18.5C14.4706 18.5 18.5 14.4706 18.5 9.5C18.5 4.52944 14.4706 0.5 9.50001 0.5C4.52945 0.5 0.5 4.52944 0.5 9.5C0.5 14.4706 4.52945 18.5 9.50001 18.5Z" stroke="#141810" stroke-miterlimit="10"/>
+<path id="Vector_2" d="M11.1471 6.43099C11.5611 5.71999 12.5781 4.74799 13.6221 4.64899" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_3" d="M7.84413 6.43099C7.43013 5.71999 6.41314 4.74799 5.36914 4.64899" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_4" d="M5 13.478C6.197 12.398 7.76301 11.741 9.50001 11.741C11.237 11.741 12.803 12.398 14 13.478" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<g id="Group_2">
+<path id="Vector_5" d="M7.20489 8.45602C6.84489 8.77102 6.3139 8.96902 5.7109 8.96902C5.1079 8.96902 4.5769 8.77102 4.2169 8.45602" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+<path id="Vector_6" d="M14.7829 8.45599C14.4229 8.77099 13.8919 8.96899 13.2889 8.96899C12.6859 8.96899 12.1549 8.77099 11.7949 8.45599" stroke="#141810" stroke-miterlimit="10" stroke-linecap="round"/>
+</g>
+</g>
+</svg></React.Fragment>),
+};
+const REACTION_LABELS = ["Reassured","Surprised","Skeptical","Concerned","Outraged"];
 
 function ReactionInteraction() {
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState(null);
   const [hovered, setHovered] = React.useState(null);
+
+  const STRIP_W = 154;
 
   const toggle = () => setOpen(o => !o);
 
@@ -1380,108 +1445,106 @@ function ReactionInteraction() {
     setTimeout(() => setOpen(false), 380);
   };
 
-  const selectedReaction = REACTIONS.find(r => r.label === selected);
-
   return (
-    <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"flex-start"}}>
-      {/* Instruction hint */}
-      <p style={{fontSize:11,fontWeight:600,color:"#999",letterSpacing:0.25,margin:0,textTransform:"uppercase"}}>
-        {selected ? `Reacted: ${selected} — tap ↙ to reset` : "Tap the smiley button ↙"}
+    <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"flex-start",fontFamily:"Inter,sans-serif"}}>
+      <p style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:0.25,margin:0,textTransform:"uppercase"}}>
+        {selected ? `Reacted: ${selected}` : "Tap the smiley ↓"}
       </p>
-      {/* Card wrapper — strips slides in from right, overlays */}
-      <div style={{width:357,borderRadius:10,overflow:"hidden",backgroundColor:T.warmBg,boxShadow:T.shadow,fontFamily:"Inter,sans-serif",position:"relative"}}>
 
-        {/* Card body */}
-        <div style={{padding:"18px 18px 0",display:"flex",flexDirection:"column",gap:20}}>
-          <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-            <span style={{fontSize:13,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Takes ~ 1 min</span>
-            <div style={{height:29,borderRadius:3,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 12px"}}>
-              <span style={{fontSize:9,fontWeight:600,color:T.slate,letterSpacing:0.5,textTransform:"uppercase"}}>Foreign Policy</span>
-            </div>
-          </div>
-          <h2 style={{fontSize:20,fontWeight:900,lineHeight:"130%",letterSpacing:-0.5,margin:0,color:T.slate,paddingRight:40}}>U.S. vs. Maduro: Smart Move or Crossing the Line?</h2>
-          <p style={{fontSize:13,fontWeight:400,color:T.gray,lineHeight:"140%",letterSpacing:-0.25,margin:0}}>At 10,000 responses, anonymous results are shared with your congressman.</p>
-        </div>
+      {/* Clip container — card slides left to reveal reactions */}
+      <div style={{width:357,borderRadius:10,overflow:"hidden",position:"relative",boxShadow:T.shadow}}>
 
-        {/* Reactions row */}
-        <div style={{padding:"12px 18px 0",display:"flex",alignItems:"center",gap:6}}>
-          <span style={{fontSize:14,lineHeight:1}}>{selectedReaction ? selectedReaction.emoji : "😌"}</span>
-          <span style={{fontSize:14,lineHeight:1}}>😮</span>
-          <span style={{fontSize:14,lineHeight:1}}>🤔</span>
-          <span style={{fontSize:13,fontWeight:500,color:T.gray,letterSpacing:-0.25,marginLeft:4}}>1.4k Reactions</span>
-        </div>
-
-        {/* Link + react button */}
-        <div style={{padding:"10px 18px 18px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <div style={{width:24,height:24,borderRadius:5,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
-              <IconLink/>
-            </div>
-            <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5}}>Link to News Article</span>
-          </div>
-          {/* Smiley / react button */}
-          <button onClick={toggle} style={{
-            width:36,height:36,borderRadius:"50%",border:"none",cursor:"pointer",
-            backgroundColor: open ? T.slate : T.cream,
-            display:"flex",alignItems:"center",justifyContent:"center",
-            fontSize:18,lineHeight:1,
-            transition:"background-color 200ms ease",
-            flexShrink:0,
-          }}>
-            {open
-              ? <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={T.warmBg} strokeWidth="2" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
-              : <span style={{marginTop:1}}>{selectedReaction ? selectedReaction.emoji : "🙂"}</span>
-            }
-          </button>
-        </div>
-
-        {/* ── Reaction strip — slides in from right ── */}
+        {/* Reaction strip — sits on the RIGHT, always present, revealed when card slides */}
         <div style={{
-          position:"absolute",top:0,right:0,bottom:0,width:160,
+          position:"absolute",top:0,right:0,bottom:0,width:STRIP_W,
           backgroundColor:T.warmBg,
-          borderLeft:"1px solid "+T.creamBorder,
-          boxShadow:"-6px 0 20px rgba(0,0,0,0.08)",
-          transform: open ? "translateX(0)" : "translateX(100%)",
-          transition:"transform 280ms cubic-bezier(0.4,0,0.2,1)",
-          display:"flex",flexDirection:"column",justifyContent:"center",
-          zIndex:10,
+          display:"flex",flexDirection:"column",justifyContent:"center",gap:0,
+          zIndex:1,
         }}>
-          {REACTIONS.map((r) => {
-            const isSelected = selected === r.label;
-            const isHovered  = hovered  === r.label;
+          {REACTION_LABELS.map((label) => {
+            const isSelected = selected === label;
+            const isHovered  = hovered  === label;
             return (
-              <button key={r.label} onClick={() => pick(r.label)}
-                onMouseEnter={() => setHovered(r.label)}
+              <button key={label} onClick={() => pick(label)}
+                onMouseEnter={() => setHovered(label)}
                 onMouseLeave={() => setHovered(null)}
                 style={{
-                  display:"flex",alignItems:"center",justifyContent:"space-between",
-                  padding:"11px 14px",gap:10,
+                  display:"flex",alignItems:"center",justifyContent:"flex-end",
+                  gap:8,padding:"11px 14px",
                   background: isSelected ? T.cream : isHovered ? "#f5f0e8" : "transparent",
                   border:"none",cursor:"pointer",width:"100%",
-                  fontFamily:"Inter,sans-serif",transition:"background 150ms ease",
+                  fontFamily:"Inter,sans-serif",
                 }}>
                 <span style={{
-                  fontSize:13,fontWeight: isSelected ? 700 : 500,
+                  fontSize:13,fontWeight: isSelected ? 700 : 400,
                   color: isSelected ? T.slate : T.gray,
-                  letterSpacing:-0.25,lineHeight:"130%",
-                  transition:"color 150ms ease, font-weight 150ms ease",
-                }}>{r.label}</span>
+                  letterSpacing:-0.25,lineHeight:"110%",
+                }}>{label}</span>
                 <div style={{
-                  width:36,height:36,borderRadius:"50%",flexShrink:0,
+                  width:40,height:40,borderRadius:"50%",flexShrink:0,
                   backgroundColor: isSelected ? T.slate : T.cream,
                   display:"flex",alignItems:"center",justifyContent:"center",
-                  fontSize:17,lineHeight:1,
-                  transition:"background-color 150ms ease",
+                  filter: isSelected ? "invert(1)" : "none",
                 }}>
-                  {r.emoji}
+                  {REACTION_ICONS[label]}
                 </div>
               </button>
             );
           })}
         </div>
+
+        {/* Card — slides LEFT to reveal the reaction strip behind it */}
+        <div style={{
+          position:"relative",zIndex:2,
+          backgroundColor:T.warmBg,
+          transform: open ? `translateX(-${STRIP_W}px)` : "translateX(0)",
+          transition:"transform 300ms cubic-bezier(0.4,0,0.2,1)",
+        }}>
+          {/* Card body */}
+          <div style={{padding:"18px 18px 0",display:"flex",flexDirection:"column",gap:20}}>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+              <span style={{fontSize:13,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Takes ~ 1 min</span>
+              <div style={{height:29,borderRadius:3,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",padding:"0 14px"}}>
+                <span style={{fontSize:9,fontWeight:600,color:T.slate,letterSpacing:0.5,textTransform:"uppercase"}}>Foreign Policy</span>
+              </div>
+            </div>
+            <h2 style={{fontSize:20,fontWeight:900,lineHeight:"130%",letterSpacing:-0.5,margin:0,color:T.slate,paddingRight:40}}>U.S. vs. Maduro: Smart Move or Crossing the Line?</h2>
+            <p style={{fontSize:13,fontWeight:400,color:T.gray,lineHeight:"140%",letterSpacing:-0.25,margin:0}}>At 10,000 responses, anonymous results are shared with your congressman.</p>
+          </div>
+          {/* Reactions row */}
+          <div style={{padding:"12px 18px 0",display:"flex",alignItems:"center",gap:6}}>
+            <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>
+              {selected ? REACTION_ICONS[selected] : REACTION_ICONS.Reassured}
+            </div>
+            <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>{REACTION_ICONS.Surprised}</div>
+            <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>{REACTION_ICONS.Skeptical}</div>
+            <span style={{fontSize:13,fontWeight:500,color:T.gray,letterSpacing:-0.25,marginLeft:4}}>1.4k Reactions</span>
+          </div>
+          {/* Link + react button */}
+          <div style={{padding:"10px 18px 18px",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <div style={{width:24,height:24,borderRadius:5,backgroundColor:T.cream,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <IconLink/>
+              </div>
+              <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5}}>Link to News Article</span>
+            </div>
+            <button onClick={toggle} style={{
+              width:36,height:36,borderRadius:"50%",border:"none",cursor:"pointer",
+              backgroundColor: open ? T.slate : T.cream,
+              display:"flex",alignItems:"center",justifyContent:"center",
+              transition:"background-color 200ms ease", flexShrink:0,
+            }}>
+              {open
+                ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={T.warmBg} strokeWidth="2.5" strokeLinecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                : <div style={{width:20,height:20,display:"flex",alignItems:"center",justifyContent:"center",filter:"none"}}>
+                    {selected ? REACTION_ICONS[selected] : REACTION_ICONS.Reassured}
+                  </div>
+              }
+            </button>
+          </div>
+        </div>
       </div>
 
-      {/* Reset link */}
       {selected && (
         <button onClick={() => { setSelected(null); setOpen(false); }}
           style={{fontSize:11,fontWeight:600,color:T.gray,background:"none",border:"none",cursor:"pointer",letterSpacing:-0.25,padding:0}}>
@@ -1530,17 +1593,17 @@ const SECTIONS = [
     ]
   },
   {
-    id: "Interactions",
-    components: [
-      { id:"ReactionInteraction", label:"Reaction Picker", desc:"Tap smiley → strip slides in from right · select emotion · strip closes" },
-    ]
-  },
-  {
     id: "Pulse",
     components: [
       { id:"SurveyProgressBar",  label:"SurveyProgressBar",  desc:"Continuous fill bar + step counter for survey flows" },
       { id:"SurveyAnswerCard",   label:"SurveyAnswerCard",   desc:"Answer card · single-select (bg toggle) or multi-select (circle checkbox)" },
       { id:"SurveyFooter",       label:"SurveyFooter",       desc:'"Be Part of the Signal" CTA with participant count' },
+    ]
+  },
+  {
+    id: "Interactions",
+    components: [
+      { id:"ReactionInteraction", label:"Reaction Picker", desc:"Card slides left · reaction strip revealed · select emotion · strip closes" },
     ]
   },
 ];
