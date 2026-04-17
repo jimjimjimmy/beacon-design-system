@@ -818,7 +818,7 @@ function PoliticianProfileCard({
   const [activeTab, setActiveTab] = useState("6M");
   const tabs = ["6M","1Y","2Y","4Y","All"];
   return (
-    <div style={{width:357,borderRadius:10,overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",paddingBottom:8,backgroundColor:"#fff",fontFamily:"Inter,sans-serif"}}>
+    <div style={{width:357,borderRadius:10,overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",backgroundColor:"#fff",fontFamily:"Inter,sans-serif"}}>
       {/* Red header */}
       <div style={{backgroundColor:headerColor,padding:18,display:"flex",flexDirection:"column",gap:16,borderRadius:"10px 10px 0 0",width:"100%"}}>
         <div style={{display:"flex",gap:17,alignItems:"flex-start"}}>
@@ -853,13 +853,12 @@ function PoliticianProfileCard({
           <IconInfo/>
         </div>
         <div style={{display:"flex",gap:16,alignItems:"center",width:"100%"}}>
-          <p style={{fontSize:14,fontWeight:600,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,margin:0,width:146}}>Calculated from participation, consistency, and conduct.</p>
-          <div style={{flex:1,display:"flex",alignItems:"baseline",justifyContent:"flex-end"}}>
+          <p style={{fontSize:14,fontWeight:600,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,margin:0,flex:1}}>Calculated from participation, consistency, and conduct.</p>
+          <div style={{flexShrink:0,display:"flex",alignItems:"baseline",justifyContent:"flex-end"}}>
             <span style={{fontSize:32,fontWeight:700,color:"#141810",lineHeight:"130%",letterSpacing:-1}}>{score} </span>
             <span style={{fontSize:32,fontWeight:700,color:T.gray,lineHeight:"130%",letterSpacing:-1}}>/100</span>
           </div>
         </div>
-        <div style={{height:24}}/>
         <EngagementBar/>
       </div>
     </div>
