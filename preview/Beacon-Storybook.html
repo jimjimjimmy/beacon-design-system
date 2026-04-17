@@ -1072,14 +1072,16 @@ function PoliticalLeaning({
         <h3 style={{fontSize:16,fontWeight:600,color:T.slate,lineHeight:"130%",letterSpacing:-0.5,margin:0,flex:1,paddingRight:12}}>{title}</h3>
         <IconChevronForward color={T.gray}/>
       </div>
-      <div style={{position:"relative",height:16}}>
-        <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",left:0,right:0,height:6,borderRadius:50,background:"linear-gradient(to right, #0067ce, #8b3fce, #ff2827)"}}/>
-        <div style={{position:"absolute",top:"50%",left:`${dotPercent}%`,transform:"translate(-50%, -50%)",width:12,height:12,borderRadius:"50%",backgroundColor:T.slate,border:"2px solid white"}}/>
-      </div>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <span style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Left</span>
-        <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5}}>{leaningLabel}</span>
-        <span style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Right</span>
+      <div style={{display:"flex",flexDirection:"column",gap:8,width:"100%"}}>
+        <div style={{position:"relative",height:16}}>
+          <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",left:0,right:0,height:6,borderRadius:50,background:"linear-gradient(to right, #0067ce, #8b3fce, #ff2827)"}}/>
+          <div style={{position:"absolute",top:"50%",left:`${dotPercent}%`,transform:"translate(-50%, -50%)",width:12,height:12,borderRadius:"50%",backgroundColor:T.slate,border:"2px solid white"}}/>
+        </div>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <span style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Left</span>
+          <span style={{fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5}}>{leaningLabel}</span>
+          <span style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:-0.25}}>Right</span>
+        </div>
       </div>
       {description && <p style={{fontSize:13,fontWeight:400,color:T.slate,lineHeight:"160%",letterSpacing:-0.25,margin:0}}>{description}</p>}
     </div>
@@ -1094,9 +1096,9 @@ function InconsistencyDetail({
 }) {
   return (
     <div style={{width:"100%",borderRadius:10,backgroundColor:T.warmBg,border:"1px solid "+T.creamBorder,padding:16,display:"flex",flexDirection:"column",gap:16,fontFamily:"Inter,sans-serif"}}>
-      <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:8}}>
-        <div style={{display:"flex",alignItems:"flex-start",gap:10,flex:1}}>
-          <svg width="20" height="20" viewBox="0 0 22 22" fill="none" style={{flexShrink:0,marginTop:1}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",gap:8}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,flex:1}}>
+          <svg width="20" height="20" viewBox="0 0 22 22" fill="none" style={{flexShrink:0}}>
             <circle cx="11" cy="11" r="10" stroke="#141810" strokeWidth="1.5"/>
             <path d="M7.5 7.5L14.5 14.5M14.5 7.5L7.5 14.5" stroke="#141810" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
