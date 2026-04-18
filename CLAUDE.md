@@ -7,8 +7,8 @@
   Both machines depend on this as the single source of truth.
   Add: last updated date + machine name at the top so we know who last touched it.
 
-  Last updated: 2026-04-17 — Machine B (Cowork)
-  Changes: IssueShareScreen merged into storybook.html · social share icons added · Screens section added to SECTIONS registry
+  Last updated: 2026-04-17 6:18pm — Machine B (Cowork)
+  Changes: IssueShareScreen merged into Issues section (not Screens) · social share icons added · IconLink used for Copy Link · folder structure documented · push commands corrected (remote=freeradicals, explicit token required)
 -->
 
 ## What this is
@@ -22,6 +22,22 @@ preview/storybook.html   ← THE file. All components live here.
 ```
 
 Live URL: https://jimjimjimmy.github.io/beacon/preview/storybook.html
+
+## Folder structure
+
+```
+preview/storybook.html      ← storybook (design QA)
+components/                 ← engineering deliverables — .jsx files imported by the dev team's app
+  tokens.js                   design tokens as JS exports
+  icons.jsx                   all Icon* components
+  SectionTitle.jsx, etc.      one file per component
+assets/icons/               ← 19 raw SVG files exported from Figma — source for Icon* components
+assets/nav-icons/           ← 73 SVG parts for nav icon states (active/inactive/fill/mask/dot)
+BUILD-PLAN.md               ← project roadmap (still current)
+COMPONENT-INDEX.md          ← engineering reference with Figma node IDs and file locations
+```
+
+**Rule:** `components/` and `assets/` are parallel engineering deliverables — do not merge into storybook.html. Everything in storybook.html is already there. New components go into storybook.html first, then get extracted to `components/` for the dev team separately.
 
 ## GitHub — Two-remote setup
 
@@ -162,10 +178,11 @@ Full-screen layout: 393×852px, `position:absolute`, simulates a mobile screen. 
 ### Interactions
 - `ReactionInteraction` — card slides left (154px), reaction strip at z:1 behind card at z:2. Select emotion, card slides back. Toggle same to deselect.
 
-### Screens (full-screen layout, 393×852, absolute positioning)
-- `IssueShareScreen` — share sheet overlay on Issues screen. Merged into storybook.html. Figma node `5935:34615`.
+### Issues (continued — full-screen screens)
+Full-screen layout: 393×852px, `position:absolute`. These live under the **Issues** nav section in the storybook.
+- `IssueShareScreen` — share sheet overlay on Issues screen. No tab bar, no Issues badge. Figma node `5935:34615`.
   - `ShareButton` — 88×88, cream fill at 0.8 opacity, cornerRadius 10, shadow. Used inside IssueShareScreen.
-  - Social share icons in file: `IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconCopyLink`, `IconEmail`, `IconMessages`, `IconCloseLarge`
+  - Copy Link uses `IconLink` (chain link) scaled to 30×30 with viewBox `3 3 10 10`.
 
 ---
 
@@ -174,10 +191,10 @@ Full-screen layout: 393×852px, `position:absolute`, simulates a mobile screen. 
 `IconPlus`, `IconGlobe`, `IconCrossed`, `IconContention`, `IconUpDown`, `IconInfo`,
 `IconExpert`, `IconSearch`, `IconVerify`, `IconMagicShield`, `IconGroup`,
 `IconNavHome`, `IconNavIssues`, `IconNavPulse`, `IconNavOfficials`, `IconNavAccount`,
-`IconShareAction`, `IconReactButton`, `IconLink`
+`IconShareAction`, `IconReactButton`, `IconLink`,
+`IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconEmail`, `IconMessages`, `IconCloseLarge`
 
-Social share icons (added for IssueShareScreen — Figma-extracted):
-`IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconCopyLink`, `IconEmail`, `IconMessages`, `IconCloseLarge`
+Note: `IconCopyLink` was removed — Copy Link uses the existing `IconLink` (chain link) instead.
 
 ---
 
