@@ -41,8 +41,8 @@ git remote add freeradicals https://github.com/freeradicals-studio/beacon-mvp.gi
 # Personal first (always)
 GITHUB_TOKEN=$(gh auth token --hostname github.com -u jimjimjimmy 2>/dev/null) && git push "https://jimjimjimmy:${GITHUB_TOKEN}@github.com/jimjimjimmy/beacon.git" main
 
-# Team repo (when ready to share)
-git push freeradicals main
+# Team repo (when ready to share) — must use jimjimjimmy token explicitly
+GITHUB_TOKEN=$(gh auth token --hostname github.com -u jimjimjimmy 2>/dev/null) && git push "https://jimjimjimmy:${GITHUB_TOKEN}@github.com/freeradicals-studio/beacon-mvp.git" main
 ```
 
 ### Ongoing workflow
