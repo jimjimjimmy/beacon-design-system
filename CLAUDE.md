@@ -27,33 +27,33 @@ Live URL: https://jimjimjimmy.github.io/beacon/preview/storybook.html
 
 | Remote | Repo | Purpose |
 |--------|------|---------|
-| `origin` | `https://github.com/jimjimjimmy/beacon-mvp.git` | Personal dev — push here first |
-| `beacon` | `https://github.com/freeradicals-studio/beacon-mvp.git` | Team repo — push when ready |
+| `origin` | `https://github.com/jimjimjimmy/beacon.git` | Personal dev — push here first |
+| `freeradicals` | `https://github.com/freeradicals-studio/beacon-mvp.git` | Team repo — push when ready |
 
 ### Initial setup (one time)
 ```bash
-git remote add origin https://github.com/jimjimjimmy/beacon-mvp.git
-git remote add beacon https://github.com/freeradicals-studio/beacon-mvp.git
+git remote add origin https://github.com/jimjimjimmy/beacon.git
+git remote add freeradicals https://github.com/freeradicals-studio/beacon-mvp.git
 ```
 
 ### Push commands (two-account setup)
 ```bash
 # Personal first (always)
-GITHUB_TOKEN=$(gh auth token --hostname github.com -u jimjimjimmy 2>/dev/null) && git push "https://jimjimjimmy:${GITHUB_TOKEN}@github.com/jimjimjimmy/beacon-mvp.git" main
+GITHUB_TOKEN=$(gh auth token --hostname github.com -u jimjimjimmy 2>/dev/null) && git push "https://jimjimjimmy:${GITHUB_TOKEN}@github.com/jimjimjimmy/beacon.git" main
 
 # Team repo (when ready to share)
-git push beacon main
+git push freeradicals main
 ```
 
 ### Ongoing workflow
 ```bash
 git add .
 git commit -m "your message"
-git push origin main      # always
-git push beacon main      # when ready to share with team
+git push origin main           # always
+git push freeradicals main     # when ready to share with team
 ```
 
-> ⚠️ One thing still needed: confirm where the local Beacon project folder lives on your Mac before running `git init`.
+> ⚠️ freeradicals-studio/beacon-mvp requires Trent to add jimjimjimmy as a collaborator before pushing.
 
 ---
 
