@@ -7,7 +7,8 @@
   Both machines depend on this as the single source of truth.
   Add: last updated date + machine name at the top so we know who last touched it.
 
-  Last updated: 2026-04-17 2:13pm — Machine B
+  Last updated: 2026-04-17 — Machine B (Cowork)
+  Changes: IssueShareScreen merged into storybook.html · social share icons added · Screens section added to SECTIONS registry
 -->
 
 ## What this is
@@ -162,9 +163,9 @@ Full-screen layout: 393×852px, `position:absolute`, simulates a mobile screen. 
 - `ReactionInteraction` — card slides left (154px), reaction strip at z:1 behind card at z:2. Select emotion, card slides back. Toggle same to deselect.
 
 ### Screens (full-screen layout, 393×852, absolute positioning)
-- `IssueShareScreen` — share sheet overlay on Issues screen. Built by Gandalf, pending merge into storybook.html.
+- `IssueShareScreen` — share sheet overlay on Issues screen. Merged into storybook.html. Figma node `5935:34615`.
   - `ShareButton` — 88×88, cream fill at 0.8 opacity, cornerRadius 10, shadow. Used inside IssueShareScreen.
-  - Social share icons needed: `IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconCopyLink`, `IconEmail`, `IconMessages`
+  - Social share icons in file: `IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconCopyLink`, `IconEmail`, `IconMessages`, `IconCloseLarge`
 
 ---
 
@@ -175,8 +176,8 @@ Full-screen layout: 393×852px, `position:absolute`, simulates a mobile screen. 
 `IconNavHome`, `IconNavIssues`, `IconNavPulse`, `IconNavOfficials`, `IconNavAccount`,
 `IconShareAction`, `IconReactButton`, `IconLink`
 
-Social share icons (needed for IssueShareScreen — extract from Figma):
-`IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconCopyLink`, `IconEmail`, `IconMessages`
+Social share icons (added for IssueShareScreen — Figma-extracted):
+`IconFacebook`, `IconTwitter`, `IconLinkedIn`, `IconCopyLink`, `IconEmail`, `IconMessages`, `IconCloseLarge`
 
 ---
 
@@ -205,6 +206,7 @@ Social share icons (needed for IssueShareScreen — extract from Figma):
 - Never simplify or rationalize. The design is the thinking.
 - Always screenshot after visual changes — never say "done" without visual proof.
 - User uses Brave browser. Control Chrome MCP works with Brave.
+- **Before building any component:** open Figma and read the exact type specs from the info panel for EVERY text element — fontSize, fontWeight, lineHeight, letterSpacing. No guessing from screenshots. Do this before writing a single line of code.
 
 ---
 
