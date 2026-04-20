@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "beacon-storybook",
-      "runtimeExecutable": "python3",
-      "runtimeArgs": ["-m", "http.server", "8765"],
+      "runtimeExecutable": "/bin/bash",
+      "runtimeArgs": ["-c", "cd /tmp && python3 -c \"import http.server,os; os.chdir('/Users/jimmyche/Library/CloudStorage/Dropbox/04 Projects/AI Shared/Beacon'); httpd=http.server.HTTPServer(('',8765),http.server.SimpleHTTPRequestHandler); httpd.serve_forever()\""],
       "port": 8765
     }
   ]
