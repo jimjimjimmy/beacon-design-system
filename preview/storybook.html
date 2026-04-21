@@ -921,7 +921,7 @@ function PoliticianProfileCard({
   const [activeTab, setActiveTab] = useState("6M");
   const tabs = ["6M","1Y","2Y","4Y","All"];
   return (
-    <div style={{width,borderRadius:cardRadius,overflow:"hidden",display:"flex",flexDirection:"column",alignItems:"center",backgroundColor:"#fff",fontFamily:"Inter,sans-serif"}}>
+    <div style={{width,borderRadius:cardRadius,overflow:cardRadius?"hidden":"visible",display:"flex",flexDirection:"column",alignItems:"center",backgroundColor:"#fff",fontFamily:"Inter,sans-serif"}}>
       {/* Red header */}
       <div style={{backgroundColor:headerColor,padding:18,display:"flex",flexDirection:"column",gap:16,borderRadius:cardRadius?`${cardRadius}px ${cardRadius}px 0 0`:0,width:"100%"}}>
         <div style={{display:"flex",gap:17,alignItems:"flex-start"}}>
@@ -949,7 +949,7 @@ function PoliticianProfileCard({
         ))}
       </div>
       {/* Score section */}
-      <div style={{padding:18,backgroundColor:"#fff",display:"flex",flexDirection:"column",gap:7,borderRadius:cardRadius?`0 0 ${cardRadius}px ${cardRadius}px`:0,boxShadow:"0 4px 15px rgba(0,0,0,0.15)",width:"100%"}}>
+      <div style={{padding:18,backgroundColor:"#fff",display:"flex",flexDirection:"column",gap:7,borderRadius:cardRadius?`0 0 ${cardRadius}px ${cardRadius}px`:0,boxShadow:cardRadius?"0 4px 15px rgba(0,0,0,0.15)":"none",width:"100%"}}>
         <div style={{display:"flex",alignItems:"center",gap:8}}>
           <IconBeaconDot/>
           <span style={{fontSize:22,fontWeight:800,color:"#141810",lineHeight:"130%",letterSpacing:-0.5,flex:1}}>Beacon Score™</span>
