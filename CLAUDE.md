@@ -7,8 +7,8 @@
   Both machines depend on this as the single source of truth.
   Add: last updated date + machine name at the top so we know who last touched it.
 
-  Last updated: 2026-04-17 6:18pm — Machine B (Cowork)
-  Changes: IssueShareScreen merged into Issues section (not Screens) · social share icons added · IconLink used for Copy Link · folder structure documented · push commands corrected (remote=freeradicals, explicit token required)
+  Last updated: 2026-04-21 11:16am — Machine B (Cowork)
+  Changes: Pulse section added — PulseSurveys (Active/Complete tabs), PulseSurveyFlow (3-step Q1→Q2→Q3 with animated progress bar + cascade fade-in, mixes single/multi-select), PulseSurveyResults (reuses PollResultsCard) · discover_tune icon inlined from assets/icons · PulseSurveyQuestion kept as internal component (not registered — PulseSurveyFlow drives it)
 -->
 
 ## What this is
@@ -177,6 +177,13 @@ Full-screen layout: 393×852px, `position:absolute`, simulates a mobile screen. 
 
 ### Interactions
 - `ReactionInteraction` — card slides left (154px), reaction strip at z:1 behind card at z:2. Select emotion, card slides back. Toggle same to deselect.
+
+### Pulse (full-screen screens)
+Full-screen layout: 393×852px, `position:absolute`. Live under the **Mobile/Screens** section in the storybook.
+- `PulseSurveys` — Beacon Pulse feed with Active/Complete tabs. Active shows 3 `PollCard`s; Complete shows `PollCard variant="complete"` with donut + result %. Uses `discover_tune` SVG (inlined from `assets/icons/discover_tune.svg`). No BottomTabBar per Figma.
+- `PulseSurveyFlow` — 3-step survey orchestrator (Q1 single → Q2 single → Q3 multi-select) that advances to `PulseSurveyResults` on Done. Uses key-based remount on `PulseSurveyQuestion` so the progress bar animates width from prevStep→step and answer cards cascade-fade top-to-bottom.
+- `PulseSurveyQuestion` — parameterized question screen (internal, not registered). Props: `{step, total, prevStep, title, options, mode:"single"|"multi", doneLabel, onAnswer}`. Multi-select adds 22px circle checkbox + Done button. Progress bar uses `transition: width 0.9s cubic-bezier(0.4,0,0.2,1)`.
+- `PulseSurveyResults` — "Thanks for adding your voice" screen. Renders `PollResultsCard` (do not rebuild the engagement/donut/Jake/toggle — PollResultsCard already contains it). Fixed "Return to Feed" CTA + BottomTabBar activeTab="pulse".
 
 ### Issues (continued — full-screen screens)
 Full-screen layout: 393×852px, `position:absolute`. These live under the **Issues** nav section in the storybook.
