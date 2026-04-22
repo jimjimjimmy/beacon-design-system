@@ -11,6 +11,22 @@
   Changes: Pulse section added — PulseSurveys (Active/Complete tabs), PulseSurveyFlow (3-step Q1→Q2→Q3 with animated progress bar + cascade fade-in, mixes single/multi-select), PulseSurveyResults (reuses PollResultsCard) · discover_tune icon inlined from assets/icons · PulseSurveyQuestion kept as internal component (not registered — PulseSurveyFlow drives it)
 -->
 
+## ⚠️ Required Reading Before Building
+
+**Before implementing any new component or fixing any visual bug, read the `design-to-code-qa` skill and the canonical pipeline doc:**
+
+- Skill: `~/.claude/skills/design-to-code-qa/SKILL.md`
+- Canonical: `~/Dropbox/04 Projects/AI Shared/memory/process_design_to_code_pipeline.md`
+
+Non-negotiables from that doc:
+1. **No `localhost:*` or `file://` URLs in committed code.** Fetch and save every asset from Figma MCP into `assets/` before committing.
+2. **Run the pre-commit checklist** (visual + technical QA) before any commit that touches visuals.
+3. **`grep -rn "localhost:\|file://" preview/`** should return nothing.
+
+If the Figma desktop app isn't available (MCP server down, network blocked), STOP and ask — do not improvise placeholder assets without explicit user approval.
+
+---
+
 ## What this is
 A single-file React component storybook for the **Beacon** app — a civic/political news app. No bundler, no build step. Everything lives in one HTML file rendered by Babel CDN in the browser.
 
