@@ -4603,105 +4603,129 @@ function VotingScreen() {
 
 const SECTIONS = [
 
-  // ── SHARED ─ Platform-agnostic components used on both mobile + desktop ──
+  // ── COMPONENTS ─ Reusable building blocks (mobile + desktop variants grouped by domain) ──
   {
-    group: "Shared", id: "Foundation",
+    group: "Components", id: "Shared",
     components: [
-      { id:"SectionTitle",  label:"SectionTitle",  desc:"Orange dot · ExtraBold title · optional subtitle + View All link" },
-      { id:"ZipCodeCTA",    label:"ZipCodeCTA",    desc:"Deep green card · zip input + Update button" },
+      { id:"SectionTitle",      label:"SectionTitle",      desc:"Orange dot · ExtraBold title · optional subtitle + View All link" },
+      { id:"ZipCodeCTA",        label:"ZipCodeCTA",        desc:"Deep green card · zip input + Update button" },
+      { id:"AccordionItem",     label:"AccordionItem",     desc:"Expandable row · icon + title + plus/minus toggle" },
+      { id:"CorroborationCard", label:"CorroborationCard", desc:"Source credibility bar · Low/Med/High + news outlet logos + source count" },
+      { id:"BottomTabBar",      label:"BottomTabBar",      desc:"Mobile 5-tab nav · active: bold underline + icon fill" },
+      { id:"BackHeader",        label:"BackHeader",        desc:"Back chevron + centered page title for mobile detail screens" },
+      { id:"DesktopNavBar",     label:"Desktop Nav Bar",   desc:"Top nav · 1280×80 · logo + Issues/Pulse/Officials + Account · active underline" },
+      { id:"DesktopBreadcrumb", label:"Desktop Breadcrumb",desc:"Officials > Page name · Inter Medium 13px · linked items underlined" },
+      { id:"DesktopTabBar",     label:"Desktop Tab Bar",   desc:"Name / State tabs + search icon · active: 4px underline" },
+      { id:"DesktopAlphaIndex", label:"Desktop Alpha Index",desc:"#–Z vertical index bar · 12px wide · Inter Medium 12px" },
     ]
   },
   {
-    group: "Shared", id: "Content",
+    group: "Components", id: "Search",
+    components: [
+      // Search primitives — to build
+    ]
+  },
+  {
+    group: "Components", id: "Issues",
+    components: [
+      { id:"IssueCard",               label:"IssueCard",                desc:"Mobile issue cards · Hero (overlay), Slim (image + text), Full-bleed variants" },
+      { id:"VoteRecordItem",          label:"VoteRecordItem",           desc:"Vote record row · Yea/Nay/Did Not Vote badge + bill ID + title + date" },
+      { id:"VotingTimeline",          label:"VotingTimeline",           desc:"Stacked bar chart · Yea/Nay per month · 6-month rolling window + legend" },
+      { id:"DesktopIssueCard",        label:"Desktop Issue Card",       desc:"996×275 · two-column: image+overlay left · description+engagement right" },
+      { id:"DesktopHeroIssueCard",    label:"Desktop Hero Issue Card",  desc:"996×360 · full-bleed image · badge top-right · title+date bottom-left" },
+      { id:"DesktopOfficialQuoteCard",label:"Desktop Official Quote",   desc:"Navy official header + Beacon Score row + large quote + sources" },
+    ]
+  },
+  {
+    group: "Components", id: "Officials",
+    components: [
+      { id:"OfficialCard",                 label:"OfficialCard",                 desc:"Compact mobile row · color swatch + avatar + name + optional score" },
+      { id:"PoliticianProfileCard",        label:"PoliticianProfileCard",        desc:"Mobile detail card · header + avatar + bio + score + time-range tabs" },
+      { id:"StateRow",                     label:"StateRow",                     desc:"State flag + name + chevron · for browsing officials by state" },
+      { id:"ScoreItem",                    label:"ScoreItem",                    desc:"Score breakdown row · icon + title + bar + score/max + Avg marker" },
+      { id:"StatSummaryCard",              label:"StatSummaryCard",              desc:"Title + subtitle + two stat boxes · showChevron / hasBorder variants" },
+      { id:"DataDetails",                  label:"DataDetails",                  desc:"Score dimension breakdown · bar chart + formula boxes" },
+      { id:"ScoreDetail",                  label:"ScoreDetail",                  desc:"Score card · title + description + score/max + progress bar + source" },
+      { id:"PoliticalLeaning",             label:"PoliticalLeaning",             desc:"Left-right spectrum bar · gradient track + dot + leaning label" },
+      { id:"InconsistencyDetail",          label:"InconsistencyDetail",          desc:"X-circle header + body copy explaining the inconsistency" },
+      { id:"BaselineCard",                 label:"BaselineCard",                 desc:"Action card · title + date + truncated body + link icon" },
+      { id:"CommitteeBreakdownCard",       label:"CommitteeBreakdownCard",       desc:"Committee list rows · name + code + attendance bar + percentage" },
+      { id:"ConductDrillDownCard",         label:"ConductDrillDownCard",         desc:"Score + bar + deduction rows + total + source · conduct sub-score detail" },
+      { id:"DesktopPoliticianProfileCard", label:"Desktop Politician Profile",   desc:"996px two-column · party color left panel · white right with score items" },
+      { id:"DesktopScoreDashboard",        label:"Desktop Score Dashboard",      desc:"Profile card + Beacon Score header + Participation/Consistency/Conduct rows" },
+      { id:"DesktopOfficialCard",          label:"Desktop Official Card",        desc:"326×368 sticky left panel · red header + avatar + term badges + engagement" },
+      { id:"DesktopOfficialsList",         label:"Desktop Officials List",       desc:"Tab bar + alpha header + official rows + alpha index · full 996px layout" },
+      { id:"DesktopOfficialRow",           label:"Desktop Official Row",         desc:"100px row · party color box + avatar + name/badge + role + Beacon Score™" },
+    ]
+  },
+  {
+    group: "Components", id: "Pulse",
     components: [
       { id:"PollCard",          label:"PollCard",          desc:"Survey card · question + time estimate + article link + engagement" },
       { id:"PollResultsCard",   label:"PollResultsCard",   desc:"Post-vote card · donut chart + completion stats + anonymous toggle" },
-      { id:"AccordionItem",     label:"AccordionItem",     desc:"Expandable row · icon + title + plus/minus toggle" },
-      { id:"CorroborationCard", label:"CorroborationCard", desc:"Source credibility bar · Low/Med/High + news outlet logos + source count" },
-    ]
-  },
-  {
-    group: "Shared", id: "Officials",
-    components: [
-      { id:"ScoreItem",              label:"ScoreItem",              desc:"Score breakdown row · icon + title + bar + score/max + Avg marker" },
-      { id:"StatSummaryCard",        label:"StatSummaryCard",        desc:"Title + subtitle + two stat boxes · showChevron / hasBorder variants" },
-      { id:"DataDetails",            label:"DataDetails",            desc:"Score dimension breakdown · bar chart + formula boxes" },
-      { id:"ScoreDetail",            label:"ScoreDetail",            desc:"Score card · title + description + score/max + progress bar + source" },
-      { id:"PoliticalLeaning",       label:"PoliticalLeaning",       desc:"Left-right spectrum bar · gradient track + dot + leaning label" },
-      { id:"InconsistencyDetail",    label:"InconsistencyDetail",    desc:"X-circle header + body copy explaining the inconsistency" },
-      { id:"BaselineCard",           label:"BaselineCard",           desc:"Action card · title + date + truncated body + link icon" },
-      { id:"CommitteeBreakdownCard", label:"CommitteeBreakdownCard", desc:"Committee list rows · name + code + attendance bar + percentage" },
-      { id:"ConductDrillDownCard",   label:"ConductDrillDownCard",   desc:"Score + bar + deduction rows + total + source · conduct sub-score detail" },
-      { id:"VotingTimeline",         label:"VotingTimeline",         desc:"Stacked bar chart · Yea/Nay per month · 6-month rolling window + legend" },
-      { id:"VoteRecordItem",         label:"VoteRecordItem",         desc:"Vote record row · Yea/Nay/Did Not Vote badge + bill ID + title + date" },
-    ]
-  },
-  {
-    group: "Shared", id: "Pulse",
-    components: [
       { id:"SurveyProgressBar", label:"SurveyProgressBar", desc:"Continuous fill bar + step counter for survey flows" },
       { id:"SurveyAnswerCard",  label:"SurveyAnswerCard",  desc:"Answer card · single-select (bg toggle) or multi-select (circle checkbox)" },
       { id:"SurveyFooter",      label:"SurveyFooter",      desc:'"Be Part of the Signal" CTA with participant count' },
     ]
   },
-
-  // ── MOBILE ─ Components + screens specific to the mobile app ────────────
   {
-    group: "Mobile", id: "Navigation",
+    group: "Components", id: "Interactions",
     components: [
-      { id:"BottomTabBar", label:"BottomTabBar", desc:"5-tab nav bar · active: bold underline + icon fill" },
-      { id:"BackHeader",   label:"BackHeader",   desc:"Back chevron + centered page title for detail screens" },
+      { id:"ReactionInteraction", label:"Reaction Picker", desc:"Card slides left · reaction strip revealed · select emotion · strip closes" },
+    ]
+  },
+
+  // ── MOBILE ─ Full-screen mobile compositions (393×852) ───────────────────
+  {
+    group: "Mobile", id: "Search",
+    components: [
+      // Mobile search screens — to build
     ]
   },
   {
-    group: "Mobile", id: "Content",
+    group: "Mobile", id: "Home",
     components: [
-      { id:"IssueCard", label:"IssueCard", desc:"Issue cards · Hero (overlay), Slim (image + text), Full-bleed variants" },
+      { id:"HomeScreen", label:"Home Screen", desc:"Full scrollable home · Issues + Pulse + Officials + ZipCode CTA · 393×852" },
+    ]
+  },
+  {
+    group: "Mobile", id: "Issues",
+    components: [
+      { id:"ActiveIssuesScreen", label:"Active Issues",  desc:"Issues feed · 5 PostArticle cards · Issues tab active · 393×852" },
+      { id:"IssueDetailScreen",  label:"Issue Detail",   desc:"Article detail · hero + engagement + 3 accordions (Consensus/Contention/Expert) · 393×852" },
+      { id:"IssueShareScreen",   label:"Share Overlay",  desc:"Share sheet overlay · article image + social share buttons · 393×852" },
+    ]
+  },
+  {
+    group: "Mobile", id: "Pulse",
+    components: [
+      { id:"PulseSurveys",       label:"Pulse Surveys",        desc:"Beacon Pulse feed · title + tune/info + Active/Complete tabs + PollCard list · 393×852" },
+      { id:"PulseSurveyFlow",    label:"Pulse Survey Flow",    desc:"Q1 → Q2 → Q3 multi → Results · bar animates + cards cascade each step · 393×852" },
+      { id:"PulseSurveyResults", label:"Pulse Survey Results", desc:"Thanks card · engagement + donut + aggregated-with + anonymous toggle + Return to Feed · 393×852" },
     ]
   },
   {
     group: "Mobile", id: "Officials",
     components: [
-      { id:"OfficialCard",          label:"OfficialCard",          desc:"Compact list row · color swatch + avatar + name + optional score" },
-      { id:"PoliticianProfileCard", label:"PoliticianProfileCard", desc:"Full detail card · header + avatar + bio + score + time-range tabs" },
-      { id:"StateRow",              label:"StateRow",              desc:"State flag + name + chevron · for browsing officials by state" },
-    ]
-  },
-  {
-    group: "Mobile", id: "Interactions",
-    components: [
-      { id:"ReactionInteraction", label:"Reaction Picker", desc:"Card slides left · reaction strip revealed · select emotion · strip closes" },
-    ]
-  },
-  {
-    group: "Mobile", id: "Screens",
-    components: [
-      { id:"HomeScreen",          label:"Home Screen",       desc:"Full scrollable home · Issues + Pulse + Officials + ZipCode CTA · 393×852" },
-      { id:"ActiveIssuesScreen",  label:"Active Issues",     desc:"Issues feed · 5 PostArticle cards · Issues tab active · 393×852" },
-      { id:"IssueDetailScreen",   label:"Issue Detail",      desc:"Article detail · hero + engagement + 3 accordions (Consensus/Contention/Expert) · 393×852" },
-      { id:"OfficialsScreen",       label:"Officials",         desc:"Name list · State list · Search · Officials tab active · 393×852" },
-      { id:"OfficialProfileScreen", label:"Official Profile", desc:"Full politician detail · hero + score + pulse + about · 393×852" },
-      { id:"ScoreInfoModalScreen",  label:"Score Info Modal",  desc:"Beacon Score info modal · blurred profile bg + white card · 393×852" },
-      { id:"ParticipationScreen",   label:"Participation",     desc:"Score drilldown · compact profile + DataDetails + voting/committee breakdown · 393×852" },
-      { id:"VotingScreen",          label:"Voting",            desc:"Voting drilldown · compact profile + timeline + lean + recent votes · 393×852" },
-      { id:"CommitteesScreen",      label:"Committees",        desc:"Committee drilldown · compact profile + summary stats + breakdown list · 393×852" },
-      { id:"ConsistencyScreen",     label:"Consistency",       desc:"Consistency drilldown · compact profile + score card + stances + inconsistencies · 393×852" },
-      { id:"StancesScreen",         label:"Stances",           desc:"Stances drilldown · compact profile + summary + Top Stances list · 393×852" },
-      { id:"InconsistenciesScreen", label:"Inconsistencies",   desc:"Inconsistencies drilldown · Ethics severity bar (animated) + Contested Proposition + Examples grid · 393×852" },
-      { id:"ConductScreen",         label:"Conduct",           desc:"Conduct drilldown · summary with animated bar + 4 sub-score cards + methodology · 393×852" },
-      { id:"ConductDrillDownScreen",label:"Campaign Finance",  desc:"Conduct sub-score drilldown · compact profile + ConductDrillDownCard · 393×852" },
-      { id:"PulseSurveys",          label:"Pulse Surveys",     desc:"Beacon Pulse feed · title + tune/info + Active/Complete tabs + PollCard list · 393×852" },
-      { id:"PulseSurveyFlow",       label:"Pulse Survey Flow", desc:"Q1 → Q2 → Q3 multi → Results · bar animates + cards cascade each step · 393×852" },
-      { id:"PulseSurveyResults",    label:"Pulse Survey Results", desc:"Thanks card · engagement + donut + aggregated-with + anonymous toggle + Return to Feed · 393×852" },
-      { id:"IssueShareScreen",    label:"Share Overlay",     desc:"Share sheet overlay · article image + social share buttons · 393×852" },
+      { id:"OfficialsScreen",        label:"Officials",         desc:"Name list · State list · Search · Officials tab active · 393×852" },
+      { id:"OfficialProfileScreen",  label:"Official Profile",  desc:"Full politician detail · hero + score + pulse + about · 393×852" },
+      { id:"ScoreInfoModalScreen",   label:"Score Info Modal",  desc:"Beacon Score info modal · blurred profile bg + white card · 393×852" },
+      { id:"ParticipationScreen",    label:"Participation",     desc:"Score drilldown · compact profile + DataDetails + voting/committee breakdown · 393×852" },
+      { id:"VotingScreen",           label:"Voting",            desc:"Voting drilldown · compact profile + timeline + lean + recent votes · 393×852" },
+      { id:"CommitteesScreen",       label:"Committees",        desc:"Committee drilldown · compact profile + summary stats + breakdown list · 393×852" },
+      { id:"ConsistencyScreen",      label:"Consistency",       desc:"Consistency drilldown · compact profile + score card + stances + inconsistencies · 393×852" },
+      { id:"StancesScreen",          label:"Stances",           desc:"Stances drilldown · compact profile + summary + Top Stances list · 393×852" },
+      { id:"InconsistenciesScreen",  label:"Inconsistencies",   desc:"Inconsistencies drilldown · Ethics severity bar (animated) + Contested Proposition + Examples grid · 393×852" },
+      { id:"ConductScreen",          label:"Conduct",           desc:"Conduct drilldown · summary with animated bar + 4 sub-score cards + methodology · 393×852" },
+      { id:"ConductDrillDownScreen", label:"Campaign Finance",  desc:"Conduct sub-score drilldown · compact profile + ConductDrillDownCard · 393×852" },
     ]
   },
 
-  // ── DESKTOP ─ Components + screens specific to the desktop web app ───────
+  // ── DESKTOP ─ Full-screen desktop compositions (1280 wide) ───────────────
   {
-    group: "Desktop", id: "Navigation",
+    group: "Desktop", id: "Search",
     components: [
-      { id:"DesktopNavBar", label:"Desktop Nav Bar", desc:"Top nav · 1280×80 · logo + Issues/Pulse/Officials + Account · active underline" },
+      // Desktop search screens — to build
     ]
   },
   {
@@ -4713,28 +4737,19 @@ const SECTIONS = [
   {
     group: "Desktop", id: "Issues",
     components: [
-      { id:"DesktopIssueCard",       label:"Desktop Issue Card",       desc:"996×275 · two-column: image+overlay left · description+engagement right" },
-      { id:"DesktopHeroIssueCard",   label:"Desktop Hero Issue Card",  desc:"996×360 · full-bleed image · badge top-right · title+date bottom-left" },
-      { id:"DesktopOfficialQuoteCard", label:"Desktop Official Quote", desc:"Navy official header + Beacon Score row + large quote + sources" },
-    ]
-  },
-  {
-    group: "Desktop", id: "Officials",
-    components: [
-      { id:"DesktopBreadcrumb",     label:"Desktop Breadcrumb",        desc:"Officials > Page name · Inter Medium 13px · linked items underlined" },
-      { id:"DesktopPoliticianProfileCard", label:"Desktop Politician Profile", desc:"996px two-column: party color left panel (avatar + info + term badges) · white right panel (time tabs + Beacon Score + score items + engagement)" },
-      { id:"DesktopScoreDashboard", label:"Desktop Score Dashboard",   desc:"Profile card (326px) + Beacon Score header + Participation/Consistency/Conduct rows" },
-      { id:"DesktopOfficialCard",  label:"Desktop Official Card",    desc:"326×368 sticky left panel · red header + avatar + term badges + engagement" },
-      { id:"DesktopOfficialsList", label:"Desktop Officials List",   desc:"Tab bar + alpha header + official rows + alpha index · full 996px layout" },
-      { id:"DesktopOfficialRow",   label:"Desktop Official Row",     desc:"100px row · party color box + avatar + name/badge + role + Beacon Score™" },
-      { id:"DesktopTabBar",        label:"Desktop Tab Bar",          desc:"Name / State tabs + search icon · active: 4px underline" },
-      { id:"DesktopAlphaIndex",    label:"Desktop Alpha Index",      desc:"#–Z vertical index bar · 12px wide · Inter Medium 12px" },
+      // Desktop issues screens — to build
     ]
   },
   {
     group: "Desktop", id: "Pulse",
     components: [
-      // DesktopPollGrid, DesktopSurvey — to build
+      // Desktop pulse screens — to build
+    ]
+  },
+  {
+    group: "Desktop", id: "Officials",
+    components: [
+      // Desktop officials screens — to build
     ]
   },
 ];
@@ -5189,7 +5204,7 @@ function ComponentPreview({ id }) {
 
 const ANIMATED_IDS = new Set(["PollCard","PollResultsCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","ReactionInteraction","DesktopPoliticianProfileCard","DesktopScoreDashboard","PulseSurveyFlow","PulseSurveyResults"]);
 
-const FULLSCREEN_IDS = new Set(["ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults"]);
+const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults"]);
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
   const hasAnim = ANIMATED_IDS.has(comp.id);
@@ -5243,53 +5258,127 @@ function ComponentCard({comp}) {
 function App() {
   const groups = [...new Set(SECTIONS.map(s => s.group))];
   const byGroup = g => SECTIONS.filter(s => s.group === g);
-  const componentCount = SECTIONS.reduce((n,s) => n+s.components.length, 0);
+  const componentCount = SECTIONS.filter(s => s.group === "Components").reduce((n,s) => n+s.components.length, 0);
   const screenCount = SECTIONS.filter(s => s.group === "Mobile" || s.group === "Desktop").reduce((n,s) => n+s.components.length, 0);
 
+  // Find first non-empty section as default
+  const firstNonEmpty = SECTIONS.find(s => s.components.length > 0);
+  const defaultKey = firstNonEmpty ? `${firstNonEmpty.group}:${firstNonEmpty.id}` : "";
+
+  // Read initial selection from URL hash
+  const readHash = () => {
+    const h = (window.location.hash || "").replace(/^#/, "");
+    if (!h) return defaultKey;
+    // Find matching section
+    const match = SECTIONS.find(s => `${s.group}:${s.id}` === h);
+    return match ? h : defaultKey;
+  };
+
+  const [selected, setSelected] = React.useState(readHash);
+  const [expanded, setExpanded] = React.useState(new Set(groups));
+
+  React.useEffect(() => {
+    const onHash = () => setSelected(readHash());
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
+
+  const pick = (group, id) => {
+    const key = `${group}:${id}`;
+    setSelected(key);
+    window.location.hash = key;
+  };
+
+  const toggleGroup = (g) => {
+    const next = new Set(expanded);
+    next.has(g) ? next.delete(g) : next.add(g);
+    setExpanded(next);
+  };
+
+  const [gKey, sKey] = selected.split(":");
+  const currentSection = SECTIONS.find(s => s.group === gKey && s.id === sKey);
+
   return (
-    <div style={{minHeight:"100vh",background:"#f5f4f0",fontFamily:"Inter,sans-serif"}}>
-      {/* Top header */}
-      <div style={{background:"#fff",borderBottom:"1px solid #e8e4de",padding:"20px 48px",position:"sticky",top:0,zIndex:100,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-        <div>
-          <h1 style={{fontSize:18,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>Beacon</h1>
-          <p style={{fontSize:11,color:T.gray,margin:0,marginTop:2}}>{componentCount} components · {screenCount} screens</p>
+    <div style={{display:"flex",minHeight:"100vh",background:"#f5f4f0",fontFamily:"Inter,sans-serif"}}>
+      {/* Left nav */}
+      <aside style={{width:240,background:"#fff",borderRight:"1px solid #e8e4de",position:"sticky",top:0,alignSelf:"flex-start",height:"100vh",overflowY:"auto",flexShrink:0,padding:"20px 0"}}>
+        <div style={{padding:"0 20px 20px",borderBottom:`1px solid ${T.creamBorder}`,marginBottom:12}}>
+          <h1 style={{fontSize:18,fontWeight:900,letterSpacing:-0.5,color:T.slate,margin:0}}>Beacon</h1>
+          <p style={{fontSize:11,color:T.gray,margin:"2px 0 0"}}>{componentCount} components · {screenCount} screens</p>
         </div>
-        <div style={{display:"flex",gap:32}}>
-          {groups.map(g => (
-            <a key={g} href={`#group-${g}`} style={{fontSize:13,fontWeight:700,color:T.slate,textDecoration:"none",letterSpacing:-0.25}}>{g}</a>
-          ))}
-        </div>
-      </div>
-
-      {/* Groups */}
-      <div style={{padding:"56px 48px 96px"}}>
-        {groups.map(group => (
-          <div key={group} id={`group-${group}`} style={{marginBottom:96}}>
-            {/* Group header */}
-            <div style={{display:"flex",alignItems:"baseline",gap:12,marginBottom:48,paddingBottom:16,borderBottom:`3px solid ${T.slate}`}}>
-              <h1 style={{fontSize:32,fontWeight:900,letterSpacing:-1,color:T.slate,margin:0}}>{group}</h1>
-              <span style={{fontSize:12,fontWeight:600,color:T.gray,letterSpacing:0.5,textTransform:"uppercase"}}>
-                {`${byGroup(group).reduce((n,s)=>n+s.components.length,0)} ${group === "Shared" ? "components" : "components"}`}
-              </span>
+        {groups.map(group => {
+          const isExp = expanded.has(group);
+          const sections = byGroup(group);
+          const totalCount = sections.reduce((n,s)=>n+s.components.length,0);
+          return (
+            <div key={group} style={{marginBottom:4}}>
+              <button
+                onClick={()=>toggleGroup(group)}
+                style={{display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",padding:"10px 20px",background:"transparent",border:"none",fontFamily:"Inter,sans-serif",fontSize:11,fontWeight:700,textTransform:"uppercase",letterSpacing:0.8,color:T.slate,cursor:"pointer"}}
+              >
+                <span style={{display:"flex",alignItems:"center",gap:8}}>
+                  <span style={{display:"inline-block",transform:isExp?"rotate(90deg)":"rotate(0deg)",transition:"transform 0.15s",fontSize:10,color:T.gray}}>▸</span>
+                  {group}
+                </span>
+                <span style={{fontSize:10,color:T.gray,fontWeight:600}}>{totalCount}</span>
+              </button>
+              {isExp && sections.map(s => {
+                const key = `${s.group}:${s.id}`;
+                const active = selected === key;
+                const empty = s.components.length === 0;
+                return (
+                  <button
+                    key={s.id}
+                    onClick={()=>pick(s.group, s.id)}
+                    style={{
+                      display:"flex",alignItems:"center",justifyContent:"space-between",width:"100%",textAlign:"left",
+                      padding:"7px 20px 7px 40px",
+                      background:active?"#f5f4f0":"transparent",
+                      borderLeft:`3px solid ${active?T.slate:"transparent"}`,
+                      marginLeft:0,border:"none",borderRadius:0,
+                      fontFamily:"Inter,sans-serif",fontSize:13,
+                      fontWeight:active?700:500,
+                      color:empty?"#bbb":(active?T.slate:"#555"),
+                      cursor:"pointer",
+                    }}
+                  >
+                    <span>{s.id}</span>
+                    <span style={{fontSize:11,color:T.gray,fontWeight:500}}>{s.components.length || "—"}</span>
+                  </button>
+                );
+              })}
             </div>
+          );
+        })}
+      </aside>
 
-            {/* Sections within group */}
-            {byGroup(group).filter(s => s.components.length > 0).map(section => (
-              <div key={section.id} id={`section-${section.id}`} style={{marginBottom:72}}>
-                <div style={{display:"flex",alignItems:"baseline",gap:10,marginBottom:24,paddingBottom:10,borderBottom:`1px solid ${T.creamBorder}`}}>
-                  <h2 style={{fontSize:18,fontWeight:800,letterSpacing:-0.5,color:T.slate,margin:0}}>{section.id}</h2>
-                  <span style={{fontSize:11,fontWeight:600,color:T.gray,letterSpacing:0.5,textTransform:"uppercase"}}>{section.components.length}</span>
-                </div>
-                <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
-                  {section.components.map(comp => (
-                    <ComponentCard key={comp.id} comp={comp}/>
-                  ))}
-                </div>
+      {/* Main canvas */}
+      <main style={{flex:1,minWidth:0,padding:"48px 56px 96px"}}>
+        {currentSection ? (
+          <>
+            <div style={{marginBottom:40,paddingBottom:16,borderBottom:`3px solid ${T.slate}`}}>
+              <p style={{fontSize:11,fontWeight:700,color:T.gray,letterSpacing:1,textTransform:"uppercase",margin:0}}>{currentSection.group}</p>
+              <div style={{display:"flex",alignItems:"baseline",gap:12,marginTop:4}}>
+                <h1 style={{fontSize:32,fontWeight:900,letterSpacing:-1,color:T.slate,margin:0}}>{currentSection.id}</h1>
+                <span style={{fontSize:12,fontWeight:600,color:T.gray,letterSpacing:0.5,textTransform:"uppercase"}}>
+                  {currentSection.components.length} {currentSection.components.length === 1 ? "item" : "items"}
+                </span>
               </div>
-            ))}
-          </div>
-        ))}
-      </div>
+            </div>
+            {currentSection.components.length > 0 ? (
+              <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
+                {currentSection.components.map(comp => (
+                  <ComponentCard key={comp.id} comp={comp}/>
+                ))}
+              </div>
+            ) : (
+              <p style={{color:T.gray,fontSize:14,fontStyle:"italic"}}>Nothing here yet — placeholder section.</p>
+            )}
+          </>
+        ) : (
+          <p style={{color:T.gray}}>Select a section from the sidebar.</p>
+        )}
+      </main>
     </div>
   );
 }
