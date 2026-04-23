@@ -1055,9 +1055,10 @@ function PostHomeSlim({
   shares="421 Shares",
   reactions="1.4k Reactions",
   imgUrl="https://images.pexels.com/photos/1464232/pexels-photo-1464232.jpeg?auto=compress&cs=tinysrgb&w=800",
+  width=333,
 }) {
   return (
-    <div style={{width:333,borderRadius:10,overflow:"hidden",boxShadow:"0 4px 15px rgba(0,0,0,0.15)",display:"flex",flexDirection:"column",fontFamily:"Inter,sans-serif",flexShrink:0}}>
+    <div style={{width,borderRadius:10,overflow:"hidden",boxShadow:"0 4px 15px rgba(0,0,0,0.15)",display:"flex",flexDirection:"column",fontFamily:"Inter,sans-serif",flexShrink:0}}>
       {/* Image top — 128px */}
       <div style={{position:"relative",height:128,flexShrink:0}}>
         <div style={{position:"absolute",inset:0,background:`url('${imgUrl}') center/cover`}}/>
@@ -3007,41 +3008,90 @@ function DesktopIssueCard({
   );
 }
 
-/* ── DesktopHeroIssueCard ──
-   Full-bleed 996×360px hero. Badge top-right, title + date at bottom-left. */
+/* ── DesktopHeroIssueCard ── Figma 7484:57335 (Post - Image, desktop hero variant)
+   996×360. Content column constrained to LEFT side via pr:640 on headline
+   and pr:680 on engagement bar, so image shows through on right. */
 function DesktopHeroIssueCard({
-  badge = "Foreign Policy",
-  title = "US and Israel Attack Iran for 10th Day",
-  date = "Mar 11, 2026",
-  updated = "Updated 8:28am EST",
-  imgUrl = "https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1000",
+  badge = "FOREIGN POLICY",
+  title = "Justice Department official posts social media photo revealing investigation into Ohio State",
+  timeAgo = "30m ago",
+  pulses = "6 Pulses",
+  shares = "421Shares",
+  reactions = "1.4k Reactions",
+  imgUrl = "https://images.pexels.com/photos/8112172/pexels-photo-8112172.jpeg?auto=compress&cs=tinysrgb&w=1600",
 }) {
+  const labelStyle = {fontSize:11, fontWeight:500, color:"#fafafa", lineHeight:"15px", letterSpacing:-0.25, whiteSpace:"nowrap", margin:0};
+  const actionLabelStyle = {fontSize:11, fontWeight:600, color:"#fafafa", lineHeight:"15px", letterSpacing:-0.25};
   return (
-    <div style={{width:996, height:360, borderRadius:T.radius, overflow:"hidden",
-      position:"relative", display:"flex", flexDirection:"column",
-      justifyContent:"space-between", padding:18, boxSizing:"border-box",
-      fontFamily:"Inter,sans-serif"}}>
+    <div style={{width:996, height:360, borderRadius:10, overflow:"hidden",
+      position:"relative", display:"flex", flexDirection:"column", gap:8,
+      padding:"18px 18px 16px 18px", boxSizing:"border-box",
+      boxShadow:"0 4px 15px rgba(0,0,0,0.15)", fontFamily:"Inter,sans-serif"}}>
       {/* BG image */}
-      <div style={{position:"absolute", inset:0, backgroundImage:`url('${imgUrl}')`,
-        backgroundSize:"cover", backgroundPosition:"center"}}/>
-      {/* Gradient */}
-      <div style={{position:"absolute", inset:0,
-        background:"linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0) 35%, rgba(0,0,0,0.6) 70%, rgba(0,0,0,0.9) 100%)"}}/>
-      {/* Badge – top right */}
-      <div style={{position:"relative", display:"flex", justifyContent:"flex-end"}}>
-        <div style={{height:29, padding:"0 15px",
+      <div style={{position:"absolute", inset:0, zIndex:0,
+        background:`url('${imgUrl}') center/cover`}}/>
+      {/* Gradient — dark at bottom 15.6% → transparent at 80% (matches Figma) */}
+      <div style={{position:"absolute", inset:0, zIndex:0,
+        background:"linear-gradient(to top, rgba(0,0,0,0.8) 15.636%, rgba(0,0,0,0) 80%)"}}/>
+      {/* Badge — top right */}
+      <div style={{position:"relative", zIndex:1, display:"flex", justifyContent:"flex-end"}}>
+        <div style={{width:120, height:29, borderRadius:3,
           backgroundColor:"rgba(20,24,16,0.5)", border:"0.5px solid #f0e8d8",
-          borderRadius:3, display:"flex", alignItems:"center"}}>
+          display:"flex", alignItems:"center", justifyContent:"center"}}>
           <span style={{fontSize:9, fontWeight:600, color:"#f0e8d8",
-            letterSpacing:0.5, textTransform:"uppercase"}}>{badge}</span>
+            letterSpacing:0.5, textTransform:"uppercase", lineHeight:"15px"}}>{badge}</span>
         </div>
       </div>
-      {/* Headline + date at bottom */}
-      <div style={{position:"relative", display:"flex", flexDirection:"column", gap:6}}>
-        <p style={{fontSize:40, fontWeight:900, lineHeight:1.1, letterSpacing:-1,
-          color:"white", margin:0}}>{title}</p>
-        <p style={{fontSize:13, fontWeight:400, lineHeight:1.3,
-          color:"rgba(240,232,216,0.8)", margin:0}}>{date}<br/>{updated}</p>
+      {/* Headline + timestamp — flex:1, LEFT column (pr:640) */}
+      <div style={{position:"relative", zIndex:1, flex:1, display:"flex",
+        alignItems:"flex-end", paddingBottom:18, paddingRight:640}}>
+        <div style={{display:"flex", flexDirection:"column", gap:8,
+          paddingRight:40, width:"100%"}}>
+          <p style={{margin:0, fontSize:20, fontWeight:900, lineHeight:"1.1",
+            letterSpacing:-0.5, color:"#fff"}}>{title}</p>
+          <p style={{margin:0, fontSize:13, fontWeight:600, color:"#f0e8d8",
+            lineHeight:"1.1", letterSpacing:-0.5}}>{timeAgo}</p>
+        </div>
+      </div>
+      {/* Engagement bar — LEFT column (pr:680) */}
+      <div style={{position:"relative", zIndex:1, display:"flex",
+        flexDirection:"column", gap:8, paddingRight:680}}>
+        {/* Responses */}
+        <div style={{display:"flex", gap:24, alignItems:"center", justifyContent:"flex-end"}}>
+          <div style={{flex:1, display:"flex", gap:8, alignItems:"center", minWidth:0}}>
+            <p style={labelStyle}>{pulses}</p>
+            <p style={labelStyle}>•</p>
+            <p style={labelStyle}>{shares}</p>
+          </div>
+          <div style={{flex:1, display:"flex", gap:8, alignItems:"center", justifyContent:"flex-end", minWidth:0}}>
+            {/* Reaction emojis */}
+            <div style={{display:"flex", gap:1.333, alignItems:"center"}}>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#fafafa" strokeWidth="1"/><circle cx="6" cy="7" r="0.8" fill="#fafafa"/><circle cx="10" cy="7" r="0.8" fill="#fafafa"/><path d="M5.5 10C6.5 11 9.5 11 10.5 10" stroke="#fafafa" strokeWidth="1" strokeLinecap="round"/></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#fafafa" strokeWidth="1"/><line x1="5.5" y1="7" x2="6.5" y2="7" stroke="#fafafa" strokeWidth="1" strokeLinecap="round"/><line x1="9.5" y1="7" x2="10.5" y2="7" stroke="#fafafa" strokeWidth="1" strokeLinecap="round"/><line x1="6" y1="10.5" x2="10" y2="10.5" stroke="#fafafa" strokeWidth="1" strokeLinecap="round"/></svg>
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="#fafafa" strokeWidth="1"/><circle cx="6" cy="7" r="0.8" fill="#fafafa"/><circle cx="10" cy="7" r="0.8" fill="#fafafa"/><path d="M5.5 11C6.5 10 9.5 10 10.5 11" stroke="#fafafa" strokeWidth="1" strokeLinecap="round"/></svg>
+            </div>
+            <p style={labelStyle}>{reactions}</p>
+          </div>
+        </div>
+        {/* Divider */}
+        <div style={{width:"100%", height:1, backgroundColor:"rgba(240,232,216,0.5)"}}/>
+        {/* Post Actions */}
+        <div style={{display:"flex", gap:24, alignItems:"center", justifyContent:"flex-end"}}>
+          <div style={{display:"flex", flexDirection:"column", gap:4, alignItems:"center", cursor:"pointer"}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.97 22H14.97C19.97 22 21.97 20 21.97 15V9C21.97 4 19.97 2 14.97 2H8.97C3.97 2 1.97 4 1.97 9V15C1.97 20 3.97 22 8.97 22Z" stroke="#fafafa" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1.97 12.7L7.97 12.68C8.72 12.68 9.56 13.25 9.84 13.95L10.98 16.83C11.24 17.48 11.65 17.48 11.91 16.83L14.2 11.02C14.42 10.46 14.83 10.44 15.11 10.97L16.15 12.94C16.46 13.53 17.26 14.01 17.92 14.01H21.98" stroke="#fafafa" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            <span style={actionLabelStyle}>Pulses</span>
+          </div>
+          <div style={{display:"flex", flexDirection:"column", gap:4, alignItems:"center", cursor:"pointer"}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.0493 2.65901L3.80687 6.93449C2.39641 7.30914 2.1099 9.10529 3.26693 10.2623L7.7628 14.7582L13.8895 10.1962L9.32754 16.3229L13.8234 20.8188C14.9804 21.9758 16.7766 21.6893 17.1512 20.2788L21.4267 4.03642C21.6471 3.20997 20.8868 2.44964 20.0603 2.67002L20.0493 2.65901Z" stroke="#fafafa" strokeLinejoin="round"/></svg>
+            <span style={actionLabelStyle}>Share</span>
+          </div>
+          <div style={{flex:1, display:"flex", justifyContent:"flex-end"}}>
+            <div style={{display:"flex", flexDirection:"column", gap:4, alignItems:"center", cursor:"pointer"}}>
+              <IconReactButton/>
+              <span style={actionLabelStyle}>React</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -3133,6 +3183,140 @@ function DesktopOfficialQuoteCard({
             alignItems:"center", justifyContent:"center"}}>
             <IconInfo/>
           </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── DesktopZipCodeCTA ── 319×383 vertical Zip CTA for desktop home sidebar. */
+function DesktopZipCodeCTA({active=false}) {
+  return (
+    <div style={{
+      width:319, height:383,
+      backgroundColor:"#39503d", padding:36,
+      display:"flex", flexDirection:"column", justifyContent:"space-between",
+      boxSizing:"border-box", fontFamily:"Inter,sans-serif", borderRadius:T.radius,
+    }}>
+      <div style={{display:"flex", justifyContent:"flex-end"}}>
+        <div style={{backgroundColor:"#141810", borderRadius:100, padding:16, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+            <path d="M19.5 10.4681C19.5 16.6106 12 20.9681 12 20.9681C12 20.9681 4.5 16.6106 4.5 10.4681C4.5 6.32808 7.86 2.96808 12 2.96808C16.14 2.96808 19.5 6.32808 19.5 10.4681Z" stroke="#FF8800" strokeMiterlimit="10"/>
+            <path d="M12 14.2181C14.0711 14.2181 15.75 12.5392 15.75 10.4681C15.75 8.39707 14.0711 6.71814 12 6.71814C9.92893 6.71814 8.25 8.39707 8.25 10.4681C8.25 12.5392 9.92893 14.2181 12 14.2181Z" stroke="#FF8800" strokeMiterlimit="10"/>
+          </svg>
+        </div>
+      </div>
+      <div style={{display:"flex", flexDirection:"column", gap:8}}>
+        <p style={{fontSize:18, fontWeight:800, color:"#fff9ed", lineHeight:1.3, letterSpacing:-0.5, margin:0}}>Politics hits different when it's local.</p>
+        <p style={{fontSize:16, fontWeight:400, color:"#fff9ed", lineHeight:1.3, letterSpacing:-0.5, margin:0}}>Enter your zip to see what's happening in your district.</p>
+      </div>
+      <div style={{display:"flex", gap:16, alignItems:"center", width:"100%"}}>
+        <div style={{flex:1, backgroundColor:"#fafafa", border:"1px solid #d0d2d5", borderRadius:5, padding:"8px 10px", minWidth:0}}>
+          <p style={{fontSize:14, fontWeight:500, color:active?"#141810":"rgba(0,0,0,0.4)", lineHeight:1.3, letterSpacing:-0.5, margin:0, whiteSpace:"nowrap"}}>{active?"90066":"Enter your zip code"}</p>
+        </div>
+        <div style={{backgroundColor:"rgba(20,24,16,0.6)", border:"1px solid #f0e8d8", borderRadius:5, height:34, padding:"4px 10px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, opacity:active?1:0.5, cursor:active?"pointer":"default"}}>
+          <p style={{fontSize:14, fontWeight:900, color:"#fafafa", lineHeight:1.1, letterSpacing:-0.5, margin:0, whiteSpace:"nowrap"}}>Update</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopSectionTitle ── orange dot + ExtraBold title + "View All" right chevron. */
+function DesktopSectionTitle({title, showViewAll=true}) {
+  return (
+    <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%", fontFamily:"Inter,sans-serif"}}>
+      <div style={{display:"flex", alignItems:"center", gap:8}}>
+        <IconBeaconDot/>
+        <span style={{fontSize:18, fontWeight:900, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{title}</span>
+      </div>
+      {showViewAll && (
+        <div style={{display:"flex", alignItems:"center", gap:4, cursor:"pointer"}}>
+          <span style={{fontSize:13, fontWeight:600, color:T.gray, lineHeight:1.2, letterSpacing:-0.25}}>View All</span>
+          <IconChevronForward color={T.gray}/>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── DesktopHomeScreen ── Figma 7096:50701.
+   1280×1890. DesktopNavBar (80) + 72px cream gutter + content frame 996w centered
+   (142px side margins). Sections: Active Issues (title + hero 996×360 + 4-card
+   carousel 319×320) · Pulse Surveys (4 PollCards 319w) · Bottom row (Officials
+   637w + DesktopZipCodeCTA 319w). 80px between sections. Photos via Pexels. */
+function DesktopHomeScreen() {
+  const carouselIssues = [
+    { title:"No Kings' protest begin nationwide with flagship rally in LA", category:"FOREIGN POLICY", timeAgo:"Mar 11, 2026",
+      imgUrl:"https://images.pexels.com/photos/3944454/pexels-photo-3944454.jpeg?auto=compress&cs=tinysrgb&w=600" },
+    { title:"DOJ says it erroneously relied on ICE memo to justify immigration courth...", category:"FOREIGN POLICY", timeAgo:"Mar 11, 2026",
+      imgUrl:"https://images.pexels.com/photos/60575/forest-fire-wildfire-flames-smoke-60575.jpeg?auto=compress&cs=tinysrgb&w=600" },
+    { title:"DOJ says it erroneously relied on ICE memo to justify immigration courth...", category:"FOREIGN POLICY", timeAgo:"Mar 11, 2026",
+      imgUrl:"https://images.pexels.com/photos/4613880/pexels-photo-4613880.jpeg?auto=compress&cs=tinysrgb&w=600" },
+    { title:"DOJ says it erroneously relied on ICE memo to justify immigration courth...", category:"FOREIGN POLICY", timeAgo:"Mar 11, 2026",
+      imgUrl:"https://images.pexels.com/photos/8112199/pexels-photo-8112199.jpeg?auto=compress&cs=tinysrgb&w=600" },
+  ];
+  const pulseQuestions = [
+    { question:"Lauren Boebert in Congress: Representing Her District Or Playing To..." },
+    { question:"Do you think possession of guns should be allowed to everyone?" },
+    { question:"Should there be more strict laws and regulations to eradicate corruption?" },
+    { question:"Lauren Boebert in Congress: Representing Her District Or Playing To..." },
+  ];
+  const officials = [
+    { name:"Suzanne Bonamici", party:"D", role:"U.S. Representative", state:"Oregon", score:91, status:"TRACKED",
+      avatarUrl:"https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200" },
+    { name:"Lauren Boebert", party:"R", role:"U.S. Representative", state:"Colorado", score:null, status:"PENDING",
+      avatarUrl:"https://images.pexels.com/photos/1516680/pexels-photo-1516680.jpeg?auto=compress&cs=tinysrgb&w=200" },
+    { name:"Suzanne Bonamici", party:"D", role:"U.S. Representative", state:"Oregon", score:91, status:"TRACKED",
+      avatarUrl:"https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200" },
+  ];
+  return (
+    <div style={{position:"relative", width:1280, height:1890, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", overflow:"hidden"}}>
+      <DesktopNavBar activeTab="none"/>
+      <div style={{paddingLeft:142, paddingRight:142, paddingTop:72, boxSizing:"border-box"}}>
+        <div style={{width:996, display:"flex", flexDirection:"column", gap:80}}>
+          {/* Active Issues */}
+          <section style={{display:"flex", flexDirection:"column", gap:20}}>
+            <DesktopSectionTitle title="Active Issues"/>
+            <DesktopHeroIssueCard
+              badge="FOREIGN POLICY"
+              title="Justice Department official posts social media photo revealing investigation into..."
+              timeAgo="30m ago"
+              imgUrl="https://images.pexels.com/photos/8112172/pexels-photo-8112172.jpeg?auto=compress&cs=tinysrgb&w=1600"
+            />
+            <div style={{display:"flex", gap:20, overflowX:"auto", paddingTop:20, paddingBottom:8}}>
+              {carouselIssues.map((issue, i) => (
+                <PostHomeSlim
+                  key={i}
+                  width={319}
+                  title={issue.title}
+                  category={issue.category}
+                  date={issue.timeAgo}
+                  imgUrl={issue.imgUrl}
+                />
+              ))}
+            </div>
+          </section>
+          {/* Pulse Surveys */}
+          <section style={{display:"flex", flexDirection:"column", gap:20}}>
+            <DesktopSectionTitle title="Pulse Surveys"/>
+            <div style={{display:"flex", gap:20, overflowX:"auto", paddingBottom:8}}>
+              {pulseQuestions.map((q, i) => (
+                <PollCard key={i} width={319} question={q.question}/>
+              ))}
+            </div>
+          </section>
+          {/* Bottom: Officials + Zip CTA */}
+          <section style={{display:"flex", gap:40, alignItems:"flex-start"}}>
+            <div style={{flex:"0 0 637px", display:"flex", flexDirection:"column", gap:20}}>
+              <DesktopSectionTitle title="Elected Officials"/>
+              <div style={{display:"flex", flexDirection:"column", gap:20}}>
+                {officials.map((o, i) => <DesktopOfficialRow key={i} {...o}/>)}
+              </div>
+            </div>
+            <DesktopZipCodeCTA/>
+          </section>
         </div>
       </div>
     </div>
@@ -4731,7 +4915,7 @@ const SECTIONS = [
   {
     group: "Desktop", id: "Home",
     components: [
-      // DesktopHome — to build
+      { id:"DesktopHomeScreen", label:"Desktop Home", desc:"1280×1890 · Active Issues hero + carousel · Pulse Surveys · Officials + Zip CTA" },
     ]
   },
   {
@@ -5198,13 +5382,18 @@ function ComponentPreview({ id }) {
         <DesktopAlphaIndex active="B"/>
       </div>
     );
+    case "DesktopHomeScreen": return (
+      <div style={{padding:0,background:"transparent",display:"flex",justifyContent:"center",alignItems:"flex-start"}}>
+        <DesktopHomeScreen/>
+      </div>
+    );
     default: return null;
   }
 }
 
 const ANIMATED_IDS = new Set(["PollCard","PollResultsCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","ReactionInteraction","DesktopPoliticianProfileCard","DesktopScoreDashboard","PulseSurveyFlow","PulseSurveyResults"]);
 
-const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults"]);
+const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen"]);
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
   const hasAnim = ANIMATED_IDS.has(comp.id);
