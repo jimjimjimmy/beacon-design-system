@@ -4039,6 +4039,314 @@ function DesktopPulseSurveyResults({ onReturn=null }={}) {
   );
 }
 
+/* ── DesktopOfficials ── Figma 7096:51644
+   1.0 Officials — alphabetized list of tracked officials.
+   1280w frame, cream bg, top nav + 996w content column w/ tab menu (Name/State),
+   alphabet header, official cards (960×100), and right-edge A–Z index bar.
+   Each card: 102w party color box + 64×64 avatar + name/tag + role/state + score.
+*/
+const OFFICIALS_DATA = [
+  { name:"Lauren Boebert",          party:"R", role:"U.S. Representative - R", state:"Colorado",     tag:"TRACKED", score:83, avatar:"../assets/images/politician-boebert-v2.png" },
+  { name:"Suzanne Bonamici",        party:"D", role:"U.S. Representative - D", state:"Oregon",       tag:"TRACKED", score:91, avatar:"../assets/images/politician-bonamici.png" },
+  { name:"Mike Bost",               party:"R", role:"U.S. Representative - R", state:"Illinois",     tag:"PENDING", score:null, avatar:"../assets/images/politician-bost.png" },
+  { name:"Brendan F. Boyle",        party:"D", role:"U.S. Representative - D", state:"Pennsylvania", tag:"TRACKED", score:88, avatar:"../assets/images/politician-boyle.png" },
+  { name:"Robert P. Bresnahan Jr.", party:"R", role:"U.S. Representative - R", state:"Pennsylvania", tag:"TRACKED", score:93, avatar:"../assets/images/politician-bresnahan.png" },
+  { name:"Vern Buchanan",           party:"R", role:"U.S. Representative - R", state:"Illinois",     tag:"TRACKED", score:76, avatar:"../assets/images/politician-buchanan.png" },
+  { name:"Lauren Boebert",          party:"R", role:"U.S. Representative - R", state:"Colorado",     tag:"TRACKED", score:83, avatar:"../assets/images/politician-boebert-v2.png" },
+  { name:"Suzanne Bonamici",        party:"D", role:"U.S. Representative - D", state:"Oregon",       tag:"TRACKED", score:91, avatar:"../assets/images/politician-bonamici.png" },
+];
+
+function OfficialStatusTag({ kind="TRACKED" }) {
+  const isTracked = kind === "TRACKED";
+  return (
+    <div style={{
+      display:"inline-flex", alignItems:"center", justifyContent:"center",
+      gap:2, padding:"0 4px", borderRadius:2,
+      backgroundColor: isTracked ? "rgba(153,153,153,0.25)" : "transparent",
+      border: isTracked ? "none" : "0.8px solid rgba(153,153,153,0.5)",
+    }}>
+      {isTracked && (
+        <svg width="8" height="8" viewBox="0 0 8 8" style={{display:"block", opacity:0.5}}>
+          <path d="M1.5 4L3.2 5.7L6.5 2.3" stroke="#141810" strokeWidth="1.2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      )}
+      <span style={{
+        fontSize:10, fontWeight:600, lineHeight:"1.3",
+        letterSpacing:-0.25, color: "rgba(20,24,16,0.6)",
+        textTransform:"uppercase",
+      }}>{isTracked ? "Tracked" : "Pending"}</span>
+    </div>
+  );
+}
+
+function DesktopOfficialListRow({ official }) {
+  const partyBg = official.party === "R" ? "#de0100" : "#003366";
+  return (
+    <div style={{
+      width:"100%", height:100, borderRadius:10,
+      backgroundColor:"#ffffff", overflow:"hidden",
+      display:"flex", alignItems:"center", gap:16, paddingRight:16,
+      flexShrink:0,
+    }}>
+      {/* Color / avatar panel */}
+      <div style={{
+        width:102, height:100, backgroundColor:partyBg,
+        display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0,
+      }}>
+        <div style={{
+          width:64, height:64, borderRadius:"50%", overflow:"hidden",
+          backgroundColor:"#ddd",
+        }}>
+          <img src={official.avatar} alt=""
+               style={{width:"100%", height:"100%", objectFit:"cover", display:"block"}} />
+        </div>
+      </div>
+
+      {/* Name + Score */}
+      <div style={{flex:"1 1 0", minWidth:0, display:"flex", alignItems:"center", gap:40}}>
+        {/* Name+Role row — items-start so Name top aligns with Role top */}
+        <div style={{flex:"1 1 0", minWidth:0, display:"flex", gap:2, alignItems:"flex-start"}}>
+          {/* Name/tag column (flex-1) */}
+          <div style={{flex:"1 1 0", minWidth:0, display:"flex", flexDirection:"column", gap:4, alignItems:"flex-start"}}>
+            <p style={{
+              margin:0, fontFamily:"Inter,sans-serif", fontWeight:800,
+              fontSize:18, lineHeight:1.3, letterSpacing:-0.5,
+              color:T.slate,
+            }}>{official.name}</p>
+            <div style={{paddingBottom:4}}>
+              <OfficialStatusTag kind={official.tag}/>
+            </div>
+          </div>
+          {/* Role / state (flex-1) — top-aligned with name */}
+          <div style={{
+            flex:"1 1 0", minWidth:0,
+            fontFamily:"Inter,sans-serif", fontWeight:400,
+            fontSize:13, lineHeight:1.3, letterSpacing:-0.5,
+            color:"rgba(20,24,16,0.6)",
+          }}>
+            <p style={{margin:0}}>{official.role}</p>
+            <p style={{margin:0}}>{official.state}</p>
+          </div>
+        </div>
+        {/* Score — always reserves width so center column aligns across rows */}
+        <div style={{
+          display:"flex", alignItems:"center", gap:8, flexShrink:0,
+          fontFamily:"Inter,sans-serif", fontWeight:700, color:T.slate,
+          whiteSpace:"nowrap",
+          visibility: official.score != null ? "visible" : "hidden",
+        }}>
+          <span style={{fontSize:14, letterSpacing:-0.5, lineHeight:1.3}}>Beacon Score™</span>
+          <span style={{fontSize:32, letterSpacing:-1, lineHeight:1.3}}>{official.score != null ? official.score : "00"}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* State tab data — 10 states w/ flag images. Alabama expands to show delegates. */
+const STATES_DATA = [
+  { name:"Alabama",     flag:"../assets/flags/alabama.png",
+    senators:[{name:"John Boozman", role:"Senior Senator"}, {name:"Tom Cotton", role:"Senior Senator"}],
+    reps:[{name:"Eric Crawford", role:"District 1"}, {name:"J. French Hill", role:"District 2"},
+          {name:"Steve Womack", role:"District 3"}, {name:"Bruce Westerman", role:"District 4"}] },
+  { name:"Alaska",      flag:"../assets/flags/alaska.png" },
+  { name:"Arizona",     flag:"../assets/flags/arizona.png" },
+  { name:"Arkansas",    flag:"../assets/flags/arkansas.png" },
+  { name:"California",  flag:"../assets/flags/california.png" },
+  { name:"Colorado",    flag:"../assets/flags/colorado.png" },
+  { name:"Connecticut", flag:"../assets/flags/connecticut.png" },
+  { name:"Delaware",    flag:"../assets/flags/delaware.png" },
+  { name:"Florida",     flag:"../assets/flags/florida.png" },
+  { name:"Georgia",     flag:"../assets/flags/georgia.png" },
+];
+
+function StateDelegateRow({ name, role }) {
+  return (
+    <div style={{
+      width:"100%", display:"flex", alignItems:"center",
+      padding:"18px 0",
+      borderBottom:"1px solid #d0d2d5",
+      cursor:"pointer",
+    }}>
+      <div style={{flex:"1 1 0", minWidth:0, display:"flex", flexDirection:"column", gap:2, alignItems:"flex-start"}}>
+        <p style={{margin:0, fontFamily:"Inter,sans-serif", fontWeight:700, fontSize:16, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>{name}</p>
+        <p style={{margin:0, fontFamily:"Inter,sans-serif", fontWeight:400, fontSize:13, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>{role}</p>
+      </div>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{display:"block", flexShrink:0}}>
+        <path d="M9 6l6 6-6 6" stroke="#141810" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  );
+}
+
+function StateDrillColumn({ label, rows }) {
+  return (
+    <div style={{flex:"1 1 0", minWidth:0, display:"flex", flexDirection:"column"}}>
+      {/* Label row */}
+      <div style={{
+        width:"100%", display:"flex", alignItems:"center",
+        padding:"18px 0", borderBottom:"1px solid #d0d2d5",
+      }}>
+        <p style={{margin:0, fontFamily:"Inter,sans-serif", fontWeight:800, fontSize:18, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>{label}</p>
+      </div>
+      {/* Indented rows */}
+      <div style={{paddingLeft:24, display:"flex", flexDirection:"column"}}>
+        {rows.map((r, i) => <StateDelegateRow key={i} name={r.name} role={r.role}/>)}
+      </div>
+    </div>
+  );
+}
+
+function StateListRow({ state, expanded, onToggle }) {
+  const canExpand = !!(state.senators && state.reps);
+  return (
+    <>
+      <div
+        onClick={canExpand ? onToggle : undefined}
+        style={{
+          width:"100%", display:"flex", alignItems:"center", gap:16,
+          padding:"20px 0",
+          borderBottom:"1px solid #d0d2d5",
+          cursor: canExpand ? "pointer" : "default",
+        }}>
+        {/* Flag 50×33 */}
+        <div style={{width:50, height:33, flexShrink:0, overflow:"hidden"}}>
+          <img src={state.flag} alt="" style={{width:"100%", height:"100%", objectFit:"cover", display:"block"}}/>
+        </div>
+        {/* State name */}
+        <div style={{flex:"1 1 0", minWidth:0}}>
+          <p style={{margin:0, fontFamily:"Inter,sans-serif", fontWeight:600, fontSize:16, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>{state.name}</p>
+        </div>
+        {/* Chevron down (rotates when expanded) */}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             style={{display:"block", flexShrink:0,
+                     transform: expanded ? "rotate(180deg)" : "rotate(0deg)",
+                     transition:"transform 0.2s ease"}}>
+          <path d="M6 9l6 6 6-6" stroke="#141810" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </div>
+      {/* Drill-down content */}
+      {expanded && canExpand && (
+        <div style={{width:"100%", display:"flex", gap:24, padding:"0 0 20px 0"}}>
+          <StateDrillColumn label="U.S. Senators" rows={state.senators}/>
+          <StateDrillColumn label="House of Representatives" rows={state.reps}/>
+        </div>
+      )}
+    </>
+  );
+}
+
+function OfficialsIndexBar({ activeLetter="B" }) {
+  const letters = ["#","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"];
+  return (
+    <div style={{
+      width:12, display:"flex", flexDirection:"column", alignItems:"center",
+      fontFamily:"Inter,sans-serif", fontWeight:600, fontSize:11,
+      lineHeight:"16px", letterSpacing:-0.25, color:"rgba(20,24,16,0.6)",
+      userSelect:"none",
+    }}>
+      {letters.map(L => (
+        <span key={L} style={{
+          color: L===activeLetter ? T.slate : "rgba(20,24,16,0.5)",
+          fontWeight: L===activeLetter ? 800 : 600,
+        }}>{L}</span>
+      ))}
+    </div>
+  );
+}
+
+function DesktopOfficials() {
+  const [tab, setTab] = React.useState("Name"); // "Name" | "State"
+  const [expanded, setExpanded] = React.useState("Alabama"); // which state is expanded
+  return (
+    <div style={{
+      width:1280, minHeight:1032, backgroundColor:T.cream,
+      display:"flex", flexDirection:"column", alignItems:"center",
+      gap:72, fontFamily:"Inter,sans-serif",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      {/* Content column */}
+      <div style={{width:996, display:"flex", flexDirection:"column", alignItems:"stretch", paddingBottom:60}}>
+        {/* Tab menu */}
+        <div style={{
+          width:"100%", height:37, display:"flex", alignItems:"center",
+          justifyContent:"space-between", position:"relative",
+          borderBottom:`1px solid ${T.slate}`,
+        }}>
+          {/* left spacer */}
+          <div style={{width:36, height:36, flexShrink:0}} />
+          {/* center tabs */}
+          <div style={{display:"flex", gap:16, alignItems:"center", justifyContent:"center"}}>
+            <div onClick={()=>setTab("Name")} style={{
+              padding:8, cursor:"pointer",
+              borderBottom: tab==="Name" ? `4px solid ${T.slate}` : "4px solid transparent",
+              marginBottom:-1,
+            }}>
+              <span style={{
+                fontWeight:600, fontSize:16, lineHeight:1.3, letterSpacing:-0.5,
+                color:T.slate, whiteSpace:"nowrap",
+              }}>Name</span>
+            </div>
+            <div onClick={()=>setTab("State")} style={{
+              padding:8, width:56, cursor:"pointer", display:"flex", justifyContent:"center",
+              borderBottom: tab==="State" ? `4px solid ${T.slate}` : "4px solid transparent",
+              marginBottom:-1,
+            }}>
+              <span style={{
+                fontWeight:600, fontSize:16, lineHeight:1.3, letterSpacing:-0.5,
+                color:T.slate, whiteSpace:"nowrap",
+              }}>State</span>
+            </div>
+          </div>
+          {/* search icon */}
+          <div style={{padding:6, cursor:"pointer"}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{display:"block"}}>
+              <circle cx="10.5" cy="10.5" r="6.5" stroke={T.slate} strokeWidth="1.5"/>
+              <path d="M15.5 15.5L20 20" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* List + index bar row */}
+        {tab === "Name" ? (
+          <div style={{display:"flex", alignItems:"flex-start", paddingTop:0, marginTop:0}}>
+            {/* Inner list 960 */}
+            <div style={{flex:"1 1 0", display:"flex", flexDirection:"column", gap:10}}>
+              {/* Alphabet header */}
+              <div style={{height:48, display:"flex", alignItems:"center"}}>
+                <p style={{
+                  margin:0, fontFamily:"Inter,sans-serif", fontWeight:800,
+                  fontSize:18, lineHeight:1.3, letterSpacing:-0.5, color:T.slate,
+                }}>B</p>
+              </div>
+              {OFFICIALS_DATA.map((o, i) => (
+                <DesktopOfficialListRow key={i} official={o}/>
+              ))}
+            </div>
+            {/* Index bar — 12w, padded from list by remaining 24px */}
+            <div style={{width:24, flexShrink:0}} />
+            <div style={{paddingTop:8}}>
+              <OfficialsIndexBar activeLetter="B"/>
+            </div>
+          </div>
+        ) : (
+          <div style={{display:"flex", flexDirection:"column", paddingTop:40}}>
+            {STATES_DATA.map((s) => (
+              <StateListRow
+                key={s.name}
+                state={s}
+                expanded={expanded === s.name}
+                onToggle={() => setExpanded(expanded === s.name ? null : s.name)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 /* ── ExpertProfileCard ── Figma 7499:13505.
    Dark gray (#888) info card, 448w · 120h · radius 10 · pad 18 · shadow 0 3px 15px.
    79×79 circular avatar + bio (name 22/700 white, role 13/500 rgba(250,250,250,0.8),
@@ -5841,7 +6149,7 @@ const SECTIONS = [
   {
     group: "Desktop", id: "Officials",
     components: [
-      // Desktop officials screens — to build
+      { id:"DesktopOfficials", label:"Desktop Officials", desc:"1280 · Officials list · Name/State tabs + search · alphabet header + 960w rows (party color box · avatar · name+tag · role+state · Beacon Score) + right-edge A–Z index bar" },
     ]
   },
 ];
@@ -6325,13 +6633,18 @@ function ComponentPreview({ id }) {
         <DesktopPulseSurveysScreen/>
       </div>
     );
+    case "DesktopOfficials": return (
+      <div className="canvas-wrap" style={{padding:0, background:"transparent"}}>
+        <DesktopOfficials/>
+      </div>
+    );
     default: return null;
   }
 }
 
 const ANIMATED_IDS = new Set(["PollCard","PollResultsCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","ReactionInteraction","DesktopPoliticianProfileCard","DesktopScoreDashboard","PulseSurveyFlow","PulseSurveyResults","DesktopPulseSurveyResults"]);
 
-const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen","DesktopActiveIssuesScreen","DesktopIssueDetailScreen","DesktopPulseSurveysScreen","DesktopPulseSurveyFlow","DesktopPulseSurveyResults"]);
+const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen","DesktopActiveIssuesScreen","DesktopIssueDetailScreen","DesktopPulseSurveysScreen","DesktopPulseSurveyFlow","DesktopPulseSurveyResults","DesktopOfficials"]);
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
   const hasAnim = ANIMATED_IDS.has(comp.id);
