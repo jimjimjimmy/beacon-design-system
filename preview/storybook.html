@@ -220,16 +220,24 @@ function BackHeader({title}) {
 }
 
 /* ── 4. ZipCodeCTA ── */
-/* Figma: #39503d bg, px-36 py-24, ExtraBold 18px headline, Regular 16px subtitle,
-   #141810 rounded location icon, input #fafafa/#d0d2d5, button opacity 0.5 default → 1.0 active */
-function ZipCodeCTA({active=false}) {
+/* Figma: #39503d bg. Two variants:
+   - "mobile"  (default) — Figma 5935:28321 — 393w, px-36 py-24, full-bleed.
+   - "desktop" — Figma 7096:50794 — 319×383, px-36, justify-center, rounded,
+                 text column 155w wraps narrower, input gap 10. */
+function ZipCodeCTA({active=false, variant="mobile"}) {
+  const isDesktop = variant === "desktop";
+  const containerStyle = isDesktop
+    ? {width:319, height:383, padding:"0 36px", justifyContent:"center", borderRadius:T.radius, boxSizing:"border-box"}
+    : {width:393, padding:"24px 36px", boxSizing:"border-box"};
+  const inputRowGap = isDesktop ? 10 : 16;
+  const headlinePr  = isDesktop ? 0  : 40;
   return (
-    <div style={{width:393,backgroundColor:"#39503d",padding:"24px 36px",display:"flex",flexDirection:"column",gap:20,boxSizing:"border-box",fontFamily:"Inter,sans-serif"}}>
+    <div style={{backgroundColor:"#39503d", display:"flex", flexDirection:"column", gap:20, fontFamily:"Inter,sans-serif", ...containerStyle}}>
       {/* Row 1: Headline + location icon */}
       <div style={{display:"flex",gap:20,alignItems:"flex-start",width:"100%"}}>
         {/* Text column */}
         <div style={{flex:1,display:"flex",flexDirection:"column",gap:8,minWidth:0}}>
-          <div style={{paddingRight:40}}>
+          <div style={{paddingRight:headlinePr}}>
             <p style={{fontSize:18,fontWeight:800,color:"#fff9ed",lineHeight:1.3,letterSpacing:-0.5,margin:0}}>Politics hits different when it's local.</p>
           </div>
           <p style={{fontSize:16,fontWeight:400,color:"#fff9ed",lineHeight:1.3,letterSpacing:-0.5,margin:0,width:"100%"}}>Enter your zip to see what's happening in your district.</p>
@@ -243,7 +251,7 @@ function ZipCodeCTA({active=false}) {
         </div>
       </div>
       {/* Row 2: Zip input + button */}
-      <div style={{display:"flex",gap:16,alignItems:"center",width:"100%"}}>
+      <div style={{display:"flex",gap:inputRowGap,alignItems:"center",width:"100%"}}>
         <div style={{flex:1,backgroundColor:"#fafafa",border:"1px solid #d0d2d5",borderRadius:5,padding:"8px 10px",minWidth:0}}>
           <p style={{fontSize:14,fontWeight:500,color:active?"#141810":"rgba(0,0,0,0.4)",lineHeight:1.3,letterSpacing:-0.5,margin:0,whiteSpace:"nowrap"}}>
             {active ? "90066" : "Enter your zip code"}
@@ -1087,11 +1095,11 @@ function PostHomeSlim({
           <div style={{width:"100%",height:1,backgroundColor:T.cream}}/>
           <div style={{display:"flex",gap:24,alignItems:"center"}}>
             <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.97 22H14.97C19.97 22 21.97 20 21.97 15V9C21.97 4 19.97 2 14.97 2H8.97C3.97 2 1.97 4 1.97 9V15C1.97 20 3.97 22 8.97 22Z" stroke="#999" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1.97 12.7L7.97 12.68C8.72 12.68 9.56 13.25 9.84 13.95L10.98 16.83C11.24 17.48 11.65 17.48 11.91 16.83L14.2 11.02C14.42 10.46 14.83 10.44 15.11 10.97L16.15 12.94C16.46 13.53 17.26 14.01 17.92 14.01H21.98" stroke="#999" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8.97 22H14.97C19.97 22 21.97 20 21.97 15V9C21.97 4 19.97 2 14.97 2H8.97C3.97 2 1.97 4 1.97 9V15C1.97 20 3.97 22 8.97 22Z" stroke={T.slate} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/><path d="M1.97 12.7L7.97 12.68C8.72 12.68 9.56 13.25 9.84 13.95L10.98 16.83C11.24 17.48 11.65 17.48 11.91 16.83L14.2 11.02C14.42 10.46 14.83 10.44 15.11 10.97L16.15 12.94C16.46 13.53 17.26 14.01 17.92 14.01H21.98" stroke={T.slate} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/></svg>
               <span style={{fontSize:11,fontWeight:600,color:T.gray,lineHeight:"15px",letterSpacing:-0.25}}>Pulses</span>
             </div>
             <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"center",cursor:"pointer"}}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.0493 2.65901L3.80687 6.93449C2.39641 7.30914 2.1099 9.10529 3.26693 10.2623L7.7628 14.7582L13.8895 10.1962L9.32754 16.3229L13.8234 20.8188C14.9804 21.9758 16.7766 21.6893 17.1512 20.2788L21.4267 4.03642C21.6471 3.20997 20.8868 2.44964 20.0603 2.67002L20.0493 2.65901Z" stroke="#999" strokeLinejoin="round"/></svg>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M20.0493 2.65901L3.80687 6.93449C2.39641 7.30914 2.1099 9.10529 3.26693 10.2623L7.7628 14.7582L13.8895 10.1962L9.32754 16.3229L13.8234 20.8188C14.9804 21.9758 16.7766 21.6893 17.1512 20.2788L21.4267 4.03642C21.6471 3.20997 20.8868 2.44964 20.0603 2.67002L20.0493 2.65901Z" stroke={T.slate} strokeLinejoin="round"/></svg>
               <span style={{fontSize:11,fontWeight:600,color:T.gray,lineHeight:"15px",letterSpacing:-0.25}}>Share</span>
             </div>
             <div style={{flex:1,display:"flex",justifyContent:"flex-end"}}>
@@ -1635,8 +1643,8 @@ function ReactionInteraction() {
 function CorroborationCard({ level="high", sourceCount=10 }) {
   const Dot = () => (
     <div style={{
-      width:8, height:8, borderRadius:"50%", flexShrink:0, position:"relative", zIndex:1,
-      backgroundColor:T.slate, border:"2px solid #fafafa", boxSizing:"border-box",
+      width:14, height:14, borderRadius:"50%", flexShrink:0, position:"relative", zIndex:1,
+      backgroundColor:T.slate, border:`2px solid ${T.white}`, boxSizing:"border-box",
     }}/>
   );
   const Seg = ({color, roundLeft, roundRight, showDot}) => (
@@ -2985,11 +2993,14 @@ function DesktopIssueCard({
               letterSpacing:0.5, textTransform:"uppercase"}}>{badge}</span>
           </div>
         </div>
-        {/* Headline + timestamp */}
+        {/* Headline + timestamp — justify-end anchors timestamp at pb:32; headline clamps to 3 lines */}
         <div style={{position:"relative", flex:1, display:"flex", flexDirection:"column",
-          justifyContent:"center", gap:8, paddingTop:40, paddingBottom:32, paddingRight:16}}>
+          justifyContent:"flex-end", gap:8, paddingTop:40, paddingBottom:32, paddingRight:16,
+          minHeight:0, overflow:"hidden"}}>
           <p style={{fontSize:32, fontWeight:900, lineHeight:1.1, letterSpacing:-0.5,
-            color:"white", margin:0}}>{title}</p>
+            color:"white", margin:0, maxHeight:"3.3em",
+            display:"-webkit-box", WebkitLineClamp:3, WebkitBoxOrient:"vertical",
+            overflow:"hidden", textOverflow:"ellipsis"}}>{title}</p>
           <p style={{fontSize:13, fontWeight:600, lineHeight:1.1, letterSpacing:-0.5,
             color:"#f0e8d8", margin:0}}>{timestamp}</p>
         </div>
@@ -3048,7 +3059,9 @@ function DesktopHeroIssueCard({
         <div style={{display:"flex", flexDirection:"column", gap:8,
           paddingRight:40, width:"100%"}}>
           <p style={{margin:0, fontSize:20, fontWeight:900, lineHeight:"1.1",
-            letterSpacing:-0.5, color:"#fff"}}>{title}</p>
+            letterSpacing:-0.5, color:"#fff",
+            display:"-webkit-box", WebkitLineClamp:3, WebkitBoxOrient:"vertical",
+            overflow:"hidden"}}>{title}</p>
           <p style={{margin:0, fontSize:13, fontWeight:600, color:"#f0e8d8",
             lineHeight:"1.1", letterSpacing:-0.5}}>{timeAgo}</p>
         </div>
@@ -3190,39 +3203,6 @@ function DesktopOfficialQuoteCard({
 }
 
 
-/* ── DesktopZipCodeCTA ── 319×383 vertical Zip CTA for desktop home sidebar. */
-function DesktopZipCodeCTA({active=false}) {
-  return (
-    <div style={{
-      width:319, height:383,
-      backgroundColor:"#39503d", padding:36,
-      display:"flex", flexDirection:"column", justifyContent:"space-between",
-      boxSizing:"border-box", fontFamily:"Inter,sans-serif", borderRadius:T.radius,
-    }}>
-      <div style={{display:"flex", justifyContent:"flex-end"}}>
-        <div style={{backgroundColor:"#141810", borderRadius:100, padding:16, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center"}}>
-          <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
-            <path d="M19.5 10.4681C19.5 16.6106 12 20.9681 12 20.9681C12 20.9681 4.5 16.6106 4.5 10.4681C4.5 6.32808 7.86 2.96808 12 2.96808C16.14 2.96808 19.5 6.32808 19.5 10.4681Z" stroke="#FF8800" strokeMiterlimit="10"/>
-            <path d="M12 14.2181C14.0711 14.2181 15.75 12.5392 15.75 10.4681C15.75 8.39707 14.0711 6.71814 12 6.71814C9.92893 6.71814 8.25 8.39707 8.25 10.4681C8.25 12.5392 9.92893 14.2181 12 14.2181Z" stroke="#FF8800" strokeMiterlimit="10"/>
-          </svg>
-        </div>
-      </div>
-      <div style={{display:"flex", flexDirection:"column", gap:8}}>
-        <p style={{fontSize:18, fontWeight:800, color:"#fff9ed", lineHeight:1.3, letterSpacing:-0.5, margin:0}}>Politics hits different when it's local.</p>
-        <p style={{fontSize:16, fontWeight:400, color:"#fff9ed", lineHeight:1.3, letterSpacing:-0.5, margin:0}}>Enter your zip to see what's happening in your district.</p>
-      </div>
-      <div style={{display:"flex", gap:16, alignItems:"center", width:"100%"}}>
-        <div style={{flex:1, backgroundColor:"#fafafa", border:"1px solid #d0d2d5", borderRadius:5, padding:"8px 10px", minWidth:0}}>
-          <p style={{fontSize:14, fontWeight:500, color:active?"#141810":"rgba(0,0,0,0.4)", lineHeight:1.3, letterSpacing:-0.5, margin:0, whiteSpace:"nowrap"}}>{active?"90066":"Enter your zip code"}</p>
-        </div>
-        <div style={{backgroundColor:"rgba(20,24,16,0.6)", border:"1px solid #f0e8d8", borderRadius:5, height:34, padding:"4px 10px", display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0, opacity:active?1:0.5, cursor:active?"pointer":"default"}}>
-          <p style={{fontSize:14, fontWeight:900, color:"#fafafa", lineHeight:1.1, letterSpacing:-0.5, margin:0, whiteSpace:"nowrap"}}>Update</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 /* ── DesktopSectionTitle ── orange dot + ExtraBold title + "View All" right chevron. */
 function DesktopSectionTitle({title, showViewAll=true}) {
   return (
@@ -3233,8 +3213,8 @@ function DesktopSectionTitle({title, showViewAll=true}) {
       </div>
       {showViewAll && (
         <div style={{display:"flex", alignItems:"center", gap:4, cursor:"pointer"}}>
-          <span style={{fontSize:13, fontWeight:600, color:T.gray, lineHeight:1.2, letterSpacing:-0.25}}>View All</span>
-          <IconChevronForward color={T.gray}/>
+          <span style={{fontSize:13, fontWeight:600, color:T.slate, lineHeight:1.2, letterSpacing:-0.25}}>View All</span>
+          <IconChevronForward color={T.slate}/>
         </div>
       )}
     </div>
@@ -3245,7 +3225,7 @@ function DesktopSectionTitle({title, showViewAll=true}) {
    1280×1890. DesktopNavBar (80) + 72px cream gutter + content frame 996w centered
    (142px side margins). Sections: Active Issues (title + hero 996×360 + 4-card
    carousel 319×320) · Pulse Surveys (4 PollCards 319w) · Bottom row (Officials
-   637w + DesktopZipCodeCTA 319w). 80px between sections. Photos via Pexels. */
+   637w + ZipCodeCTA 393w). 80px between sections. Photos via Pexels. */
 function DesktopHomeScreen() {
   const carouselIssues = [
     { title:"No Kings' protest begin nationwide with flagship rally in LA", category:"FOREIGN POLICY", timeAgo:"Mar 11, 2026",
@@ -3285,7 +3265,7 @@ function DesktopHomeScreen() {
               timeAgo="30m ago"
               imgUrl="https://images.pexels.com/photos/8112172/pexels-photo-8112172.jpeg?auto=compress&cs=tinysrgb&w=1600"
             />
-            <div style={{display:"flex", gap:20, overflowX:"auto", paddingTop:20, paddingBottom:8}}>
+            <div style={{display:"flex", gap:20, overflowX:"auto", paddingTop:20, paddingBottom:8, marginRight:-142}}>
               {carouselIssues.map((issue, i) => (
                 <PostHomeSlim
                   key={i}
@@ -3301,7 +3281,7 @@ function DesktopHomeScreen() {
           {/* Pulse Surveys */}
           <section style={{display:"flex", flexDirection:"column", gap:20}}>
             <DesktopSectionTitle title="Pulse Surveys"/>
-            <div style={{display:"flex", gap:20, overflowX:"auto", paddingBottom:8}}>
+            <div style={{display:"flex", gap:20, overflowX:"auto", paddingBottom:8, marginRight:-142}}>
               {pulseQuestions.map((q, i) => (
                 <PollCard key={i} width={319} question={q.question}/>
               ))}
@@ -3315,8 +3295,641 @@ function DesktopHomeScreen() {
                 {officials.map((o, i) => <DesktopOfficialRow key={i} {...o}/>)}
               </div>
             </div>
-            <DesktopZipCodeCTA/>
+            <ZipCodeCTA variant="desktop"/>
           </section>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── DesktopActiveIssuesScreen ── Figma 7484:55587.
+   1280×1165. DesktopNavBar (80, activeTab="issues") + 72px cream gutter +
+   content frame 996w centered (142px margins). Title row (Beacon dot + "Active
+   Issues" ExtraBold 18 + Info icon) then 3× DesktopIssueCard (996×275) stacked
+   with 20px gaps. */
+function DesktopActiveIssuesScreen() {
+  const issues = [
+    { badge:"Foreign Policy", title:"US and Israel Attack Iran for 10th Day", timestamp:"1h ago",
+      description:"The ongoing war has involved strikes on Iranian sites and retaliatory actions, with reports of casualties among U.S. service members.",
+      imgUrl:"https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=1000" },
+    { badge:"Domestic Policy", title:"DOJ Official Posts Social Media Photo Revealing Investigation", timestamp:"3h ago",
+      description:"A Justice Department official drew scrutiny after sharing a photo on social media that appeared to reveal details of an ongoing federal inquiry.",
+      imgUrl:"https://images.pexels.com/photos/8112172/pexels-photo-8112172.jpeg?auto=compress&cs=tinysrgb&w=1000" },
+    { badge:"Domestic Policy", title:"No Kings Protest Begins Nationwide With Flagship Rally in LA", timestamp:"5h ago",
+      description:"Thousands gathered in downtown Los Angeles for the opening rally of a nationwide protest coalition organizing around executive accountability.",
+      imgUrl:"https://images.pexels.com/photos/3944454/pexels-photo-3944454.jpeg?auto=compress&cs=tinysrgb&w=1000" },
+  ];
+  return (
+    <div style={{position:"relative", width:1280, height:1165, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", overflow:"hidden"}}>
+      <DesktopNavBar activeTab="Issues"/>
+      <div style={{paddingLeft:142, paddingRight:142, paddingTop:72, boxSizing:"border-box"}}>
+        <div style={{width:996, display:"flex", flexDirection:"column", gap:20}}>
+          {/* Title row — Beacon dot + "Active Issues" + Info icon */}
+          <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 0"}}>
+            <div style={{display:"flex", alignItems:"center", gap:10}}>
+              <IconBeaconDot/>
+              <span style={{fontSize:18, fontWeight:900, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Active Issues</span>
+            </div>
+            <div style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer"}}>
+              <IconInfo/>
+            </div>
+          </div>
+          {/* 3× DesktopIssueCard stacked */}
+          {issues.map((issue, i) => <DesktopIssueCard key={i} {...issue}/>)}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── DesktopConsensusHero ── Figma 7484:55658 (Post-Image, hero detail variant).
+   996×300. px:80 pt:18, gradient overlay, badge top-right, LEFT 480w column with
+   44px black headline + two-line date (Mar 11, 2026 / Updated 8:28am EST). */
+function DesktopConsensusHero({
+  badge = "FOREIGN POLICY",
+  title = "US and Israel Attack Iran for 10th Day",
+  dateLine1 = "Mar 11, 2026",
+  dateLine2 = "Updated 8:28am EST",
+  imgUrl = "../assets/images/hero-iran-strike.png",
+}) {
+  return (
+    <div style={{width:996, height:300, position:"relative", overflow:"hidden",
+      display:"flex", flexDirection:"column", gap:8,
+      padding:"18px 80px", boxSizing:"border-box", fontFamily:"Inter,sans-serif"}}>
+      <div style={{position:"absolute", inset:0, zIndex:0,
+        background:`url('${imgUrl}') center/cover`}}/>
+      <div style={{position:"absolute", inset:0, zIndex:0,
+        background:"linear-gradient(to top, rgba(0,0,0,0.5) 15.636%, rgba(0,0,0,0) 80%)"}}/>
+      {/* Badge — top right */}
+      <div style={{position:"relative", zIndex:1, display:"flex", justifyContent:"flex-end"}}>
+        <div style={{width:120, height:29, borderRadius:3,
+          backgroundColor:"rgba(20,24,16,0.5)", border:"0.5px solid #f0e8d8",
+          display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <span style={{fontSize:9, fontWeight:600, color:"#f0e8d8",
+            letterSpacing:0.5, textTransform:"uppercase", lineHeight:"15px"}}>{badge}</span>
+        </div>
+      </div>
+      {/* Headline + date — LEFT 480w column */}
+      <div style={{position:"relative", zIndex:1, flex:1, display:"flex", alignItems:"stretch", minHeight:0}}>
+        <div style={{width:480, display:"flex", flexDirection:"column", gap:8,
+          justifyContent:"flex-end", paddingTop:40, paddingBottom:32, paddingRight:16,
+          boxSizing:"border-box", minHeight:0, overflow:"hidden"}}>
+          <p style={{fontSize:44, fontWeight:900, lineHeight:1.1, letterSpacing:-0.5,
+            color:"white", margin:0, maxHeight:"3.3em",
+            display:"-webkit-box", WebkitLineClamp:3, WebkitBoxOrient:"vertical",
+            overflow:"hidden"}}>{title}</p>
+          <div style={{display:"flex", flexDirection:"column", flexShrink:0}}>
+            <span style={{fontSize:13, fontWeight:500, color:"#fafafa",
+              lineHeight:1.3, letterSpacing:-0.25}}>{dateLine1}</span>
+            <span style={{fontSize:13, fontWeight:500, color:"#fafafa",
+              lineHeight:1.3, letterSpacing:-0.25}}>{dateLine2}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── IssueTopicTab ── Figma 7484:55662/3/4. Pill button, flex:1.
+   Active = transparent bg + X icon. Inactive = warmBg + drop shadow + + icon.
+   Icon (24) + ExtraBold 18 title + close/plus (24). padding:12, radius:10. */
+function IssueTopicTab({active=false, icon, title, onClick}) {
+  const Close = () => (
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+      <path d="M2 2 L10 10 M10 2 L2 10" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/>
+    </svg>
+  );
+  return (
+    <div onClick={onClick} style={{flex:1, display:"flex", gap:8, alignItems:"center", padding:12,
+      borderRadius:T.radius, boxSizing:"border-box", overflow:"hidden", cursor:"pointer",
+      backgroundColor: active ? "transparent" : T.warmBg,
+      boxShadow: active ? "none" : "0 4px 15px rgba(0,0,0,0.15)",
+      fontFamily:"Inter,sans-serif"}}>
+      <div style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0}}>{icon}</div>
+      <div style={{flex:1, minWidth:0, display:"flex", alignItems:"flex-start"}}>
+        <span style={{fontSize:18, fontWeight:800, color:T.slate, letterSpacing:-0.5,
+          lineHeight:1.3, whiteSpace:"nowrap"}}>{title}</span>
+      </div>
+      <div style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", flexShrink:0}}>
+        {active ? <Close/> : <IconPlus color={T.slate}/>}
+      </div>
+    </div>
+  );
+}
+
+
+/* ── IssueCounterPointsCard ── Figma 7484:55649 / 7484:55651.
+   282w card, radius:10. Title h:39 px:18 py:8 (blue #036 or red #de0100, text 18/600 #fff9ed).
+   Body bg #fafafa, border 1px #e9e1d3, pb:32 pt:8 px:18, text 16/600 #141810 lh:1.3.
+   Paragraphs separated by blank line (double <br>). */
+function IssueCounterPointsCard({side="left", paragraphs=[]}) {
+  const titleBg = side === "right" ? T.red : "#036";
+  const label   = side === "right" ? "Right" : "Left";
+  return (
+    <div style={{width:"100%", borderRadius:T.radius, overflow:"hidden",
+      display:"flex", flexDirection:"column", fontFamily:"Inter,sans-serif"}}>
+      <div style={{height:39, padding:"8px 18px", backgroundColor:titleBg,
+        display:"flex", alignItems:"center", boxSizing:"border-box"}}>
+        <span style={{fontSize:18, fontWeight:600, color:T.warmBg,
+          lineHeight:1.3, letterSpacing:-0.5}}>{label}</span>
+      </div>
+      <div style={{backgroundColor:T.white, border:`1px solid ${T.creamBorder}`,
+        padding:"8px 18px 32px 18px", boxSizing:"border-box",
+        display:"flex", flexDirection:"column", gap:20}}>
+        {paragraphs.map((p,i) => (
+          <p key={i} style={{fontSize:16, fontWeight:600, color:T.slate,
+            lineHeight:1.3, letterSpacing:-0.5, margin:0}}>{p}</p>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
+/* ── IssueContentionNavRow ── Figma 7484:55645 (active) / 7484:55646 (inactive).
+   Active: 4px bottom border #141810, pb:12. Inactive: no border.
+   Text 14/600 #141810 lh:1.3 tracking:-0.5. */
+function IssueContentionNavRow({active=false, children, onClick}) {
+  return (
+    <div onClick={onClick} style={{
+      borderBottom: active ? `4px solid ${T.slate}` : "none",
+      paddingBottom: active ? 12 : 0,
+      cursor: "pointer", fontFamily:"Inter,sans-serif"}}>
+      <p style={{fontSize:14, fontWeight:600, color:T.slate,
+        lineHeight:1.3, letterSpacing:-0.5, margin:0}}>{children}</p>
+    </div>
+  );
+}
+
+
+/* ── ExpertPerspectiveCard ── Figma 7484:55615.
+   612×auto card. Header (bg blue #036 or red #de0100, p:18) · Beacon Score row (bg
+   white, px:18 py:10, shadow 0 4px 15px) · Quote+Sources (p:40, gap:48).
+   Card outer: radius:10, border 1px #e9e1d3, overflow:hidden. */
+function ExpertPerspectiveCard({
+  party = "D",
+  name = "Bernie Sanders",
+  role = "U.S. Representative · House",
+  location = "Colorado",
+  district = "4th Congressional District",
+  partyLabel = "Republican",
+  score = 81,
+  quote = "",
+  avatarUrl = "../assets/images/politician-bernie.png",
+}) {
+  const headerBg = party === "R" ? T.red : "#036";
+  return (
+    <div style={{width:"100%", borderRadius:T.radius, border:`1px solid ${T.creamBorder}`,
+      overflow:"hidden", backgroundColor:T.white, display:"flex", flexDirection:"column",
+      fontFamily:"Inter,sans-serif"}}>
+      {/* Header */}
+      <div style={{backgroundColor:headerBg, padding:18,
+        boxShadow:"0 3px 15px rgba(0,0,0,0.15)",
+        display:"flex", gap:17, alignItems:"flex-start"}}>
+        <img src={avatarUrl} alt="" style={{width:79, height:79, flexShrink:0,
+          borderRadius:"50%", objectFit:"cover", display:"block"}}/>
+        <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", color:"white"}}>
+          <p style={{fontSize:18, fontWeight:700, color:"white", letterSpacing:-1,
+            lineHeight:1.3, margin:0}}>{name}</p>
+          <p style={{fontSize:11, fontWeight:600, color:"rgba(250,250,250,0.8)",
+            letterSpacing:-0.5, lineHeight:1.3, margin:0, marginTop:2}}>{role}</p>
+          <p style={{fontSize:11, fontWeight:400, color:"rgba(250,250,250,0.8)",
+            letterSpacing:-0.5, lineHeight:1.4, margin:0, marginTop:6}}>
+            {location}<br/>{district}<br/>{partyLabel}
+          </p>
+        </div>
+      </div>
+      {/* Beacon Score row */}
+      <div style={{backgroundColor:T.white, padding:"10px 18px",
+        boxShadow:"0 4px 15px rgba(0,0,0,0.15)", position:"relative", zIndex:1,
+        display:"flex", alignItems:"center", gap:7}}>
+        <span style={{fontSize:16, fontWeight:800, color:T.slate, letterSpacing:-0.5,
+          lineHeight:1.3, whiteSpace:"nowrap"}}>Beacon Score™</span>
+        <div style={{flex:1, display:"flex", alignItems:"center", justifyContent:"flex-end", gap:16}}>
+          <span style={{fontSize:18, fontWeight:700, color:T.slate, letterSpacing:-1,
+            lineHeight:1.3, textAlign:"right"}}>
+            {score} <span style={{color:T.gray}}>/100</span>
+          </span>
+          <div style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center"}}>
+            <IconInfo/>
+          </div>
+        </div>
+      </div>
+      {/* Quote and Sources */}
+      <div style={{padding:40, display:"flex", flexDirection:"column", gap:48}}>
+        <p style={{fontSize:18, fontWeight:700, fontStyle:"italic", color:"#000",
+          letterSpacing:-0.5, lineHeight:1.3, margin:0}}>{quote}</p>
+        <div style={{display:"flex", flexDirection:"column", gap:8}}>
+          <span style={{fontSize:13, fontWeight:600, color:T.gray,
+            letterSpacing:-0.5, lineHeight:1.3}}>Sources</span>
+          <div style={{display:"flex", alignItems:"center", gap:24}}>
+            {/* USA Gov */}
+            <div style={{width:28, height:28, borderRadius:"50%", overflow:"hidden",
+              backgroundColor:"#0071bc", display:"flex", alignItems:"center",
+              justifyContent:"center", flexShrink:0}}>
+              <span style={{fontSize:5, fontWeight:800, color:"white", textAlign:"center",
+                lineHeight:1.1}}>usa.gov</span>
+            </div>
+            <img src="../assets/icons/logos/ap.svg" style={{width:24,height:28,flexShrink:0,display:"block",objectFit:"contain"}}/>
+            <img src="../assets/icons/logos/nyt.svg" style={{width:21,height:28,flexShrink:0,display:"block",objectFit:"contain"}}/>
+            <div style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center"}}>
+              <IconInfo/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── PulseInfoModal ── Figma 7096:57194.
+   680×auto · white · radius 10 · shadow 0 4px 15px · pt:24 pb:40 px:40 gap:20.
+   Close (X) top-right · "Beacon Pulse" Inter Black 44/1.0/-1px + subtitle 14/600/#999 ·
+   3 sections (title 20/900/1.1 + body 14/600/1.3) separated by 1px cream dividers. */
+function PulseInfoModal({ onClose }) {
+  const [shown, setShown] = React.useState(false);
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  const handleClose = () => {
+    setShown(false);
+    setTimeout(() => onClose && onClose(), 220);
+  };
+  const Section = ({title, children}) => (
+    <div style={{display:"flex", flexDirection:"column", gap:8, width:"100%"}}>
+      <div style={{
+        fontFamily:"Inter,sans-serif", fontWeight:900, fontSize:20,
+        lineHeight:1.1, letterSpacing:-0.5, color:T.slate, whiteSpace:"pre-line",
+      }}>{title}</div>
+      <div style={{
+        fontFamily:"Inter,sans-serif", fontWeight:600, fontSize:14,
+        lineHeight:1.3, letterSpacing:-0.5, color:T.slate,
+      }}>{children}</div>
+    </div>
+  );
+  const Divider = () => <div style={{height:1, backgroundColor:T.cream, width:"100%"}}/>;
+
+  return (
+    <div
+      onClick={handleClose}
+      style={{
+        position:"absolute", inset:0,
+        backgroundColor: shown ? "rgba(240,232,216,0.75)" : "rgba(240,232,216,0)",
+        backdropFilter: shown ? "blur(6px)" : "blur(0px)",
+        WebkitBackdropFilter: shown ? "blur(6px)" : "blur(0px)",
+        display:"flex", alignItems:"flex-start", justifyContent:"center",
+        paddingTop:304, zIndex:10,
+        transition:"background-color 220ms ease, backdrop-filter 220ms ease, -webkit-backdrop-filter 220ms ease",
+      }}
+    >
+      <div
+        onClick={(e)=>e.stopPropagation()}
+        style={{
+          width:680, backgroundColor:T.white, borderRadius:10,
+          boxShadow:"0 4px 15px rgba(0,0,0,0.15)",
+          padding:"24px 40px 40px", display:"flex", flexDirection:"column",
+          gap:20, alignItems:"flex-start", justifyContent:"center",
+          fontFamily:"Inter,sans-serif", boxSizing:"border-box",
+          opacity: shown ? 1 : 0,
+          transform: shown ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
+          transition:"opacity 220ms cubic-bezier(0.22, 1, 0.36, 1), transform 220ms cubic-bezier(0.22, 1, 0.36, 1)",
+        }}
+      >
+        {/* Close */}
+        <div style={{display:"flex", justifyContent:"flex-end", width:"100%"}}>
+          <div onClick={handleClose} style={{cursor:"pointer", width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center"}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M6 18L18 6M6 6L18 18" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </div>
+
+        {/* Title block */}
+        <div style={{display:"flex", flexDirection:"column", paddingBottom:8, width:"100%"}}>
+          <div style={{paddingRight:80, display:"flex", flexDirection:"column", justifyContent:"center"}}>
+            <div style={{display:"flex", height:80, alignItems:"flex-start", width:"100%"}}>
+              <div style={{
+                flex:1, fontFamily:"Inter,sans-serif", fontWeight:900, fontSize:44,
+                lineHeight:1.0, letterSpacing:-1, color:T.slate,
+                display:"flex", flexDirection:"column", justifyContent:"center",
+              }}>Beacon Pulse</div>
+            </div>
+          </div>
+          <div style={{paddingTop:10, width:"100%"}}>
+            <div style={{
+              fontFamily:"Inter,sans-serif", fontWeight:600, fontSize:14,
+              lineHeight:1.3, letterSpacing:-0.5, color:T.gray, width:"100%",
+            }}>The country&rsquo;s daily civic check-in</div>
+          </div>
+        </div>
+
+        <Section title={"Go beyond making a point.\nMake a difference."}>
+          Take a quick daily survey on trending issues or on elected officials. See how other citizens actually feel compared to you.
+        </Section>
+        <Divider/>
+        <Section title="Voice to Impact">
+          Your aggregated responses are summarized and shared with elected officials, media outlets, and civic organizations &mdash; opening the door for real dialogue.
+        </Section>
+        <Divider/>
+        <Section title="100% Private &amp; Secure">
+          Your identity is never tracked or stored. Responses are fully anonymous, encrypted, and aggregated. No personal data is collected.
+        </Section>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopPulseSurveysScreen ── Figma 7096:57163.
+   1280w · nav (Pulse active) · content 996w centered · title row (Beacon Circle + "Beacon Pulse"
+   + tune + info icons) · Active/Complete tab menu (center, 1px bottom border, 4px active border)
+   · 3-col grid of PollCard width=319, gap 20, row gap 20. Active tab = 4 survey cards;
+   Complete tab = 3 result cards (PollCard variant="complete"). */
+function DesktopPulseSurveysScreen() {
+  const [tab, setTab]         = React.useState("active");
+  const [visible, setVisible] = React.useState(true);
+  const [infoOpen, setInfoOpen] = React.useState(false);
+  const switchTab = (next) => {
+    if (next === tab) return;
+    setVisible(false);
+    setTimeout(() => { setTab(next); setVisible(true); }, 180);
+  };
+
+  const activeCards = [
+    { question:"Lauren Boebert in Congress: Representing Her District Or Playing To The Base?", category:"domestic policy" },
+    { question:"Do you think possession of guns should be allowed to everyone?",                 category:"domestic policy" },
+    { question:"Should there be more strict laws and regulations to eradicate corruption?",      category:"domestic policy" },
+    { question:"Should there be more strict laws and regulations to eradicate corruption?",      category:"domestic policy" },
+  ];
+  const completeCards = [
+    { question:"U.S. vs. Maduro: Smart Move or Crossing the Line?",                               category:"foreign policy",  resultPct:73, resultLabel:"Complete", resultCount:"6,876", resultTotal:"10,000" },
+    { question:"Should the government assist corporations in increasing employment?",             category:"domestic policy", resultPct:82, resultLabel:"Support",  resultCount:"8,200", resultTotal:"10,000" },
+    { question:"Do you think public universities should be tuition-free for in-state students?",  category:"domestic policy", resultPct:64, resultLabel:"Support",  resultCount:"6,412", resultTotal:"10,000" },
+  ];
+
+  const Tab = ({value, label}) => (
+    <div onClick={()=>switchTab(value)} style={{
+      padding:8, cursor:"pointer",
+      borderBottom: tab===value ? `4px solid ${T.slate}` : "4px solid transparent",
+      marginBottom:-1, height:"100%", display:"flex", alignItems:"center",
+    }}>
+      <span style={{fontSize:16, fontWeight:600, color:T.slate, letterSpacing:-0.5, lineHeight:1.3}}>{label}</span>
+    </div>
+  );
+
+  return (
+    <div style={{width:1280, minHeight:1053, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", position:"relative"}}>
+      <DesktopNavBar activeTab="Pulse"/>
+
+      <div style={{width:996, margin:"72px auto 0", paddingBottom:80}}>
+        {/* Title row */}
+        <div style={{display:"flex", alignItems:"center", gap:10, paddingBottom:12, width:"100%"}}>
+          <div style={{width:18, height:18, borderRadius:"50%", backgroundColor:T.orange, flexShrink:0}}/>
+          <span style={{flex:1, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Beacon Pulse</span>
+          <div style={{display:"flex", alignItems:"center", gap:24}}>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{display:"block"}}>
+              <path d="M7 4.75L7 8.25" stroke="#999999" strokeWidth="1.3"/>
+              <path d="M17 19.25L17 15.75" stroke="#999999" strokeWidth="1.3"/>
+              <line x1="4.65" y1="11.1" x2="9.35" y2="11.1" stroke="#999999" strokeWidth="1.3" strokeLinecap="round"/>
+              <path d="M7 11.75L7 19.25" stroke="#999999" strokeWidth="1.3"/>
+              <line x1="0.65" y1="-0.65" x2="5.35" y2="-0.65" transform="matrix(1 0 0 -1 14 12.25)" stroke="#999999" strokeWidth="1.3" strokeLinecap="round"/>
+              <path d="M17 12.25L17 4.75" stroke="#999999" strokeWidth="1.3"/>
+            </svg>
+            <div onClick={()=>setInfoOpen(true)} style={{cursor:"pointer", display:"flex"}}>
+              <IconInfo/>
+            </div>
+          </div>
+        </div>
+
+        {/* Hero headline */}
+        <div style={{
+          marginTop:40, fontFamily:"Inter,sans-serif", fontWeight:900, fontSize:64,
+          lineHeight:1.0, letterSpacing:-2, color:T.slate,
+        }}>Your Voice Matters</div>
+
+        {/* Active / Complete tab menu */}
+        <div style={{
+          borderBottom:`1px solid ${T.slate}`, display:"flex", gap:28, justifyContent:"center",
+          height:37, alignItems:"center", marginTop:40,
+        }}>
+          <Tab value="active"   label="Active"/>
+          <Tab value="complete" label="Complete"/>
+        </div>
+
+        {/* Card grid — 180ms crossfade on tab swap */}
+        <div style={{
+          marginTop:20,
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(6px)",
+          transition: "opacity 180ms ease, transform 180ms ease",
+        }}>
+          <div style={{display:"grid", gridTemplateColumns:"repeat(3, 319px)", gap:20, justifyContent:"space-between"}}>
+            {tab === "active"
+              ? activeCards.map((c,i)=>(
+                  <PollCard key={i} width={319} question={c.question} category={c.category}/>
+                ))
+              : completeCards.map((c,i)=>(
+                  <PollCard key={i} width={319} variant="complete"
+                            question={c.question} category={c.category}
+                            resultPct={c.resultPct} resultLabel={c.resultLabel}
+                            resultCount={c.resultCount} resultTotal={c.resultTotal}/>
+                ))}
+          </div>
+        </div>
+      </div>
+
+      {infoOpen && <PulseInfoModal onClose={()=>setInfoOpen(false)}/>}
+    </div>
+  );
+}
+
+/* ── ExpertProfileCard ── Figma 7499:13505.
+   Dark gray (#888) info card, 448w · 120h · radius 10 · pad 18 · shadow 0 3px 15px.
+   79×79 circular avatar + bio (name 22/700 white, role 13/500 rgba(250,250,250,0.8),
+   org 13/400). Used for attribution / expert list rows. */
+function ExpertProfileCard({
+  name = "Aaron David Miller",
+  role = "Senior Fellow",
+  organization = "The Carnegie Endowment",
+  avatarUrl = "../assets/images/expert-aaron-miller.png",
+  width = 448,
+}) {
+  return (
+    <div style={{
+      width, backgroundColor:"#888888", borderRadius:10, padding:18,
+      boxShadow:"0 3px 15px rgba(0,0,0,0.15)", boxSizing:"border-box",
+      display:"flex", flexDirection:"column", alignItems:"flex-start",
+    }}>
+      <div style={{display:"flex", gap:17, alignItems:"flex-start", width:"100%"}}>
+        <div style={{
+          width:79, height:79, borderRadius:"50%", overflow:"hidden",
+          flexShrink:0, backgroundColor:"#666",
+        }}>
+          <img src={avatarUrl} alt="" style={{width:"100%", height:"100%", objectFit:"cover", display:"block"}}/>
+        </div>
+        <div style={{display:"flex", flexDirection:"column", flex:"1 1 0", minWidth:0}}>
+          <div style={{
+            fontFamily:"Inter, sans-serif", fontWeight:700, fontSize:22,
+            lineHeight:1.3, letterSpacing:"-1px", color:T.white,
+          }}>{name}</div>
+          <div style={{
+            fontFamily:"Inter, sans-serif", fontWeight:500, fontSize:13,
+            lineHeight:1.3, letterSpacing:"-0.5px", color:"rgba(250,250,250,0.8)",
+            marginTop:4,
+          }}>{role}</div>
+          <div style={{
+            fontFamily:"Inter, sans-serif", fontWeight:400, fontSize:13,
+            lineHeight:1.3, letterSpacing:"-0.5px", color:"rgba(250,250,250,0.8)",
+            marginTop:6,
+          }}>{organization}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopIssueDetailScreen ── Unified 3-tab version of 7484:55652 / 55630 / Expert.
+   Tabs click to swap panel. 220ms opacity+translateY crossfade on panel change.
+   Consensus, Contention panels match Figma. Expert panel = placeholder (Figma TBD). */
+function DesktopIssueDetailScreen() {
+  const [tab, setTab]         = React.useState("consensus");
+  const [visible, setVisible] = React.useState(true);
+  const switchTab = (next) => {
+    if (next === tab) return;
+    setVisible(false);
+    setTimeout(() => { setTab(next); setVisible(true); }, 180);
+  };
+  const body = "The ongoing war has involved strikes on Iranian sites and retaliatory actions, with reports of casualties among U.S. service members.";
+  const Bullet = ({text}) => (
+    <div style={{display:"flex", gap:8, alignItems:"flex-start"}}>
+      <span style={{fontSize:16, color:T.slate, lineHeight:1.3, flexShrink:0}}>•</span>
+      <p style={{fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, margin:0}}>{text}</p>
+    </div>
+  );
+  const SectionHeader = ({children}) => (
+    <p style={{fontSize:18, fontWeight:600, color:"#000", letterSpacing:-0.5, lineHeight:1.3, margin:0}}>{children}</p>
+  );
+
+  const ConsensusPanel = () => (
+    <div style={{display:"flex", gap:80, alignItems:"flex-start", paddingTop:24}}>
+      <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:40}}>
+        <div style={{display:"flex", flexDirection:"column", gap:16}}>
+          <SectionHeader>What This is</SectionHeader>
+          {[body, body, body, body].map((t,i) => <Bullet key={i} text={t}/>)}
+        </div>
+        <div style={{display:"flex", flexDirection:"column", gap:16}}>
+          <SectionHeader>Why This Matters</SectionHeader>
+          {[body, body, body].map((t,i) => <Bullet key={i} text={t}/>)}
+        </div>
+      </div>
+      <div style={{width:325, flexShrink:0}}>
+        <CorroborationCard level="high" sourceCount={10}/>
+      </div>
+    </div>
+  );
+
+  const ContentionPanel = () => {
+    const paras  = [body, body, body];
+    const topics = [
+      { title: <>Lawfulness of<br/>International Force</>, active:true },
+      { title: "Proper Executive Authorization" },
+      { title: "Strategic & Economic Oil Interests" },
+    ];
+    return (
+      <div style={{display:"flex", gap:48, alignItems:"flex-start", paddingTop:24}}>
+        <div style={{width:176, flexShrink:0, display:"flex", flexDirection:"column", gap:24}}>
+          {topics.map((t,i) => (
+            <IssueContentionNavRow key={i} active={t.active}>{t.title}</IssueContentionNavRow>
+          ))}
+        </div>
+        <div style={{width:282, flexShrink:0}}>
+          <IssueCounterPointsCard side="left" paragraphs={paras}/>
+        </div>
+        <div style={{width:282, flexShrink:0}}>
+          <IssueCounterPointsCard side="right" paragraphs={paras}/>
+        </div>
+      </div>
+    );
+  };
+
+  const ExpertPanel = () => {
+    const quote = "\u201CGovernment is not reason; it is not eloquent; it is force. Like fire, it is a dangerous servant and a fearful master. It is our true policy to steer clear of entangling alliances with any portion of the foreign world.\u201D";
+    const experts = [
+      { party:"D", avatarUrl:"../assets/images/politician-bernie.png",  partyLabel:"Democrat"   },
+      { party:"R", avatarUrl:"../assets/images/politician-boebert.png", partyLabel:"Republican" },
+      { party:"D", avatarUrl:"../assets/images/politician-bernie.png",  partyLabel:"Democrat"   },
+    ];
+    const topics = [
+      { title: "My Officials", active:true },
+      { title: "Committee Members" },
+      { title: "Policy Experts" },
+    ];
+    return (
+      <div style={{display:"flex", gap:48, alignItems:"flex-start", paddingTop:24}}>
+        {/* Left: topic nav (176w) */}
+        <div style={{width:176, flexShrink:0, display:"flex", flexDirection:"column", gap:24}}>
+          {topics.map((t,i) => (
+            <IssueContentionNavRow key={i} active={t.active}>{t.title}</IssueContentionNavRow>
+          ))}
+        </div>
+        {/* Right: stacked Expert perspective cards (612w) */}
+        <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:40}}>
+          {experts.map((e,i) => (
+            <ExpertPerspectiveCard key={i}
+              party={e.party} avatarUrl={e.avatarUrl} partyLabel={e.partyLabel}
+              quote={quote}/>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  const panel = tab === "consensus" ? <ConsensusPanel/>
+              : tab === "contention" ? <ContentionPanel/>
+              : <ExpertPanel/>;
+
+  return (
+    <div style={{position:"relative", width:1280, minHeight:1526, backgroundColor:T.cream, fontFamily:"Inter,sans-serif"}}>
+      <DesktopNavBar activeTab="Issues"/>
+      {/* Back chevron row */}
+      <div style={{paddingLeft:142, paddingRight:142, paddingTop:24, boxSizing:"border-box"}}>
+        <div style={{width:996, height:24, display:"flex", alignItems:"center"}}>
+          <div style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center", cursor:"pointer"}}>
+            <IconChevronBack color={T.slate}/>
+          </div>
+        </div>
+      </div>
+      {/* White article card */}
+      <div style={{paddingLeft:142, paddingRight:142, paddingTop:24, boxSizing:"border-box"}}>
+        <div style={{width:996, backgroundColor:T.white, borderRadius:T.radius, overflow:"hidden"}}>
+          <DesktopConsensusHero/>
+          {/* Engagement bar 996×89, px:80 py:16 */}
+          <div style={{padding:"16px 80px"}}>
+            <EngagementBar horizontal={true}/>
+          </div>
+          {/* Article body */}
+          <div style={{padding:"40px 80px", display:"flex", flexDirection:"column", gap:24}}>
+            <p style={{fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, margin:0}}>{body}</p>
+            {/* Topic tabs (interactive) */}
+            <div style={{display:"flex", gap:20}}>
+              <IssueTopicTab active={tab==="consensus"}  icon={<IconGlobe      color={T.slate}/>} title="Consensus View"      onClick={() => switchTab("consensus")}/>
+              <IssueTopicTab active={tab==="contention"} icon={<IconContention color={T.slate}/>} title="Contention Points"   onClick={() => switchTab("contention")}/>
+              <IssueTopicTab active={tab==="expert"}     icon={<IconExpert     color={T.slate}/>} title="Expert Perspectives" onClick={() => switchTab("expert")}/>
+            </div>
+            {/* Animated panel */}
+            <div style={{
+              opacity: visible ? 1 : 0,
+              transform: visible ? "translateY(0)" : "translateY(6px)",
+              transition: "opacity 180ms ease, transform 180ms ease",
+            }}>
+              {panel}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -4836,6 +5449,7 @@ const SECTIONS = [
       { id:"CommitteeBreakdownCard",       label:"CommitteeBreakdownCard",       desc:"Committee list rows · name + code + attendance bar + percentage" },
       { id:"ConductDrillDownCard",         label:"ConductDrillDownCard",         desc:"Score + bar + deduction rows + total + source · conduct sub-score detail" },
       { id:"DesktopPoliticianProfileCard", label:"Desktop Politician Profile",   desc:"996px two-column · party color left panel · white right with score items" },
+      { id:"ExpertProfileCard",            label:"Expert Profile Card",          desc:"448×120 · dark gray #888 · 79px circular avatar + name 22/700 + role + organization · expert attribution card (Figma 7499:13505)" },
       { id:"DesktopScoreDashboard",        label:"Desktop Score Dashboard",      desc:"Profile card + Beacon Score header + Participation/Consistency/Conduct rows" },
       { id:"DesktopOfficialCard",          label:"Desktop Official Card",        desc:"326×368 sticky left panel · red header + avatar + term badges + engagement" },
       { id:"DesktopOfficialsList",         label:"Desktop Officials List",       desc:"Tab bar + alpha header + official rows + alpha index · full 996px layout" },
@@ -4921,13 +5535,14 @@ const SECTIONS = [
   {
     group: "Desktop", id: "Issues",
     components: [
-      // Desktop issues screens — to build
+      { id:"DesktopActiveIssuesScreen",    label:"Desktop Active Issues",    desc:"1280×1165 · top nav (Issues active) · title row + 3× Desktop Issue Cards 996×275" },
+      { id:"DesktopIssueDetailScreen", label:"Desktop Issue — Detail", desc:"1280 · article detail · hero 996×300 + engagement + desc + 3 tabbed panels (Consensus/Contention/Expert) · click to swap with 180ms crossfade" },
     ]
   },
   {
     group: "Desktop", id: "Pulse",
     components: [
-      // Desktop pulse screens — to build
+      { id:"DesktopPulseSurveysScreen", label:"Desktop Pulse Surveys", desc:"1280 · Pulse feed · title row + Active/Complete tab menu + 3-col grid of PollCard width=319 · 180ms crossfade · info icon opens Beacon Pulse modal overlay" },
     ]
   },
   {
@@ -5387,13 +6002,33 @@ function ComponentPreview({ id }) {
         <DesktopHomeScreen/>
       </div>
     );
+    case "DesktopActiveIssuesScreen": return (
+      <div style={{padding:0,background:"transparent",display:"flex",justifyContent:"center",alignItems:"flex-start"}}>
+        <DesktopActiveIssuesScreen/>
+      </div>
+    );
+    case "ExpertProfileCard": return (
+      <div className="canvas-wrap">
+        <ExpertProfileCard/>
+      </div>
+    );
+    case "DesktopIssueDetailScreen": return (
+      <div className="canvas-wrap" style={{padding:0, background:"transparent"}}>
+        <DesktopIssueDetailScreen/>
+      </div>
+    );
+    case "DesktopPulseSurveysScreen": return (
+      <div className="canvas-wrap" style={{padding:0, background:"transparent"}}>
+        <DesktopPulseSurveysScreen/>
+      </div>
+    );
     default: return null;
   }
 }
 
 const ANIMATED_IDS = new Set(["PollCard","PollResultsCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","ReactionInteraction","DesktopPoliticianProfileCard","DesktopScoreDashboard","PulseSurveyFlow","PulseSurveyResults"]);
 
-const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen"]);
+const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen","DesktopActiveIssuesScreen","DesktopIssueDetailScreen","DesktopPulseSurveysScreen"]);
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
   const hasAnim = ANIMATED_IDS.has(comp.id);
