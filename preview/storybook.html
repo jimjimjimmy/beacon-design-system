@@ -60,8 +60,43 @@ function useReveal(duration) {
 
    Returns [ref, styleObj]. Attach ref={ref} to the fading element and
    spread styleObj into its inline style. */
+
+/* ── DesktopTab / DesktopTabRow ──
+   Shared tab styling for any 1280 desktop screen. Matches the pattern used by
+   DesktopPulseSurveysScreen (7096:57163). Row has a 1px bottom border; active
+   tab has a 4px bottom border slate that overlaps the row border (marginBottom:-1).
+   Tab cells stretch to full row height so the underline sits ON the row line. */
+function DesktopTabRow({ children, style }) {
+  return (
+    <div style={{
+      width:"100%", height:37, display:"flex", alignItems:"center",
+      position:"relative", borderBottom:`1px solid ${T.slate}`,
+      ...style,
+    }}>{children}</div>
+  );
+}
+function DesktopTab({ value, activeValue, label, onClick, width, extraStyle }) {
+  const active = value === activeValue;
+  return (
+    <div onClick={() => onClick && onClick(value)} style={{
+      padding:8, cursor:"pointer",
+      display:"flex", alignItems:"center", justifyContent:"center",
+      height:"100%", marginBottom:-1,
+      borderBottom: active ? `4px solid ${T.slate}` : "4px solid transparent",
+      ...(width ? { width } : null),
+      ...(extraStyle || null),
+    }}>
+      <span style={{
+        fontSize:16, fontWeight:600, color:T.slate,
+        letterSpacing:-0.5, lineHeight:1.3, whiteSpace:"nowrap",
+      }}>{label}</span>
+    </div>
+  );
+}
+
 function usePageFadeIn() {
   var ref = React.useRef(null);
+  var playRef = React.useRef(function(){});
   React.useEffect(function() {
     var el = ref.current;
     if (!el) return;
@@ -80,6 +115,7 @@ function usePageFadeIn() {
       el.style.opacity = "1";
       el.style.transform = "translateY(0)";
     }
+    playRef.current = play;
     function check() {
       var r = el.getBoundingClientRect();
       var vh = window.innerHeight || document.documentElement.clientHeight;
@@ -100,13 +136,13 @@ function usePageFadeIn() {
       window.removeEventListener("resize", check);
     };
   }, []);
-  // Initial inline styles: element starts hidden so first paint shows opacity:0.
-  // play() overwrites these imperatively on first in-view check.
+  // replay() lets tab-switch handlers re-trigger the fade imperatively.
+  var replay = React.useCallback(function() { playRef.current(); }, []);
   return [ref, {
     opacity: 0,
     transform: "translateY(16px)",
     willChange: "opacity, transform",
-  }];
+  }, replay];
 }
 
 /* ═══════════════════════════════════════════════
@@ -1324,7 +1360,7 @@ function PoliticalLeaning({
       <div style={{display:"flex",flexDirection:"column",gap:8,width:"100%"}}>
         <div style={{position:"relative",height:8}}>
           <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",left:0,right:0,height:6,borderRadius:50,background:"linear-gradient(to right, #0067ce, #ff2827)"}}/>
-          <div style={{position:"absolute",top:"50%",left:`${animDot}%`,transform:"translate(-50%, -50%)",width:14,height:14,borderRadius:"50%",backgroundColor:T.slate,border:`2px solid ${T.white}`,transition:"none"}}/>
+          <div style={{position:"absolute",top:"50%",left:`${animDot}%`,transform:"translate(-50%, -50%)",width:18,height:18,borderRadius:"50%",backgroundColor:T.slate,border:`2px solid ${T.white}`,transition:"none"}}/>
         </div>
         <div style={{display:"flex",alignItems:"center",width:"100%"}}>
           <span style={{flex:1,fontSize:11,fontWeight:600,color:T.gray,letterSpacing:-0.5}}>Left</span>
@@ -2291,7 +2327,7 @@ function IssueDetailScreen() {
                   <div style={{overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch",marginLeft:-18,marginRight:-18,borderBottom:`1px solid ${T.creamBorder}`,marginBottom:16}}>
                     <div style={{display:"flex",gap:0,paddingLeft:18,minWidth:"max-content"}}>
                       {tabs.map(t=>(
-                        <div key={t.id} onClick={()=>setTab(t.id)} style={{padding:"10px 14px",cursor:"pointer",borderBottom:tab===t.id?`3px solid ${T.slate}`:"3px solid transparent",marginBottom:-1,flexShrink:0}}>
+                        <div key={t.id} onClick={()=>setTab(t.id)} style={{padding:"10px 14px",cursor:"pointer",borderBottom:tab===t.id?`4px solid ${T.slate}`:"4px solid transparent",marginBottom:-1,flexShrink:0}}>
                           <span style={{fontSize:13,fontWeight:600,color:tab===t.id?T.slate:T.gray,letterSpacing:-0.25,whiteSpace:"nowrap"}}>{t.label}</span>
                         </div>
                       ))}
@@ -2575,15 +2611,19 @@ function DesktopOfficialCard({
   nextElection="Nov 2026",
   headerColor="#de0100",
   imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200",
+  rightSquare=false,
 }) {
+  const outerRadius = rightSquare ? "10px 0 0 10px" : T.radius;
+  const headerRadius = rightSquare ? "10px 0 0 0"   : "10px 10px 0 0";
+  const footerRadius = rightSquare ? "0 0 0 10px"   : "0 0 10px 10px";
   return (
     <div style={{
-      width:326, borderRadius:T.radius,
+      width:326, borderRadius:outerRadius,
       overflow:"hidden", display:"flex", flexDirection:"column",
       backgroundColor:T.white, fontFamily:"Inter,sans-serif",
     }}>
       {/* Red header */}
-      <div style={{backgroundColor:headerColor, padding:18, display:"flex", flexDirection:"column", gap:16, borderRadius:"10px 10px 0 0"}}>
+      <div style={{backgroundColor:headerColor, padding:18, display:"flex", flexDirection:"column", gap:16, borderRadius:headerRadius}}>
         <div style={{display:"flex", gap:17, alignItems:"flex-start"}}>
           <div style={{
             width:79, height:79, borderRadius:"50%",
@@ -2608,7 +2648,7 @@ function DesktopOfficialCard({
         </div>
       </div>
       {/* Engagement footer */}
-      <div style={{padding:"12px 18px", backgroundColor:T.white, borderRadius:"0 0 10px 10px"}}>
+      <div style={{padding:"12px 18px", backgroundColor:T.white, borderRadius:footerRadius}}>
         <EngagementBar/>
       </div>
     </div>
@@ -2673,6 +2713,354 @@ function DesktopScoreDashboard() {
 }
 
 
+/* ── DesktopPulseCard ──
+   Figma 7096:51582 — 333×296 pulse survey card used in Related Pulse carousel.
+   3-band stack: content (headline + category + PUBLIC badge), news-link row, actions row.
+   Bg T.warmBg, radius 10, shadow, Inter fonts. */
+function DesktopPulseCard({
+  timeEstimate="Takes ~ 1 min",
+  category="DOMESTIC POLICY",
+  headline="Should Congress raise the federal minimum wage to $15/hour?",
+  description="Lauren Boebert has co-sponsored 2 related bills in the last 6 months.",
+  publicLabel="PUBLIC",
+  newsLink="Link to News Article",
+  shareCount="842.3k",
+  showActions=true,
+}) {
+  return (
+    <div style={{
+      width:333, minHeight:296, borderRadius:10, overflow:"hidden",
+      backgroundColor:T.warmBg, boxShadow:"0 4px 15px rgba(0,0,0,0.15)",
+      fontFamily:"Inter,sans-serif", flexShrink:0,
+      display:"flex", flexDirection:"column",
+    }}>
+      {/* Top section */}
+      <div style={{padding:"18px 18px 16px 18px", display:"flex", flexDirection:"column", gap:20, flex:1}}>
+        {/* Row: time estimate + category badge */}
+        <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:8}}>
+          <span style={{fontSize:13, fontWeight:600, color:T.gray, letterSpacing:-0.5, lineHeight:"1.3"}}>{timeEstimate}</span>
+          <div style={{
+            height:29, minWidth:120, borderRadius:3,
+            backgroundColor:T.cream, border:`0.5px solid ${T.cream}`,
+            display:"flex", alignItems:"center", justifyContent:"center",
+            padding:"0 10px",
+          }}>
+            <span style={{fontSize:9, fontWeight:600, color:T.slate, letterSpacing:0.5, textTransform:"uppercase", lineHeight:"15px"}}>{category}</span>
+          </div>
+        </div>
+        {/* Headline + description */}
+        <div style={{display:"flex", flexDirection:"column", gap:8, paddingRight:24}}>
+          <p style={{margin:0, fontSize:20, fontWeight:900, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{headline}</p>
+          <p style={{margin:0, fontSize:13, fontWeight:500, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{description}</p>
+        </div>
+        {/* PUBLIC badge */}
+        <div style={{marginTop:"auto"}}>
+          <div style={{
+            display:"inline-flex", height:29, minWidth:120, borderRadius:3,
+            backgroundColor:"transparent", border:`1px solid ${T.gray}`,
+            alignItems:"center", justifyContent:"center", padding:"0 10px",
+          }}>
+            <span style={{fontSize:9, fontWeight:600, color:T.slate, letterSpacing:0.5, textTransform:"uppercase", lineHeight:"15px"}}>{publicLabel}</span>
+          </div>
+        </div>
+      </div>
+      {/* Middle section — news link */}
+      <div style={{padding:"10px 18px", display:"flex", alignItems:"center", gap:8}}>
+        <div style={{backgroundColor:T.cream, borderRadius:5, padding:4, display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <IconLink/>
+        </div>
+        <span style={{fontSize:13, fontWeight:600, color:T.slate, lineHeight:1.1, letterSpacing:-0.5}}>{newsLink}</span>
+      </div>
+      {/* Bottom section — actions (only when showActions) */}
+      {showActions && (
+      <div style={{
+        borderTop:`1px solid ${T.creamBorder}`,
+        padding:"5px 18px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:16,
+      }}>
+        <div style={{display:"flex", alignItems:"center", gap:4}}>
+          <IconShareAction/>
+          <span style={{fontSize:13, fontWeight:500, color:T.gray, letterSpacing:-0.25, lineHeight:"1"}}>{shareCount}</span>
+        </div>
+        <div style={{display:"flex", alignItems:"center", gap:8}}>
+          <span style={{fontSize:13, fontWeight:500, color:T.gray, letterSpacing:-0.25, lineHeight:"1"}}>Reaction</span>
+          <IconReactButton/>
+        </div>
+      </div>
+      )}
+    </div>
+  );
+}
+
+
+/* ── DesktopRelatedPulse ──
+   Figma 7096:51571 — Related Pulse section (996×382)
+   Header: orange dot + "Pulse Pulse" Black 20 + "View All" right
+   Tab menu: Active / Complete, center justified, 28px gap, 1px bottom border slate
+   Carousel row of DesktopPulseCards (333×296, 20px gap) */
+function DesktopRelatedPulse() {
+  const [tab, setTab] = React.useState("Active");
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  const switchTab = (next) => {
+    if (next === tab) return;
+    setVisible(false);
+    setTimeout(() => { setTab(next); setVisible(true); }, 180);
+  };
+  const activeCards = [
+    { headline:"Lauren Boebert in Congress: Representing Her District Or Playing To The Base?", description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+    { headline:"Do you think possession of guns should be allowed to everyone?",                  description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+    { headline:"Should there be more strict laws and regulations to eradicate corruption?",       description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+    { headline:"Should the federal minimum wage be raised to $15 per hour?",                      description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+    { headline:"Should immigration policy prioritize border security over pathways to citizenship?", description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+    { headline:"Should public colleges be tuition-free for in-state students?",                     description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+    { headline:"Do you support expanding Medicare to cover dental and vision?",                     description:"At 10,000 responses, anonymous results are shared with your congressman.", category:"DOMESTIC POLICY" },
+  ];
+  const completeCards = [
+    { question:"U.S. vs. Maduro: Smart Move or Crossing the Line?",                   category:"foreign policy",  resultPct:73, resultLabel:"Complete", resultCount:"6,876", resultTotal:"10,000" },
+    { question:"Should the government assist corporations in increasing employment?", category:"domestic policy", resultPct:82, resultLabel:"Support",  resultCount:"8,200", resultTotal:"10,000" },
+    { question:"Do you think public universities should be tuition-free for in-state students?", category:"domestic policy", resultPct:64, resultLabel:"Support",  resultCount:"6,412", resultTotal:"10,000" },
+    { question:"Should term limits apply to the U.S. Supreme Court?",                 category:"domestic policy", resultPct:58, resultLabel:"Support",  resultCount:"5,812", resultTotal:"10,000" },
+    { question:"Should Congress raise the federal debt ceiling without conditions?",  category:"economy",         resultPct:47, resultLabel:"Support",  resultCount:"4,732", resultTotal:"10,000" },
+    { question:"Should the federal government fund universal pre-K?",                 category:"education",       resultPct:71, resultLabel:"Support",  resultCount:"7,102", resultTotal:"10,000" },
+    { question:"Should Social Security benefits be means-tested?",                    category:"domestic policy", resultPct:39, resultLabel:"Support",  resultCount:"3,912", resultTotal:"10,000" },
+  ];
+  return (
+    <div style={{width:996, display:"flex", flexDirection:"column", gap:20, fontFamily:"Inter,sans-serif", overflow:"visible"}}>
+      {/* Header row */}
+      <div style={{padding:"0 18px", display:"flex", alignItems:"center", justifyContent:"space-between"}}>
+        <div style={{display:"flex", alignItems:"center", gap:8}}>
+          <IconBeaconDot/>
+          <span style={{fontSize:20, fontWeight:900, color:T.slate, lineHeight:"1", letterSpacing:-1}}>Pulse</span>
+        </div>
+        <div style={{display:"flex", alignItems:"center", gap:4, cursor:"pointer"}}>
+          <span style={{fontSize:14, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>View All</span>
+          <IconChevronForward/>
+        </div>
+      </div>
+      {/* Tab menu — center justified */}
+      <div style={{padding:"0 18px"}}>
+        <div style={{
+          width:"100%", height:37, display:"flex", alignItems:"center", justifyContent:"center",
+          gap:28, borderBottom:`1px solid ${T.slate}`,
+        }}>
+          {["Active","Complete"].map(t => {
+            const active = t === tab;
+            return (
+              <div key={t} onClick={() => switchTab(t)} style={{
+                padding:8, height:"100%", cursor:"pointer", marginBottom:-1,
+                display:"flex", alignItems:"center", justifyContent:"center",
+                borderBottom: active ? `4px solid ${T.slate}` : "4px solid transparent",
+              }}>
+                <span style={{fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>{t}</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      {/* Carousel row */}
+      <div className="hide-scrollbar" style={{
+        padding:"16px 142px 24px", display:"flex", gap:20,
+        marginLeft:-142, marginRight:-142, marginTop:-16, marginBottom:-24,
+        overflowX:"auto", overflowY:"visible",
+        scrollbarWidth:"none",
+        WebkitOverflowScrolling:"touch",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {tab === "Active"
+          ? activeCards.map((c,i)=>(
+              <DesktopPulseCard key={`a-${i}`} headline={c.headline} description={c.description} category={c.category}/>
+            ))
+          : completeCards.map((c,i)=>(
+              <PollCard key={`c-${i}`} width={333} variant="complete"
+                question={c.question} category={c.category}
+                resultPct={c.resultPct} resultLabel={c.resultLabel}
+                resultCount={c.resultCount} resultTotal={c.resultTotal}/>
+            ))}
+      </div>
+    </div>
+  );
+}
+
+
+/* ── DesktopAboutSection ──
+   Figma 7096:51588 — 996×208, 3 columns x 300w, 24px gap, no bg.
+   Each block: heading Inter SemiBold 18/1.3/-0.5 slate, body Inter Regular 14/1.3/-0.5 black. */
+function DesktopAboutBlock({ title, children }) {
+  return (
+    <div style={{display:"flex", flexDirection:"column", gap:8, width:300}}>
+      <h3 style={{margin:0, fontSize:18, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{title}</h3>
+      <div style={{fontSize:14, fontWeight:400, color:"#000", lineHeight:1.3, letterSpacing:-0.5}}>{children}</div>
+    </div>
+  );
+}
+function DesktopAboutSection() {
+  return (
+    <div style={{width:996, fontFamily:"Inter,sans-serif", display:"flex", flexDirection:"column"}}>
+      {/* 1px divider above */}
+      <div style={{width:"100%", height:1, backgroundColor:T.creamBorder, marginBottom:24}}/>
+      <div style={{padding:"0 24px", display:"flex", gap:24, justifyContent:"space-between"}}>
+        {/* Column 1: About + Term Info */}
+        <div style={{display:"flex", flexDirection:"column", gap:20}}>
+          <DesktopAboutBlock title="About">
+            <p style={{margin:0}}>US Representative</p>
+            <p style={{margin:0}}>4th Congressional District</p>
+            <p style={{margin:0}}>House of Representatives</p>
+          </DesktopAboutBlock>
+          <DesktopAboutBlock title="Term Info">
+            <p style={{margin:0}}>US Representative</p>
+            <p style={{margin:0}}>14th Congressional District</p>
+            <p style={{margin:0}}>House of Representatives</p>
+          </DesktopAboutBlock>
+        </div>
+        {/* Column 2: Committees + Biography */}
+        <div style={{display:"flex", flexDirection:"column", gap:20}}>
+          <DesktopAboutBlock title="Committees">
+            <ul style={{margin:0, paddingLeft:21, listStyleType:"disc"}}>
+              <li>Natural Resources</li>
+              <li>Budget</li>
+            </ul>
+          </DesktopAboutBlock>
+          <DesktopAboutBlock title="Biography">
+            <p style={{margin:0}}>Age: 38 (born December 15, 1986)</p>
+            <p style={{margin:0}}>Hometown: Garfield County, CO</p>
+            <p style={{margin:0}}>Education: GED (2020)</p>
+            <p style={{margin:0}}>Pre-office career: Restaurant owner</p>
+            <p style={{margin:0}}>(Shooters Grill, Rifle CO)</p>
+          </DesktopAboutBlock>
+        </div>
+        {/* Column 3: Contact & Office + Social */}
+        <div style={{display:"flex", flexDirection:"column", gap:20}}>
+          <DesktopAboutBlock title="Contact & Office">
+            <p style={{margin:0}}>Website: <span style={{textDecoration:"underline"}}>boebert.house.gov</span></p>
+            <p style={{margin:0}}>DC Office: 1609 Longworth HOB, Washington, DC 20515</p>
+            <p style={{margin:0}}>District Office: Pueblo, CO</p>
+          </DesktopAboutBlock>
+          <DesktopAboutBlock title="Social">
+            <p style={{margin:0}}>X/Twitter: <span style={{textDecoration:"underline"}}>@laurenboebert</span></p>
+            <p style={{margin:0}}>Facebook: <span style={{textDecoration:"underline"}}>/laurenboebert</span></p>
+          </DesktopAboutBlock>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── BeaconScoreInfoModal ──
+   Figma 7096-51552 — Beacon Score™ info modal overlay.
+   Behaves like PulseInfoModal (RAF-gated reveal, 220ms cubic-bezier fade/scale,
+   backdrop blur fade, click-outside-to-close). Vertically centered. */
+function BeaconScoreInfoModal({ onClose }) {
+  const [shown, setShown] = React.useState(false);
+  React.useEffect(() => {
+    const id = requestAnimationFrame(() => setShown(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+  const handleClose = () => {
+    setShown(false);
+    setTimeout(() => onClose && onClose(), 220);
+  };
+  const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+  return (
+    <div onClick={handleClose} style={{
+      position:"absolute", inset:0,
+      backgroundColor: shown ? "rgba(240,232,216,0.8)" : "rgba(240,232,216,0)",
+      backdropFilter: shown ? "blur(7.5px)" : "blur(0px)",
+      WebkitBackdropFilter: shown ? "blur(7.5px)" : "blur(0px)",
+      display:"flex", alignItems:"center", justifyContent:"center",
+      zIndex:10,
+      transition:`background-color 220ms ease, backdrop-filter 220ms ease, -webkit-backdrop-filter 220ms ease`,
+    }}>
+      <div onClick={(e)=>e.stopPropagation()} style={{
+        width:680, backgroundColor:T.white, borderRadius:10,
+        boxShadow:"0 4px 15px rgba(0,0,0,0.15)",
+        padding:"24px 40px 64px",
+        display:"flex", flexDirection:"column", alignItems:"center",
+        gap:8,
+        fontFamily:"Inter,sans-serif",
+        opacity: shown ? 1 : 0,
+        transform: shown ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
+        transition:`opacity 220ms ${EASE}, transform 220ms ${EASE}`,
+      }}>
+        {/* Close row — 24px X top-right */}
+        <div style={{display:"flex", justifyContent:"flex-end", width:"100%"}}>
+          <div onClick={handleClose} style={{
+            width:24, height:24, cursor:"pointer",
+            display:"flex", alignItems:"center", justifyContent:"center",
+          }}>
+            <svg width="13.5" height="13.5" viewBox="0 0 13.5 13.5" fill="none">
+              <path d="M1 1L12.5 12.5M12.5 1L1 12.5" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </div>
+        {/* Title + body — gap 32 */}
+        <div style={{display:"flex", flexDirection:"column", gap:32, width:"100%", alignItems:"flex-start"}}>
+          <p style={{
+            margin:0, fontFamily:"Inter,sans-serif", fontWeight:800,
+            fontSize:18, lineHeight:1.3, letterSpacing:-0.5, color:T.slate,
+            whiteSpace:"nowrap",
+          }}>Beacon Score™</p>
+          <p style={{
+            margin:0, fontFamily:"Inter,sans-serif", fontWeight:400,
+            fontSize:16, lineHeight:1.3, letterSpacing:-0.5, color:T.slate,
+            width:"100%", whiteSpace:"pre-wrap",
+          }}>{`Copy TBD. The Beacon Score is a 0–100 metric that measures whether an official's actions match their words — built entirely from verifiable public data like voting records, FEC filings, and financial disclosures. \n\nIt's a composite of five sub-scores (Participation, Consistency, Transparency, Follow-Through, and Independence), so the single number is always backed by visible reasoning and primary sources. No opinion, no sentiment, no user ratings — every claim must be defensible with a direct link to the proof.`}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopPoliticianProfileScreen ──
+   Figma 7096-51558 — full page composition.
+   1280×1421 screen with 996 content: Breadcrumb, Dashboard (Profile + Score),
+   Related Pulse, About Section. */
+function DesktopPoliticianProfileScreen({
+  headerColor="#de0100",
+  name="Lauren Boebert",
+  role="U.S. Representative",
+  branch="House",
+  location="Colorado",
+  district="4th Congressional District",
+  party="Republican",
+  score=81,
+  imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200",
+}) {
+  const [scoreInfoOpen, setScoreInfoOpen] = React.useState(false);
+  return (
+    <div style={{
+      width:1280, minHeight:1421, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+      {/* Content column — 996 wide, centered; carousel breaks out visually */}
+      <div style={{width:996, display:"flex", flexDirection:"column", gap:24, paddingTop:32, paddingBottom:60}}>
+        <DesktopBreadcrumb items={[{label:"Officials", href:"#"},{label:name}]}/>
+        <DesktopPoliticianProfileCard
+          headerColor={headerColor}
+          name={name} role={role} branch={branch}
+          location={location} district={district} party={party}
+          score={score} imgUrl={imgUrl}
+          onScoreInfoClick={()=>setScoreInfoOpen(true)}
+        />
+        <DesktopRelatedPulse/>
+        <DesktopAboutSection/>
+      </div>
+      {scoreInfoOpen && <BeaconScoreInfoModal onClose={()=>setScoreInfoOpen(false)}/>}
+    </div>
+  );
+}
+
+
 /* ── DesktopPoliticianProfileCard ──
    Desktop variant of PoliticianProfileCard. 996px wide, two-column layout.
    Left 326px: party color panel — 79×79 avatar + name + role + info + term badges
@@ -2690,98 +3078,104 @@ function DesktopPoliticianProfileCard({
   score=81,
   headerColor="#de0100",
   imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200",
+  onScoreInfoClick,
 }) {
-  const [activeTab, setActiveTab] = React.useState("6M");
-  const tabs = ["6M","1Y","2Y","4Y","All"];
   return (
     <div style={{
-      width:996, display:"flex", flexDirection:"row",
-      borderRadius:T.radius, overflow:"hidden",
-      boxShadow:T.shadow, fontFamily:"Inter,sans-serif",
+      width:996, display:"flex", flexDirection:"row", alignItems:"flex-start",
+      backgroundColor:"transparent", borderRadius:T.radius,
+      fontFamily:"Inter,sans-serif",
     }}>
-      {/* LEFT: party color panel */}
+      {/* LEFT COLUMN — 326 wide, left-only radius */}
       <div style={{
         width:326, flexShrink:0,
-        backgroundColor:headerColor,
-        display:"flex", flexDirection:"column", gap:16,
-        padding:18,
-      }}>
-        {/* Avatar + name + info */}
-        <div style={{display:"flex", gap:17, alignItems:"flex-start"}}>
-          <div style={{
-            width:79, height:79, borderRadius:"50%",
-            backgroundColor:"rgba(0,0,0,0.3)",
-            backgroundImage:`url('${imgUrl}')`,
-            backgroundSize:"cover", backgroundPosition:"center",
-            flexShrink:0,
-          }}/>
-          <div style={{display:"flex", flexDirection:"column", color:T.white}}>
-            <h2 style={{fontSize:22, fontWeight:700, lineHeight:"130%", letterSpacing:-1, margin:"0 0 2px 0", color:T.white}}>{name}</h2>
-            <p style={{fontSize:13, fontWeight:600, lineHeight:"130%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{role}</p>
-            <p style={{fontSize:13, fontWeight:400, lineHeight:"140%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{branch}</p>
-            <p style={{fontSize:13, fontWeight:400, lineHeight:"200%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{location}</p>
-            <p style={{fontSize:13, fontWeight:400, lineHeight:"140%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{district}</p>
-            <p style={{fontSize:13, fontWeight:400, lineHeight:"140%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{party}</p>
-          </div>
-        </div>
-        {/* Term badges */}
-        <div style={{display:"flex", gap:4, width:"100%"}}>
-          <TermBadge label="Term Served" value={termServed}/>
-          <TermBadge label="Office Since" value={officeSince}/>
-          <TermBadge label="Next Election" value={nextElection}/>
-        </div>
-      </div>
-      {/* RIGHT: white panel */}
-      <div style={{
-        flex:1, minWidth:0,
-        backgroundColor:T.white,
+        borderTopLeftRadius:T.radius, borderBottomLeftRadius:T.radius,
+        overflow:"hidden",
         display:"flex", flexDirection:"column",
       }}>
-        {/* Time tabs */}
+        {/* Top red block: avatar + name + info + term badges */}
         <div style={{
-          display:"flex", alignItems:"center", justifyContent:"center",
-          borderBottom:`1px solid ${T.slate}`,
-          height:37, flexShrink:0, gap:0,
+          backgroundColor:headerColor,
+          display:"flex", flexDirection:"column", gap:16,
+          padding:18,
         }}>
-          {tabs.map(tab => {
-            const isActive = tab === activeTab;
-            return (
-              <button key={tab} onClick={() => setActiveTab(tab)} style={{
-                padding:"0 20px", height:"100%",
-                fontSize:16, fontWeight:600,
-                color:T.slate, backgroundColor:"transparent",
-                border:"none",
-                borderBottom: isActive ? `4px solid ${T.slate}` : "4px solid transparent",
-                cursor:"pointer", letterSpacing:-0.5, lineHeight:"130%",
-                boxSizing:"border-box",
-              }}>{tab}</button>
-            );
-          })}
+          <div style={{display:"flex", gap:17, alignItems:"flex-start", width:"100%"}}>
+            <div style={{
+              width:79, height:79, borderRadius:"50%",
+              backgroundColor:"rgba(0,0,0,0.3)",
+              backgroundImage:`url('${imgUrl}')`,
+              backgroundSize:"cover", backgroundPosition:"center",
+              flexShrink:0,
+            }}/>
+            <div style={{width:168, display:"flex", flexDirection:"column", color:T.white}}>
+              <h2 style={{fontSize:20, fontWeight:700, lineHeight:"110%", letterSpacing:-0.5, margin:"0 0 8px 0", color:T.white}}>
+                {(() => {
+                  const parts = String(name).split(" ");
+                  if (parts.length < 2) return name;
+                  return (<>{parts[0]}<br/>{parts.slice(1).join(" ")}</>);
+                })()}
+              </h2>
+              <p style={{fontSize:12, fontWeight:600, lineHeight:"130%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{role}</p>
+              <p style={{fontSize:12, fontWeight:600, lineHeight:"130%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{branch}</p>
+              <p style={{fontSize:12, fontWeight:400, lineHeight:2.4, letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{location}</p>
+              <p style={{fontSize:12, fontWeight:400, lineHeight:"140%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{district}</p>
+              <p style={{fontSize:12, fontWeight:400, lineHeight:"140%", letterSpacing:-0.5, color:"rgba(250,250,250,0.8)", margin:0}}>{party}</p>
+            </div>
+          </div>
+          {/* Term badges */}
+          <div style={{display:"flex", gap:4, width:"100%"}}>
+            <TermBadge label="Term Served" value={termServed}/>
+            <TermBadge label="Office Since" value={officeSince}/>
+            <TermBadge label="Next Election" value={nextElection}/>
+          </div>
         </div>
-        {/* Score header */}
-        <div style={{padding:"18px 18px 4px 18px", display:"flex", alignItems:"center", justifyContent:"space-between", gap:16}}>
+        {/* Bottom white block: engagement stats + divider + actions */}
+        <div style={{backgroundColor:"#ffffff", padding:18}}>
+          <EngagementBar/>
+        </div>
+      </div>
+
+      {/* RIGHT COLUMN — 670 wide, right-only radius */}
+      <div style={{
+        flex:1, minWidth:0,
+        borderTopRightRadius:T.radius, borderBottomRightRadius:T.radius,
+        overflow:"hidden",
+        display:"flex", flexDirection:"column",
+      }}>
+        {/* Top white header card with shadow */}
+        <div style={{
+          backgroundColor:"#ffffff",
+          boxShadow:"0 4px 15px rgba(0,0,0,0.15)",
+          padding:18,
+          display:"flex", alignItems:"flex-start", justifyContent:"space-between", gap:16,
+          position:"relative", zIndex:1,
+          borderTopRightRadius:T.radius,
+        }}>
           <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:4}}>
             <div style={{display:"flex", alignItems:"center", gap:8}}>
               <IconBeaconDot/>
-              <span style={{fontSize:22, fontWeight:800, color:T.slate, lineHeight:"130%", letterSpacing:-0.5}}>Beacon Score™</span>
-              <IconInfo/>
+              <span style={{fontSize:26, fontWeight:800, color:T.slate, lineHeight:"130%", letterSpacing:-0.5}}>Beacon Score™</span>
             </div>
-            <p style={{margin:0, fontSize:14, fontWeight:400, color:T.slate, lineHeight:"140%", letterSpacing:-0.25}}>Calculated from participation, consistency, and conduct.</p>
+            <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:"130%", letterSpacing:-1}}>A three-part signal on civic behavior.</p>
           </div>
-          <div style={{flexShrink:0, display:"flex", alignItems:"baseline", gap:2}}>
-            <span style={{fontSize:56, fontWeight:800, color:T.slate, lineHeight:"1", letterSpacing:-2}}>{score}</span>
-            <span style={{fontSize:32, fontWeight:700, color:T.gray, lineHeight:"1", letterSpacing:-1}}>/100</span>
+          <div style={{flexShrink:0, display:"flex", alignItems:"center", gap:8}}>
+            <div style={{display:"flex", alignItems:"baseline", gap:2}}>
+              <span style={{fontSize:44, fontWeight:600, color:T.slate, lineHeight:"130%", letterSpacing:-2}}>{score}</span>
+              <span style={{fontSize:44, fontWeight:600, color:T.gray, lineHeight:"130%", letterSpacing:-2}}>/100</span>
+            </div>
+            <span onClick={onScoreInfoClick} style={{paddingBottom:16, display:"flex", alignItems:"flex-end", cursor: onScoreInfoClick ? "pointer" : "default"}}><IconInfo/></span>
           </div>
         </div>
-        {/* Score breakdown items */}
-        <div style={{padding:"0 18px", flex:1}}>
-          <ScoreItem icon={<IconVerify/>}       title="Participation" score={16} maxScore={20} avgPercent={45}/>
-          <ScoreItem icon={<IconUpDown/>}        title="Consistency"   score={34} maxScore={40} avgPercent={55}/>
-          <ScoreItem icon={<IconMagicShield/>}   title="Conduct"       score={31} maxScore={40} avgPercent={40}/>
-        </div>
-        {/* Engagement bar */}
-        <div style={{padding:"12px 18px", borderTop:`1px solid ${T.creamBorder}`}}>
-          <EngagementBar/>
+        {/* Bottom score rows on cream bg */}
+        <div style={{
+          flex:1, backgroundColor:T.warmBg,
+          padding:"18px 0 0 0",
+          display:"flex", flexDirection:"column", gap:2,
+          borderBottomRightRadius:T.radius,
+        }}>
+          <ScoreItem icon={<IconVerify/>}     title="Participation" score={16} maxScore={20} avgPercent={45}/>
+          <ScoreItem icon={<IconUpDown/>}      title="Consistency"   score={34} maxScore={40} avgPercent={55}/>
+          <ScoreItem icon={<IconMagicShield/>} title="Conduct"       score={31} maxScore={40} avgPercent={40}/>
         </div>
       </div>
     </div>
@@ -4260,6 +4654,28 @@ function StateDrillColumn({ label, rows }) {
 
 function StateListRow({ state, expanded, onToggle }) {
   const canExpand = !!(state.senators && state.reps);
+  // Height-animated drill-down (matches AccordionItem pattern).
+  const contentRef = React.useRef(null);
+  const [height, setHeight] = React.useState(expanded ? null : 0);
+  React.useEffect(() => {
+    if (!canExpand) return;
+    const el = contentRef.current;
+    if (!el) return;
+    if (expanded) {
+      // Opening: 0 → scrollHeight → natural
+      setHeight(el.scrollHeight);
+    } else {
+      // Closing: natural/scrollHeight → 0 (double RAF so the browser sees an intermediate numeric height before 0)
+      setHeight(el.scrollHeight);
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => setHeight(0));
+      });
+    }
+  }, [expanded, canExpand]);
+  const handleTransitionEnd = (e) => {
+    if (e.propertyName !== "height") return;
+    if (expanded) setHeight(null); // allow natural height (e.g. if content reflows)
+  };
   return (
     <>
       <div
@@ -4286,11 +4702,20 @@ function StateListRow({ state, expanded, onToggle }) {
           <path d="M6 9l6 6 6-6" stroke="#141810" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
-      {/* Drill-down content */}
-      {expanded && canExpand && (
-        <div style={{width:"100%", display:"flex", gap:24, padding:"0 0 20px 0"}}>
-          <StateDrillColumn label="U.S. Senators" rows={state.senators}/>
-          <StateDrillColumn label="House of Representatives" rows={state.reps}/>
+      {/* Drill-down — height-animated wrapper */}
+      {canExpand && (
+        <div
+          ref={contentRef}
+          onTransitionEnd={handleTransitionEnd}
+          style={{
+            width:"100%", overflow:"hidden",
+            height: height === null ? "auto" : height,
+            transition: "height 0.28s ease",
+          }}>
+          <div style={{width:"100%", display:"flex", gap:24, padding:"0 0 20px 0"}}>
+            <StateDrillColumn label="U.S. Senators" rows={state.senators}/>
+            <StateDrillColumn label="House of Representatives" rows={state.reps}/>
+          </div>
         </div>
       )}
     </>
@@ -4303,7 +4728,7 @@ function OfficialsIndexBar({ activeLetter="B" }) {
     <div style={{
       width:12, display:"flex", flexDirection:"column", alignItems:"center",
       fontFamily:"Inter,sans-serif", fontWeight:600, fontSize:11,
-      lineHeight:"16px", letterSpacing:-0.25, color:"rgba(20,24,16,0.6)",
+      lineHeight:"26px", letterSpacing:-0.25, color:"rgba(20,24,16,0.6)",
       userSelect:"none",
     }}>
       {letters.map(L => (
@@ -4319,7 +4744,13 @@ function OfficialsIndexBar({ activeLetter="B" }) {
 function DesktopOfficials() {
   const [tab, setTab] = React.useState("Name"); // "Name" | "State"
   const [expanded, setExpanded] = React.useState(null); // which state is expanded
+  const [visible, setVisible] = React.useState(true);
   const [fadeRef, fade] = usePageFadeIn();
+  const switchTab = (next) => {
+    if (next === tab) return;
+    setVisible(false);
+    setTimeout(() => { setTab(next); setExpanded(null); setVisible(true); }, 180);
+  };
   return (
     <div style={{
       width:1280, minHeight:1032, backgroundColor:T.cream,
@@ -4330,36 +4761,14 @@ function DesktopOfficials() {
 
       {/* Content column */}
       <div ref={fadeRef} style={{width:996, display:"flex", flexDirection:"column", alignItems:"stretch", paddingBottom:60, ...fade}}>
-        {/* Tab menu */}
-        <div style={{
-          width:"100%", height:37, display:"flex", alignItems:"center",
-          justifyContent:"space-between", position:"relative",
-          borderBottom:`1px solid ${T.slate}`,
-        }}>
-          {/* left spacer */}
+        {/* Tab menu — uses shared DesktopTabRow/DesktopTab */}
+        <DesktopTabRow style={{justifyContent:"space-between"}}>
+          {/* left spacer — balances the search icon on the right */}
           <div style={{width:36, height:36, flexShrink:0}} />
           {/* center tabs */}
-          <div style={{display:"flex", gap:16, alignItems:"center", justifyContent:"center"}}>
-            <div onClick={()=>setTab("Name")} style={{
-              padding:8, cursor:"pointer",
-              borderBottom: tab==="Name" ? `4px solid ${T.slate}` : "4px solid transparent",
-              marginBottom:-1,
-            }}>
-              <span style={{
-                fontWeight:600, fontSize:16, lineHeight:1.3, letterSpacing:-0.5,
-                color:T.slate, whiteSpace:"nowrap",
-              }}>Name</span>
-            </div>
-            <div onClick={()=>setTab("State")} style={{
-              padding:8, width:56, cursor:"pointer", display:"flex", justifyContent:"center",
-              borderBottom: tab==="State" ? `4px solid ${T.slate}` : "4px solid transparent",
-              marginBottom:-1,
-            }}>
-              <span style={{
-                fontWeight:600, fontSize:16, lineHeight:1.3, letterSpacing:-0.5,
-                color:T.slate, whiteSpace:"nowrap",
-              }}>State</span>
-            </div>
+          <div style={{display:"flex", gap:16, alignItems:"center", justifyContent:"center", height:"100%"}}>
+            <DesktopTab value="Name"  activeValue={tab} label="Name"  onClick={switchTab}/>
+            <DesktopTab value="State" activeValue={tab} label="State" onClick={switchTab} width={56}/>
           </div>
           {/* search icon */}
           <div style={{padding:6, cursor:"pointer"}}>
@@ -4368,9 +4777,15 @@ function DesktopOfficials() {
               <path d="M15.5 15.5L20 20" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/>
             </svg>
           </div>
-        </div>
+        </DesktopTabRow>
 
-        {/* List + index bar row */}
+        {/* List + index bar row — tab-switch crossfade wrapper */}
+        <div style={{
+          opacity: visible ? 1 : 0,
+          transform: visible ? "translateY(0)" : "translateY(6px)",
+          transition: "opacity 0.18s ease-out, transform 0.18s ease-out",
+          willChange: "opacity, transform",
+        }}>
         {tab === "Name" ? (
           <div style={{display:"flex", alignItems:"flex-start", paddingTop:0, marginTop:0}}>
             {/* Inner list 960 */}
@@ -4386,9 +4801,10 @@ function DesktopOfficials() {
                 <DesktopOfficialListRow key={i} official={o}/>
               ))}
             </div>
-            {/* Index bar — 12w, padded from list by remaining 24px */}
+            {/* Index bar — 12w, padded from list by remaining 24px.
+               paddingTop = 48 (B header) + 10 (gap) so "#" aligns with first card top. */}
             <div style={{width:24, flexShrink:0}} />
-            <div style={{paddingTop:8}}>
+            <div style={{paddingTop:58}}>
               <OfficialsIndexBar activeLetter="B"/>
             </div>
           </div>
@@ -4404,6 +4820,7 @@ function DesktopOfficials() {
             ))}
           </div>
         )}
+        </div>
       </div>
     </div>
   );
@@ -5218,8 +5635,9 @@ function StancesScreen() {
            labels "90" (white left) and "-10" (white right), Consistency / Inconsistency below.
    Bottom: Overall Consistency × Weight = Rounded Score — three boxed cells. */
 function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", rounded=36 }) {
+  const p = useReveal(900);
   return (
-    <div style={{width:"100%",backgroundColor:T.warmBg,borderRadius:10,padding:18,display:"flex",flexDirection:"column",alignItems:"center",gap:24,fontFamily:"Inter,sans-serif",boxSizing:"border-box"}}>
+    <div style={{width:"100%",backgroundColor:"transparent",borderRadius:10,padding:18,display:"flex",flexDirection:"column",alignItems:"center",gap:24,fontFamily:"Inter,sans-serif",boxSizing:"border-box"}}>
       {/* Score Item header */}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end",width:"100%"}}>
         <div style={{flex:1,minWidth:0,display:"flex",gap:10,alignItems:"flex-start"}}>
@@ -5236,7 +5654,7 @@ function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", roun
         </div>
         <div style={{width:70,display:"flex",alignItems:"flex-end",justifyContent:"flex-end",paddingRight:6,flexShrink:0}}>
           <p style={{margin:0,textAlign:"right",fontFamily:"Inter",letterSpacing:-1,lineHeight:1.3,whiteSpace:"nowrap"}}>
-            <span style={{fontSize:22,fontWeight:700,color:T.slate}}>{score}</span>
+            <span style={{fontSize:22,fontWeight:700,color:T.slate}}>{Math.round(score * p)}</span>
             <span style={{fontSize:26,fontWeight:700,color:T.slate}}> </span>
             <span style={{fontSize:22,fontWeight:700,color:T.gray}}>/{max}</span>
           </p>
@@ -5249,9 +5667,9 @@ function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", roun
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:4,width:"100%"}}>
           {/* Bar — orange bg, deep-green fill (full width minus 32px), labels overlaid */}
           <div style={{position:"relative",width:"100%",height:24,backgroundColor:"#f80",overflow:"hidden"}}>
-            <div style={{width:"calc(100% - 32px)",height:"100%",backgroundColor:T.deepGreen}}/>
-            <span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:T.white,lineHeight:1,width:32}}>{overall}</span>
-            <span style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:T.white,lineHeight:1,width:32,textAlign:"right"}}>-10</span>
+            <div style={{width:`calc((100% - 32px) * ${p})`,height:"100%",backgroundColor:T.deepGreen}}/>
+            <span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:T.white,lineHeight:1,width:32}}>{Math.round(overall * p)}</span>
+            <span style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:T.white,lineHeight:1,width:32,textAlign:"right"}}>{`-${Math.round(10 * p)}`}</span>
           </div>
           {/* Labels under bar */}
           <div style={{display:"flex",justifyContent:"space-between",width:"100%",padding:"0 8px",boxSizing:"border-box"}}>
@@ -5262,7 +5680,7 @@ function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", roun
       </div>
       {/* Score Explanation */}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",width:"100%"}}>
-        <ScoreBoxCell value={overall} label={"Overall\nConsistency"} filled={false}/>
+        <ScoreBoxCell value={Math.round(overall * p)} label={"Overall\nConsistency"} filled={false}/>
         <div style={{display:"flex",height:29,alignItems:"center",justifyContent:"center"}}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 7L17 17M17 7L7 17" stroke="#141810" strokeWidth="1.5" strokeLinecap="round"/></svg>
         </div>
@@ -5272,7 +5690,7 @@ function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", roun
             <path d="M8 10H16M8 14H16" stroke="#141810" strokeWidth="1.5" strokeLinecap="round"/>
           </svg>
         </div>
-        <ScoreBoxCell value={rounded} label={"Rounded\nScore"} filled={true}/>
+        <ScoreBoxCell value={Math.round(rounded * p)} label={"Rounded\nScore"} filled={true}/>
       </div>
     </div>
   );
@@ -5642,18 +6060,20 @@ function ConductDrillDownScreen() {
    sub-score list with divider + Combined. */
 function ConductSummary({
   score=30, max=40, raw=75, weight="40%",
+  description="How they behave in office with money, with the truth, and with their colleagues.",
   items=[
     {label:"Campaign Finance", score:15, max:25},
     {label:"Personal Finance", score:18, max:25},
     {label:"Ethics & Misconduct", score:21, max:25},
     {label:"Statement Accuracy", score:21, max:25}
   ],
-  combined={score:75,max:100}
+  combined={score:75,max:100},
+  bg=T.warmBg
 }) {
   const p = useReveal(800);
   const barFill = 90; // visual fill % for green portion (static from Figma)
   return (
-    <div style={{width:"100%",borderRadius:10,backgroundColor:T.warmBg,paddingBottom:18,display:"flex",flexDirection:"column",gap:24,overflow:"hidden",fontFamily:"Inter,sans-serif",boxSizing:"border-box"}}>
+    <div style={{width:"100%",borderRadius:10,backgroundColor:bg,paddingBottom:18,display:"flex",flexDirection:"column",gap:24,overflow:"hidden",fontFamily:"Inter,sans-serif",boxSizing:"border-box"}}>
       {/* Header */}
       <div style={{display:"flex",alignItems:"flex-start",justifyContent:"flex-end"}}>
         <div style={{flex:1,minWidth:0,display:"flex",gap:10,alignItems:"flex-start"}}>
@@ -5663,7 +6083,7 @@ function ConductSummary({
               <span style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,whiteSpace:"nowrap"}}>Conduct</span>
               <IconInfo/>
             </div>
-            <p style={{fontSize:14,fontWeight:500,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>How they behave in office with money, with the truth, and with their colleagues.</p>
+            <p style={{fontSize:14,fontWeight:500,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>{description}</p>
           </div>
         </div>
         <div style={{width:70,display:"flex",alignItems:"flex-end",justifyContent:"flex-end",paddingRight:6,flexShrink:0}}>
@@ -6029,7 +6449,7 @@ function VotingScreen() {
             <div style={{display:"flex",flexDirection:"column",gap:8,width:"100%"}}>
               <div style={{position:"relative",height:8}}>
                 <div style={{position:"absolute",top:"50%",transform:"translateY(-50%)",left:0,right:0,height:6,borderRadius:50,background:"linear-gradient(to right, #005ebc, #ff1b1a)"}}/>
-                <div style={{position:"absolute",top:"50%",left:`${animDot}%`,transform:"translate(-50%, -50%)",width:8,height:8,borderRadius:"50%",backgroundColor:T.slate,border:`2px solid ${T.warmBg}`}}/>
+                <div style={{position:"absolute",top:"50%",left:`${animDot}%`,transform:"translate(-50%, -50%)",width:18,height:18,borderRadius:"50%",backgroundColor:T.slate,border:`2px solid ${T.warmBg}`}}/>
               </div>
               <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
                 <span style={{fontSize:14,fontWeight:600,color:T.gray,letterSpacing:-0.5}}>Left</span>
@@ -6059,6 +6479,1304 @@ function VotingScreen() {
     </div>
   );
 }
+
+/* ── DesktopParticipationScreen ──
+   Figma 7096:51510 — 1280×1189 participation drill-down page.
+   DesktopNavBar + 996w content column: Breadcrumb, 370w Time tab menu centered,
+   Dashboard row (326 DesktopOfficialCard + 670 right side: Beacon Score header
+   card + split bar/formula block + Overview breakdown + Committees block). */
+function DesktopParticipationScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  const p = useReveal(800);
+
+  return (
+    <div style={{
+      width:1280, minHeight:1189, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      {/* Content column — 996w, centered, 32px top pad from 80h nav */}
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Participation"},
+        ]}/>
+
+        {/* Time tabs row — 370w Tab Menu centered within 996; tab height is content-driven (~41px incl. 4px underline) */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left card + 670 right side, no gap */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 — only left corners rounded (right side abuts the right column) */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — 2px gap between stacked blocks reveals cream page bg */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+            {/* ── Beacon Score block — 670×314, rounded top-right ── */}
+            <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
+              {/* Header Data Detail — 670×114, white bg, px 20 py 16 */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"16px 20px", boxSizing:"border-box",
+                display:"flex", alignItems:"flex-start",
+              }}>
+                <div style={{flex:1, minWidth:0, display:"flex", gap:10, alignItems:"flex-start"}}>
+                  <div style={{display:"flex", alignItems:"flex-start", justifyContent:"center", padding:"6px 0", flexShrink:0}}>
+                    <IconVerify/>
+                  </div>
+                  <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:4, paddingRight:64}}>
+                    <div style={{display:"flex", gap:8, alignItems:"center"}}>
+                      <span style={{fontSize:26, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Participation</span>
+                      <IconInfo/>
+                    </div>
+                    <p style={{fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.4, letterSpacing:-0.5, margin:0}}>
+                      Participation score is a blend of voting participation (50%) and committee participation (50%)
+                    </p>
+                  </div>
+                </div>
+                <div style={{display:"flex", alignItems:"center", gap:16, flexShrink:0}}>
+                  <p style={{margin:0, textAlign:"right", whiteSpace:"nowrap", lineHeight:1.3, letterSpacing:-1}}>
+                    <span style={{fontSize:32, fontWeight:600, color:T.slate}}>17 </span>
+                    <span style={{fontSize:32, fontWeight:600, color:T.gray}}>/20</span>
+                  </p>
+                  <IconChevronForward color={T.gray}/>
+                </div>
+              </div>
+
+              {/* Split bar + formula — 670×160, white bg, pb 18 px 20, gap 24 */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"0 20px 18px", boxSizing:"border-box",
+                display:"flex", flexDirection:"column", gap:24, alignItems:"center",
+              }}>
+                {/* Bar + Labels */}
+                <div style={{width:"100%", display:"flex", flexDirection:"column", gap:4, alignItems:"center"}}>
+                  {/* Bar: deepGreen bg, orange fills left, ~128px deepGreen right reserved */}
+                  <div style={{position:"relative", width:"100%", height:24, backgroundColor:T.deepGreen, overflow:"hidden"}}>
+                    <div style={{position:"absolute", left:0, top:0, bottom:0, width:`calc((100% - 128px) * ${p})`, backgroundColor:T.orange}}/>
+                    <span style={{position:"absolute", left:8, top:"50%", transform:"translateY(-50%)", fontSize:11, fontWeight:600, color:T.white, lineHeight:1, width:32}}>{Math.round(49 * p)}</span>
+                    <span style={{position:"absolute", right:8, top:"50%", transform:"translateY(-50%)", fontSize:11, fontWeight:600, color:T.white, lineHeight:1, width:32, textAlign:"right"}}>{Math.round(36 * p)}</span>
+                  </div>
+                  {/* Labels */}
+                  <div style={{display:"flex", justifyContent:"space-between", width:"100%", padding:"0 8px", boxSizing:"border-box"}}>
+                    <p style={{margin:0, fontSize:11, lineHeight:1.4}}>
+                      <span style={{fontWeight:700, color:T.slate}}>Voting </span>
+                      <br/>
+                      <span style={{fontWeight:500, color:T.gray}}>(50% x 97%)</span>
+                    </p>
+                    <p style={{margin:0, fontSize:11, lineHeight:1.4, textAlign:"right"}}>
+                      <span style={{fontWeight:700, color:T.slate}}>Committees</span>
+                      <br/>
+                      <span style={{fontWeight:500, color:T.gray}}>(50% x 71%)</span>
+                    </p>
+                  </div>
+                </div>
+                {/* Formula row */}
+                <div style={{display:"flex", alignItems:"flex-start", justifyContent:"space-between", width:"100%"}}>
+                  <ParticipationScoreBox value="85" label={"Overall\nParticipation"} filled={false}/>
+                  <div style={{height:29, display:"flex", alignItems:"center", justifyContent:"center", padding:"0 24px"}}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M7 7L17 17M17 7L7 17" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  </div>
+                  <ParticipationScoreBox value="20%" label={"Participation\nWeight"} filled={false}/>
+                  <div style={{height:29, display:"flex", alignItems:"center", justifyContent:"center", padding:"0 24px"}}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M8 10H16M8 14H16" stroke={T.slate} strokeWidth="1.5" strokeLinecap="round"/></svg>
+                  </div>
+                  <ParticipationScoreBox value="17" label={"Rounded\nScore"} filled={true}/>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Overview block — 670×408 — warmBg outer with p 16 gap 16 (638 inner) ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:16, boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:16,
+            }}>
+              <ParticipationDataDetail title="Voting Participation"   value="693" suffix=" /702" rightValue="99%"/>
+              <ParticipationDataDetail title="Committee Participation" value="14"  suffix=" /14"  rightValue="100%"/>
+              <div style={{display:"flex", gap:16, width:"100%"}}>
+                <ParticipationDataDetail title="Yea" value="191" valueColor="#2aaa5a" half/>
+                <ParticipationDataDetail title="Nay" value="502" valueColor="#e55a00" half/>
+              </div>
+              <div style={{display:"flex", gap:16, width:"100%"}}>
+                <ParticipationDataDetail title="Absent"     value="0" valueColor={T.gray}     half/>
+                <ParticipationDataDetail title="Not Voting" value="9" valueColor="#005f5f" half/>
+              </div>
+            </div>
+
+            {/* ── Committees block — 670×219, warmBg, px 20 py 24, gap 16, rounded bottom-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"24px 20px", boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:16,
+              borderRadius:"0 0 10px 0",
+            }}>
+              {/* Heading row — 634w Participation Detail */}
+              <div style={{display:"flex", gap:24, alignItems:"center", width:"100%"}}>
+                <div style={{flex:1, minWidth:0}}>
+                  <span style={{fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Committees</span>
+                </div>
+                <div style={{display:"flex", alignItems:"center", padding:"0 8px"}}>
+                  <IconChevronForward color={T.slate}/>
+                </div>
+              </div>
+              {/* Description Data Detail — 614w, bg warmBg, radius 5, no border/padding per spec */}
+              <div style={{
+                width:"100%", backgroundColor:T.warmBg, borderRadius:5,
+                display:"flex", flexDirection:"column", gap:4,
+              }}>
+                <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>69% committee attendance across 5 committees.</p>
+                <p style={{margin:0, fontSize:13, fontWeight:400, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Score 69% from 48 reported meetings.</p>
+              </div>
+              {/* Half row — 309w each gap 16 (634w total) */}
+              <div style={{display:"flex", gap:16, width:"100%"}}>
+                <ParticipationDataDetail title="Vote"       value="94%" half filled/>
+                <ParticipationDataDetail title="Committees" value="69%" half filled/>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* Score box cell for DesktopParticipationScreen formula row (72w) */
+function ParticipationScoreBox({ value, label, filled }) {
+  return (
+    <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:6, alignItems:"stretch"}}>
+      <div style={{
+        border: filled ? "none" : `1px solid ${T.cream}`,
+        backgroundColor: filled ? T.cream : "transparent",
+        height:32, borderRadius:5, padding:"4px 16px",
+        display:"flex", alignItems:"center", justifyContent:"center",
+        boxSizing:"border-box",
+      }}>
+        <span style={{fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, textAlign:"center"}}>{value}</span>
+      </div>
+      <p style={{margin:0, fontSize:10, fontWeight:500, color:T.gray, lineHeight:1.1, letterSpacing:-0.5, textAlign:"center", whiteSpace:"pre-line"}}>{label}</p>
+    </div>
+  );
+}
+
+/* Data Detail cell — matches Figma 7096:51534/51537/51549.
+   Border creamBorder, radius 5, p 12, gap 8. Title SemiBold 16 ls-0.5.
+   Score row SemiBold 22, optional right value, optional colored value, half=flex equally. */
+function ParticipationDataDetail({ title, value, suffix, rightValue, valueColor, half=false, filled=false }) {
+  return (
+    <div style={{
+      flex: half ? 1 : undefined,
+      width: half ? undefined : "100%",
+      minWidth:0,
+      backgroundColor: filled ? T.warmBg : "transparent",
+      border:`1px solid ${T.creamBorder}`, borderRadius:5,
+      padding:12, boxSizing:"border-box",
+      display:"flex", flexDirection:"column", gap:8,
+      fontFamily:"Inter,sans-serif",
+    }}>
+      <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{title}</p>
+      <div style={{display:"flex", gap:16, alignItems:"center", justifyContent:"center", width:"100%"}}>
+        <p style={{margin:0, flex:1, minWidth:0, fontSize:22, fontWeight:600, lineHeight:1.3, color: valueColor || T.slate, letterSpacing: valueColor ? 0 : -1}}>
+          <span>{value}</span>
+          {suffix && <span style={{color:T.gray}}>{suffix}</span>}
+        </p>
+        {rightValue && (
+          <p style={{margin:0, fontSize:22, fontWeight:600, color:T.slate, lineHeight:1.3, textAlign:"right", whiteSpace:"nowrap"}}>{rightValue}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopVotingTimeline ──
+   Figma 7096:51485 — widened desktop variant of mobile VotingTimeline.
+   White bg, px 20 py 16, gap 24. Bar col: flex:1 with px 16, bar width = col inner.
+   Bar H 160. Stacked bars: green (Yea) bottom, orange (Nay) middle, gray (Absent) above,
+   deepteal (Not Voting) top. Mobile chart only modeled Yea/Nay — we carry 4 stacks per Figma legend. */
+function DesktopVotingTimeline({
+  bars = [
+    {month:"Sep", year:"'25", yea:0.30, nay:0.70, absent:0,    notVoting:0},
+    {month:"Oct", year:"'25", yea:0.20, nay:0.80, absent:0,    notVoting:0},
+    {month:"Nov", year:"'25", yea:0.25, nay:0.75, absent:0,    notVoting:0},
+    {month:"Dec", year:"'25", yea:0.50, nay:0.50, absent:0,    notVoting:0},
+    {month:"Jan", year:"'26", yea:0.35, nay:0.65, absent:0,    notVoting:0},
+    {month:"Feb", year:"'26", yea:0.05, nay:0.95, absent:0,    notVoting:0},
+  ]
+}) {
+  const BAR_H = 160;
+  const p = useReveal(900);
+  const COLORS = { yea:"#00b34a", nay:"#ff5500", absent:"#c5c5c5", notVoting:"#1a5e52" };
+  const legend = [
+    {label:"Yea",        color:COLORS.yea},
+    {label:"Nay",        color:COLORS.nay},
+    {label:"Absent",     color:COLORS.absent},
+    {label:"Not Voting", color:COLORS.notVoting},
+  ];
+  return (
+    <div style={{
+      width:"100%", backgroundColor:T.white,
+      padding:"16px 20px", boxSizing:"border-box",
+      display:"flex", flexDirection:"column", gap:24, fontFamily:"Inter,sans-serif",
+    }}>
+      {/* Bars */}
+      <div style={{display:"flex", gap:40, alignItems:"flex-end", width:"100%", padding:"0 8px", boxSizing:"border-box"}}>
+        {bars.map((bar, i) => {
+          const yea = bar.yea || 0, nay = bar.nay || 0, absent = bar.absent || 0, notVoting = bar.notVoting || 0;
+          // Animate bar fill top→down: reveal from bottom using p
+          const yeaH       = Math.round(BAR_H * yea * p);
+          const nayH       = Math.round(BAR_H * nay * p);
+          const absentH    = Math.round(BAR_H * absent * p);
+          const notVotingH = Math.round(BAR_H * notVoting * p);
+          return (
+            <div key={i} style={{flex:"1 0 0", minWidth:0, display:"flex", flexDirection:"column", gap:8, alignItems:"center", padding:"0 16px", boxSizing:"border-box"}}>
+              {/* Stacked bar col — flex column, justify-end so empty space is on top */}
+              <div style={{width:"100%", height:BAR_H, display:"flex", flexDirection:"column", justifyContent:"flex-end", borderRadius:1, overflow:"hidden"}}>
+                {notVotingH > 0 && <div style={{height:notVotingH, backgroundColor:COLORS.notVoting}}/>}
+                {absentH    > 0 && <div style={{height:absentH,    backgroundColor:COLORS.absent}}/>}
+                {nayH       > 0 && <div style={{height:nayH,       backgroundColor:COLORS.nay}}/>}
+                {yeaH       > 0 && <div style={{height:yeaH,       backgroundColor:COLORS.yea}}/>}
+              </div>
+              <div style={{display:"flex", flexDirection:"column", alignItems:"center", lineHeight:1.3}}>
+                <span style={{fontSize:13, fontWeight:700, color:T.slate, letterSpacing:-0.5, whiteSpace:"nowrap"}}>{bar.month}</span>
+                <span style={{fontSize:12, fontWeight:600, color:T.slate, letterSpacing:-0.5, whiteSpace:"nowrap"}}>{bar.year}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      {/* Legend */}
+      <div style={{display:"flex", gap:24, alignItems:"center", justifyContent:"center", width:"100%"}}>
+        {legend.map(({label, color}) => (
+          <div key={label} style={{display:"flex", gap:8, alignItems:"center"}}>
+            <div style={{width:12, height:12, borderRadius:"50%", backgroundColor:color, flexShrink:0}}/>
+            <span style={{fontSize:13, fontWeight:500, color:T.slate, opacity:0.8, letterSpacing:-0.5, whiteSpace:"nowrap"}}>{label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopVoteRow ──
+   Figma 7096:51500/51502/51508 — single recent vote row.
+   warmBg (container supplies), py 12, gap 16. Vote/Result column w-80.
+   Pill: rounded 24, px 12 py 2, SemiBold 14, color warmBg.
+   Yea=#00b34a, Nay=#ff5500, No Vote=#999. */
+function DesktopVoteRow({
+  vote       = "Nay",
+  result     = "Failed",
+  billId     = "PN730-46",
+  title      = "End Debate on Transportation Policy Undersecretary Nomination",
+  date       = "Feb 26, 2026",
+}) {
+  const PILL_BG = { "Yea":"#00b34a", "Nay":"#ff5500", "No Vote":"#999999", "Did Not Vote":"#999999" };
+  const bg = PILL_BG[vote] || "#999999";
+  return (
+    <div style={{
+      width:"100%", display:"flex", gap:16, alignItems:"flex-start",
+      padding:"12px 0", boxSizing:"border-box", fontFamily:"Inter,sans-serif",
+    }}>
+      {/* Left: pill + result */}
+      <div style={{width:80, flexShrink:0, display:"flex", flexDirection:"column", gap:4, alignItems:"stretch"}}>
+        <div style={{
+          backgroundColor:bg, borderRadius:24,
+          padding:"2px 12px", width:"100%", boxSizing:"border-box",
+          display:"flex", alignItems:"center", justifyContent:"center",
+        }}>
+          <span style={{fontWeight:600, fontSize:14, color:T.warmBg, lineHeight:1.3, whiteSpace:"nowrap"}}>{vote}</span>
+        </div>
+        <span style={{
+          fontWeight:600, fontSize:13, color:T.slate,
+          letterSpacing:-0.5, lineHeight:1.3,
+          textAlign:"center", display:"block", width:"100%",
+          overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap",
+        }}>{result}</span>
+      </div>
+      {/* Right: info */}
+      <div style={{flex:"1 0 0", minWidth:0, display:"flex", flexDirection:"column"}}>
+        {/* Bill ID + View Bill */}
+        <div style={{display:"flex", gap:16, alignItems:"center", width:"100%"}}>
+          <span style={{flex:"1 0 0", minWidth:0, fontWeight:600, fontSize:14, color:T.gray, lineHeight:1.3}}>{billId}</span>
+          <div style={{display:"flex", gap:8, alignItems:"center", flexShrink:0}}>
+            <span style={{fontWeight:600, fontSize:14, color:T.gray, letterSpacing:-0.5, lineHeight:1.3, whiteSpace:"nowrap"}}>View Bill</span>
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style={{display:"block", flexShrink:0}}>
+              <path d="M7.5 4.5H4.5C3.94772 4.5 3.5 4.94772 3.5 5.5V15.5C3.5 16.0523 3.94772 16.5 4.5 16.5H14.5C15.0523 16.5 15.5 16.0523 15.5 15.5V12.5" stroke="#999999" strokeWidth="1.3" strokeLinecap="round"/>
+              <path d="M11 3.5H16.5V9" stroke="#999999" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M16.5 3.5L9.5 10.5" stroke="#999999" strokeWidth="1.3" strokeLinecap="round"/>
+            </svg>
+          </div>
+        </div>
+        {/* Title + date */}
+        <div style={{display:"flex", flexDirection:"column", gap:4, width:"100%"}}>
+          <p style={{margin:0, fontWeight:700, fontSize:16, color:T.slate, letterSpacing:-0.5, lineHeight:1.5}}>{title}</p>
+          <p style={{margin:0, fontWeight:400, fontSize:14, color:T.slate, letterSpacing:-0.5, lineHeight:1.3}}>{date}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopVotingScreen ──
+   Figma 7096:51473 — 1280×1316 voting drill-down page.
+   Same shell as DesktopParticipationScreen (nav + 996 col + breadcrumb + time tabs +
+   326 profile card + 670 right column: Voting Participation + Lean + Recent Votes). */
+function DesktopVotingScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  const p = useReveal(900);
+  const leanPct = 68;
+  const animDot = 50 + (leanPct - 50) * p;
+  const votes = [
+    {vote:"Nay", result:"Passed",  billId:"PN730-46",  title:"Confirmation: Ryan McCormack, of Virginia, to be Under Secretary of Transportation for Policy", date:"Feb 26, 2026"},
+    {vote:"Nay", result:"Failed",  billId:"PN730-46",  title:"End Debate on Transportation Policy Undersecretary Nomination", date:"Feb 26, 2026"},
+    {vote:"Yea", result:"Passed",  billId:"PN730-19",  title:"Confirmation: John DeLeuw, of Texas, to be a Member of the National Transportation Safety Board", date:"Feb 25, 2026"},
+    {vote:"Nay", result:"Failed",  billId:"HR987-04",  title:"Expanding Federal Environmental Review Timelines", date:"Feb 18, 2026"},
+    {vote:"Yea", result:"Passed",  billId:"HR3317-02", title:"Veterans Health Modernization Amendments", date:"Feb 14, 2026"},
+  ];
+  return (
+    <div style={{
+      width:1280, minHeight:1316, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      {/* Content column — 996w, centered, 32px top pad from 80h nav */}
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb — 4 items */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Participation", href:"#"},
+          {label:"Voting"},
+        ]}/>
+
+        {/* Time tabs row — centered, no fixed height */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left + 670 right */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — three stacked blocks, 2px gap */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+
+            {/* ── Voting Participation block — 670×425, white bg, rounded top-right ── */}
+            <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
+              {/* Header — 670×66, white bg, pl 20 pr 10 py 16 */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"16px 10px 16px 20px", boxSizing:"border-box",
+                display:"flex", alignItems:"center",
+              }}>
+                <span style={{fontSize:26, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Voting Participation</span>
+              </div>
+              {/* Voting Timeline — 670×319 */}
+              <DesktopVotingTimeline/>
+            </div>
+
+            {/* ── Lean block — 670×109, warmBg ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"16px 20px", boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:16,
+            }}>
+              <p style={{margin:0, fontSize:16, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Lean</p>
+              <div style={{display:"flex", flexDirection:"column", gap:8, width:"100%"}}>
+                <div style={{position:"relative", height:6}}>
+                  <div style={{position:"absolute", top:"50%", transform:"translateY(-50%)", left:0, right:0, height:6, borderRadius:50, background:"linear-gradient(to right, #005ebc, #ff1b1a)"}}/>
+                  <div style={{position:"absolute", top:"50%", left:`${animDot}%`, transform:"translate(-50%, -50%)", width:18, height:18, borderRadius:"50%", backgroundColor:T.slate, border:`2px solid ${T.warmBg}`}}/>
+                </div>
+                <div style={{display:"flex", alignItems:"center", width:"100%"}}>
+                  <span style={{flex:1, fontSize:14, fontWeight:600, color:T.gray, letterSpacing:-0.5}}>Left</span>
+                  <span style={{flex:1, fontSize:14, fontWeight:600, color:T.slate, letterSpacing:-0.5, textAlign:"center"}}>Leans Right</span>
+                  <span style={{flex:1, fontSize:14, fontWeight:600, color:T.gray, letterSpacing:-0.5, textAlign:"right"}}>Right</span>
+                </div>
+              </div>
+            </div>
+
+            {/* ── Recent Votes block — 670×698, warmBg, rounded bottom-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"16px 20px", boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:8,
+              borderRadius:"0 0 10px 0",
+            }}>
+              <p style={{margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Recent Votes</p>
+              <div style={{display:"flex", flexDirection:"column", width:"100%"}}>
+                {votes.map((v, i) => (
+                  <React.Fragment key={i}>
+                    <DesktopVoteRow {...v}/>
+                    {i < votes.length - 1 && <div style={{height:2, backgroundColor:T.cream, width:"100%"}}/>}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopCommitteeRow ──
+   Figma 7096:51466/51468/51470 — single committee row inside the warmBg block.
+   Structure: top row (info left + percent right), then bar, then caption.
+   Flush (no bg/padding) so it lives inside a shared warmBg container with dividers between. */
+function DesktopCommitteeRow({ name, code, percent, attendance }) {
+  const p = useReveal(900);
+  return (
+    <div style={{width:"100%", display:"flex", flexDirection:"column", gap:8, fontFamily:"Inter,sans-serif"}}>
+      <div style={{display:"flex", gap:16, alignItems:"flex-start", width:"100%"}}>
+        <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:4}}>
+          <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{name}</p>
+          <p style={{margin:0, fontSize:14, fontWeight:400, color:"#999", lineHeight:1.3, letterSpacing:-0.5}}>{code}</p>
+        </div>
+        <p style={{margin:0, fontSize:22, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-1, whiteSpace:"nowrap", flexShrink:0, textAlign:"right"}}>{Math.round(percent * p)}%</p>
+      </div>
+      <div style={{width:"100%", height:6, backgroundColor:T.creamBorder, borderRadius:50, overflow:"hidden"}}>
+        <div style={{width:`${percent * p}%`, height:"100%", backgroundColor:T.slate, borderRadius:50}}/>
+      </div>
+      {attendance && <p style={{margin:0, fontSize:14, fontWeight:400, color:"#999", lineHeight:1.3, letterSpacing:-0.5}}>{attendance}</p>}
+    </div>
+  );
+}
+
+/* ── DesktopCommitteesScreen ──
+   Figma 7096:51445 — 1280 committees drill-down page.
+   Same shell as DesktopParticipationScreen / DesktopVotingScreen.
+   Right column has TWO blocks: Voting Participation (white) + Committee Breakdown (warmBg). */
+function DesktopCommitteesScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  const committees = [
+    {name:"Oversight and Government Reform Committee", code:"hsgo00 • House", percent:76, attendance:"Attendance 16/21 reported • 22 tracked"},
+    {name:"Economic Growth, Energy Policy, and Regulatory Affairs Subcommittee", code:"hsgo05 • House", percent:43, attendance:"Attendance 3/7 reported • 8 tracked"},
+    {name:"Cybersecurity, Information Technology, and Government Innovation Subcommittee", code:"hsgo12 • House", percent:50, attendance:"Attendance 3/6 reported • 7 tracked"},
+  ];
+  return (
+    <div style={{
+      width:1280, minHeight:1189, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb — 4 items */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Participation", href:"#"},
+          {label:"Committees"},
+        ]}/>
+
+        {/* Time tabs row — centered, no fixed height */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left + 670 right */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+
+            {/* ── Voting Participation block — 670×220, white bg, rounded top-right ── */}
+            <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
+              {/* Header Data Detail — white bg, pl 20 pr 40 pt 16 pb 20 */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"16px 40px 20px 20px", boxSizing:"border-box",
+                display:"flex", flexDirection:"column", gap:4,
+              }}>
+                <p style={{margin:0, fontSize:26, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Voting Participation</p>
+                <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.4, letterSpacing:-0.5}}>
+                  How often they show up and engage in the committee work that shapes legislation.
+                </p>
+              </div>
+              {/* Breakdown row — white bg, px 20 pb 20, two halves gap 16 */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"0 20px 20px", boxSizing:"border-box",
+                display:"flex", gap:16,
+              }}>
+                <ParticipationDataDetail title="Vote"       value="94%" half/>
+                <ParticipationDataDetail title="Committees" value="69%" half/>
+              </div>
+            </div>
+
+            {/* ── Committee Breakdown block — warmBg, rounded bottom-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"16px 20px", boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:16,
+              borderRadius:"0 0 10px 0",
+            }}>
+              <p style={{margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Committee Breakdown</p>
+              <div style={{display:"flex", flexDirection:"column", width:"100%"}}>
+                {committees.map((c, i) => (
+                  <React.Fragment key={i}>
+                    <div style={{padding:"16px 0"}}>
+                      <DesktopCommitteeRow {...c}/>
+                    </div>
+                    {i < committees.length - 1 && <div style={{height:1, backgroundColor:T.cream, width:"100%"}}/>}
+                  </React.Fragment>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopConsistencyScreen ──
+   Figma 7096:51420 — 1280 consistency drill-down page.
+   Same shell as DesktopCommitteesScreen / DesktopParticipationScreen.
+   Right column has TWO blocks:
+     1) Beacon Score (white, ConsistencyScoreCard at 670w)
+     2) Stances + Inconsistencies (warmBg, two subsections split by 1px cream divider). */
+function DesktopConsistencyScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  return (
+    <div style={{
+      width:1280, minHeight:1000, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Consistency"},
+        ]}/>
+
+        {/* Time tabs row — centered, no fixed height */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left + 670 right */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+
+            {/* ── Beacon Score block — 670w, white bg, rounded top-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.white,
+              padding:"16px 20px 20px", boxSizing:"border-box",
+              borderRadius:"0 10px 0 0", overflow:"hidden",
+            }}>
+              <ConsistencyScoreCard score={34} max={40} overall={90} weight="40%" rounded={36}/>
+            </div>
+
+            {/* ── Stances + Inconsistencies block — 670w, warmBg, rounded bottom-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"16px 0", boxSizing:"border-box",
+              display:"flex", flexDirection:"column",
+              borderRadius:"0 0 10px 0",
+            }}>
+              {/* Stances subsection */}
+              <div style={{padding:"0 20px 16px", display:"flex", flexDirection:"column", gap:16}}>
+                <div style={{display:"flex", flexDirection:"column", gap:4}}>
+                  <div style={{display:"flex", alignItems:"center", gap:8, width:"100%"}}>
+                    <p style={{flex:1, minWidth:0, margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Stances</p>
+                    <IconChevronForward color={T.gray}/>
+                  </div>
+                  <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.4, letterSpacing:-0.5}}>Top issue positions.</p>
+                </div>
+                <div style={{display:"flex", gap:16, width:"100%"}}>
+                  <ParticipationDataDetail title="Signals" value="0000" half/>
+                  <ParticipationDataDetail title="Stances" value="16"   half/>
+                </div>
+              </div>
+
+              {/* Divider */}
+              <div style={{height:1, backgroundColor:T.cream, width:"100%"}}/>
+
+              {/* Inconsistencies subsection */}
+              <div style={{padding:"16px 20px 0", display:"flex", flexDirection:"column", gap:16}}>
+                <div style={{display:"flex", flexDirection:"column", gap:4}}>
+                  <div style={{display:"flex", alignItems:"center", gap:8, width:"100%"}}>
+                    <p style={{flex:1, minWidth:0, margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Inconsistencies</p>
+                    <IconChevronForward color={T.gray}/>
+                  </div>
+                  <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.4, letterSpacing:-0.5}}>No Stance Inconsistencies Detected</p>
+                </div>
+                <div style={{display:"flex", gap:16, width:"100%"}}>
+                  <ParticipationDataDetail title="Inconsistencies" value="6"  half/>
+                  <ParticipationDataDetail title="Stances"         value="16" half/>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopInconsistenciesScreen ──
+   Figma 7096:51356 — 1280 inconsistencies drill-down page.
+   Same shell as DesktopConsistencyScreen.
+   Right column: Block 1 Beacon Score (Inconsistencies title + desc + Inconsistencies/Stances halves).
+   Block 2 warmBg stack: Ethics bar card · Contested Proposition · What Makes This Inconsistent · Examples 3×2 grid. */
+function DesktopInconsistenciesScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  const p = useReveal(900);
+  // Avg marker at ~42% (Figma: pl-[264px] on a 630-80=~550px usable bar; actually the bar in card is 598w, marker at 264 = ~44%)
+  const avgPct = 44;
+  const fillPct = 78; // severity/visual fill target for the slate bar
+  const examples = new Array(3).fill(0);
+  return (
+    <div style={{
+      width:1280, minHeight:1766, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb — 4 items */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Consistency", href:"#"},
+          {label:"Inconsistencies"},
+        ]}/>
+
+        {/* Time tabs row — centered, no fixed height */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left + 670 right */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+
+            {/* ── Block 1: Beacon Score — 670w, white bg, rounded top-right ── */}
+            <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
+              {/* Header Title + Description */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"16px 40px 20px 20px", boxSizing:"border-box",
+                display:"flex", flexDirection:"column", gap:4,
+              }}>
+                <p style={{margin:0, fontSize:26, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Inconsistencies</p>
+                <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.4, letterSpacing:-0.5}}>
+                  Where what they say and how they vote don't line up.
+                </p>
+              </div>
+              {/* Breakdown row — white bg, px 20 pb 20, two halves gap 16 */}
+              <div style={{
+                width:670, backgroundColor:T.white,
+                padding:"0 20px 20px", boxSizing:"border-box",
+                display:"flex", gap:16,
+              }}>
+                <ParticipationDataDetail title="Inconsistencies" value="94%" half/>
+                <ParticipationDataDetail title="Stances"         value="69%" half/>
+              </div>
+            </div>
+
+            {/* ── Block 2: warmBg content stack ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"16px 20px", boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:16,
+              borderRadius:"0 0 10px 0",
+            }}>
+
+              {/* 1. Ethics card — warmBg, no border, title + severity + bar with Avg marker */}
+              <div style={{width:"100%", backgroundColor:T.warmBg, display:"flex", flexDirection:"column", gap:16, fontFamily:"Inter,sans-serif"}}>
+                <div style={{display:"flex", flexDirection:"column", gap:8, width:"100%"}}>
+                  <div style={{display:"flex", alignItems:"center", width:"100%"}}>
+                    <p style={{flex:1, minWidth:0, margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Ethics</p>
+                    <IconChevronForward color={T.gray}/>
+                  </div>
+                  <p style={{margin:0, fontSize:13, fontWeight:600, color:"rgba(20,24,16,0.5)", lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"pre-wrap"}}>{`Severity: 25%  ·  Confidence 90%`}</p>
+                </div>
+                {/* Bar Graph */}
+                <div style={{position:"relative", width:"100%", height:28}}>
+                  <div style={{width:"100%", height:6, borderRadius:16, backgroundColor:T.creamBorder, overflow:"hidden"}}>
+                    <div style={{height:"100%", width:`${fillPct * p}%`, backgroundColor:T.slate, borderRadius:50, transition:"width 60ms linear"}}/>
+                  </div>
+                  {/* Avg marker */}
+                  <div style={{
+                    position:"absolute", left:`${avgPct}%`, top:-4,
+                    display:"flex", flexDirection:"column", alignItems:"center",
+                    opacity: p, transform:`translateY(${(1-p)*4}px)`, transition:"opacity 120ms ease",
+                  }}>
+                    <div style={{width:1, height:23, backgroundColor:T.slate, position:"relative"}}>
+                      <div style={{position:"absolute", top:4, left:0, width:1, height:6, backgroundColor:"#fff"}}/>
+                    </div>
+                    <div style={{marginTop:4, fontSize:12, fontWeight:500, color:T.slate, letterSpacing:-0.5, lineHeight:1.3, whiteSpace:"nowrap", transform:"translateX(-50%)"}}>Avg</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 2. Contested Proposition card — warmBg with border, IconContention + chevron + copy */}
+              <div style={{width:"100%", borderRadius:10, backgroundColor:T.warmBg, border:`1px solid ${T.creamBorder}`, padding:16, display:"flex", flexDirection:"column", gap:16, fontFamily:"Inter,sans-serif"}}>
+                <div style={{display:"flex", alignItems:"center", gap:4, width:"100%"}}>
+                  <div style={{width:24, height:24, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center"}}>
+                    <IconContention color={T.slate}/>
+                  </div>
+                  <p style={{flex:1, minWidth:0, margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Contested Proposition:</p>
+                  <IconChevronForward color={T.gray}/>
+                </div>
+                <p style={{margin:0, fontSize:13, fontWeight:400, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>
+                  Copy TBD. Signal over noise. Proof, not opinion. Every vote, every dollar, every promise — tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story.
+                </p>
+              </div>
+
+              {/* 3. What Makes This Inconsistent — reuse InconsistencyDetail */}
+              <InconsistencyDetail/>
+
+              {/* 4. Examples grid — labels + 3 rows × 2 cols */}
+              <div style={{display:"flex", flexDirection:"column", gap:16, width:"100%"}}>
+                {/* Labels */}
+                <div style={{display:"flex", gap:16, width:"100%"}}>
+                  <div style={{flex:1, padding:"0 16px"}}>
+                    <p style={{margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Baseline</p>
+                  </div>
+                  <div style={{flex:1, padding:"0 16px"}}>
+                    <p style={{margin:0, fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Inconsistencies</p>
+                  </div>
+                </div>
+                {/* Rows */}
+                {examples.map((_, i) => (
+                  <div key={i} style={{display:"flex", gap:16, width:"100%"}}>
+                    <div style={{flex:1, minWidth:0}}>
+                      <BaselineCard variant="baseline"/>
+                    </div>
+                    <div style={{flex:1, minWidth:0}}>
+                      <BaselineCard variant="inconsistent"/>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+/* ── DesktopViolationCard ──
+   Warm-bg white card (638w in Figma) showing a Conduct sub-score violation.
+   Title + chevron row · "Weight: 25%" + "00%" row · slate bar (6px) with Avg marker · description. */
+function DesktopViolationCard({ title, weight="Weight: 25%", percent="00%", fillPct, avgPct, description }) {
+  const p = useReveal(1400);
+  return (
+    <div style={{
+      width:"100%", backgroundColor:T.warmBg, border:`1px solid ${T.creamBorder}`,
+      borderRadius:10, padding:16, boxSizing:"border-box",
+      display:"flex", flexDirection:"column", gap:16, fontFamily:"Inter,sans-serif",
+    }}>
+      {/* Title + weight/percent rows */}
+      <div style={{display:"flex", flexDirection:"column", gap:8, width:"100%"}}>
+        <div style={{display:"flex", alignItems:"center", width:"100%"}}>
+          <p style={{flex:1, minWidth:0, margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{title}</p>
+          <IconChevronForward color={T.gray}/>
+        </div>
+        <div style={{display:"flex", alignItems:"center", width:"100%"}}>
+          <p style={{flex:1, minWidth:0, margin:0, fontSize:13, fontWeight:600, color:"rgba(20,24,16,0.5)", lineHeight:1.3, letterSpacing:-0.5}}>{weight}</p>
+          <p style={{margin:0, fontSize:22, fontWeight:500, color:T.gray, lineHeight:1.3, letterSpacing:-0.5, textAlign:"right", whiteSpace:"nowrap"}}>{percent}</p>
+        </div>
+      </div>
+      {/* Bar + Avg marker */}
+      <div style={{display:"flex", flexDirection:"column", gap:8, width:"100%"}}>
+        <div style={{position:"relative", width:"100%", height:28}}>
+          <div style={{width:"100%", height:6, borderRadius:16, backgroundColor:T.creamBorder, overflow:"hidden"}}>
+            <div style={{height:"100%", width:`${fillPct*p}%`, backgroundColor:T.slate, borderRadius:50}}/>
+          </div>
+          {/* Avg marker */}
+          <div style={{
+            position:"absolute", left:`${avgPct}%`, top:-4,
+            display:"flex", flexDirection:"column", alignItems:"center",
+            opacity: p, transform:"translateX(-50%)",
+          }}>
+            <div style={{width:1, height:23, backgroundColor:T.slate, position:"relative"}}>
+              <div style={{position:"absolute", top:4, left:0, width:1, height:6, backgroundColor:"#fff"}}/>
+            </div>
+            <div style={{marginTop:4, fontSize:12, fontWeight:500, color:T.slate, letterSpacing:-0.5, lineHeight:1.3, whiteSpace:"nowrap"}}>Avg</div>
+          </div>
+        </div>
+        <p style={{margin:0, fontSize:11, fontWeight:400, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{description}</p>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopConductScreen ──
+   Figma 7096:51315 — 1280 conduct drill-down page. Same shell as DesktopConsistencyScreen.
+   Right column: Block 1 Beacon Score (ConductSummary with shield/bar/formula/sub-scores/Combined).
+   Block 2 warmBg stack: 4 DesktopViolationCards + Methodology block. */
+function DesktopConductScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  // Figma violation card bars: card container 638w, padding 16 → inner 606w.
+  // Cards 1,2,3: bar fill = 606 - 96 = 510 (~84.16%). Card 4: 606 - 72 = 534 (~88.12%).
+  // Avg markers sit at an absolute flex-left offset relative to the bar container + 23px ml on the tick.
+  // Card 1: pl 16 + ml 23 = 39px → 39/606 = ~6.44%
+  // Card 2: pl 0  + ml 23 = 23px → 23/606 = ~3.80%
+  // Card 3: pl 16 + ml 23 = 39px → 39/606 = ~6.44%
+  // Card 4: pl 216 + ml 23 = 239px → 239/606 = ~39.44%
+  const violations = [
+    {title:"Campaign Finance Violations", fillPct:84.16, avgPct:6.44,  description:"Multiple FEC filing irregularities flagged; no formal sanctions but recurring late disclosures noted."},
+    {title:"Personal Finance Violations", fillPct:84.16, avgPct:3.80,  description:"Late financial disclosure filings on record; potential STOCK Act compliance issues under review."},
+    {title:"Ethics & Misconduct",         fillPct:84.16, avgPct:6.44,  description:"No formal ethics committee sanctions; minor procedural complaints and incidents of public misconduct reported. No censure or removal proceedings."},
+    {title:"Accuracy in Official Statements", fillPct:88.12, avgPct:39.44, description:"Fact-checkers have flagged multiple statements as misleading or false across social media and press events."},
+  ];
+  return (
+    <div style={{
+      width:1280, minHeight:1547, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb — 3 items */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Conduct"},
+        ]}/>
+
+        {/* Time tabs row */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left + 670 right */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+
+            {/* ── Block 1: Beacon Score — 670w, white bg, rounded top-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.white,
+              padding:"16px 20px 20px", boxSizing:"border-box",
+              borderRadius:"0 10px 0 0", overflow:"hidden",
+            }}>
+              <ConductSummary bg="transparent" description="A contrast of their current actions against historical positions."/>
+            </div>
+
+            {/* ── Block 2: Conduct violations stack — 670w, warmBg, rounded bottom-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:16, boxSizing:"border-box",
+              display:"flex", flexDirection:"column", gap:16,
+              borderRadius:"0 0 10px 0",
+            }}>
+              {violations.map((v,i) => (
+                <DesktopViolationCard key={i} {...v}/>
+              ))}
+
+              {/* Methodology block — warmBg continuation, no card bg */}
+              <div style={{display:"flex", flexDirection:"column", gap:4, width:"100%"}}>
+                <p style={{margin:0, fontSize:13, fontWeight:400, color:"#666", lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"pre-wrap"}}>
+                  <span style={{fontWeight:600}}>Methodology: </span>
+                  <br/>
+                  Scores are derived from FEC filings, financial disclosures, ethics committee records, news reporting, fact-checker databases, and social media analysis. Weights reflect relative importance to overall conduct assessment.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DesktopCampaignFinanceScreen ──
+   Figma 7096:51333 — 1280 Campaign Finance drill-down page. Same shell as DesktopConductScreen.
+   Right column: Block 1 white bg — title + desc + score/25 + chevron + animated slate progress bar.
+   Block 2 warmBg — "Deductions" label, 2 deduction rows (IconLink + title/period + -pts),
+   Total Deducted row with top border, source line. */
+function DesktopCampaignFinanceScreen() {
+  const [tab, setTab] = React.useState("6M");
+  const tabs = ["6M","1Y","2Y","4Y","All"];
+  const [visible, setVisible] = React.useState(false);
+  React.useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 40);
+    return () => clearTimeout(t);
+  }, []);
+  const p = useReveal(1400);
+  const score = 15;
+  const maxScore = 25;
+  const fillPct = (score / maxScore) * 100;
+  const deductions = [
+    {label:"Late FEC filing",                       period:"Q2 2024", pts:"-4 pts"},
+    {label:"Exceeded individual contribution limit", period:"Q3 2024", pts:"-6 pts"},
+  ];
+  return (
+    <div style={{
+      width:1280, minHeight:1547, backgroundColor:T.cream,
+      boxSizing:"border-box",
+      fontFamily:"Inter,sans-serif",
+      display:"flex", flexDirection:"column", alignItems:"center",
+      overflowX:"hidden",
+      position:"relative",
+    }}>
+      <DesktopNavBar activeTab="Officials"/>
+
+      <div style={{
+        width:996, paddingTop:32, paddingBottom:60,
+        display:"flex", flexDirection:"column",
+        opacity: visible ? 1 : 0,
+        transform: visible ? "translateY(0)" : "translateY(6px)",
+        transition: "opacity 180ms ease, transform 180ms ease",
+      }}>
+        {/* Breadcrumb — 3 items */}
+        <DesktopBreadcrumb items={[
+          {label:"Officials", href:"#"},
+          {label:"Lauren Boebert", href:"#"},
+          {label:"Conduct"},
+        ]}/>
+
+        {/* Time tabs row */}
+        <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
+          <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
+            {tabs.map(t => (
+              <div
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  padding:8, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center",
+                  borderBottom: tab===t ? `4px solid ${T.slate}` : "4px solid transparent",
+                }}
+              >
+                <span style={{
+                  fontSize:16, fontWeight:600, color:T.slate,
+                  lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap",
+                  textAlign:"center",
+                }}>{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Dashboard row — 326 left + 670 right */}
+        <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
+          {/* LEFT 326 */}
+          <div style={{width:326, flexShrink:0}}>
+            <DesktopOfficialCard rightSquare/>
+          </div>
+
+          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
+
+            {/* ── Block 1: Beacon Score — 670w, white bg, rounded top-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.white,
+              padding:"16px 20px", boxSizing:"border-box",
+              borderRadius:"0 10px 0 0",
+              display:"flex", flexDirection:"column", gap:16,
+            }}>
+              {/* Top row: title/desc left + score + chevron right */}
+              <div style={{display:"flex", alignItems:"flex-start", gap:16, width:"100%"}}>
+                <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:8}}>
+                  <p style={{margin:0, fontSize:26, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Campaign Finance</p>
+                  <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.4, letterSpacing:-0.5}}>
+                    Compliance with campaign finance laws, donation limits, and disclosure requirements.
+                  </p>
+                </div>
+                <div style={{flexShrink:0, display:"flex", alignItems:"center", gap:8}}>
+                  <p style={{margin:0, fontFamily:"Inter", letterSpacing:-1, lineHeight:1.3, whiteSpace:"nowrap"}}>
+                    <span style={{fontSize:22, fontWeight:700, color:T.slate}}>{Math.round(score*p)}</span>
+                    <span style={{fontSize:22, fontWeight:400, color:T.gray}}> /{maxScore}</span>
+                  </p>
+                  <IconChevronForward color={T.gray}/>
+                </div>
+              </div>
+              {/* Progress bar — slate fill on cream track */}
+              <div style={{width:"100%", height:6, borderRadius:50, backgroundColor:T.creamBorder, overflow:"hidden"}}>
+                <div style={{height:"100%", width:`${fillPct*p}%`, backgroundColor:T.slate, borderRadius:50}}/>
+              </div>
+            </div>
+
+            {/* ── Block 2: Deductions — 670w, warmBg, rounded bottom-right ── */}
+            <div style={{
+              width:670, backgroundColor:T.warmBg,
+              padding:"16px 20px", boxSizing:"border-box",
+              borderRadius:"0 0 10px 0",
+              display:"flex", flexDirection:"column", gap:16,
+            }}>
+              {/* Small "Deductions" label */}
+              <p style={{margin:0, fontSize:12, fontWeight:500, color:T.gray, lineHeight:1.3, letterSpacing:-0.5}}>Deductions</p>
+
+              {/* Deduction rows */}
+              <div style={{display:"flex", flexDirection:"column", width:"100%"}}>
+                {deductions.map((d,i) => (
+                  <React.Fragment key={i}>
+                    <div style={{display:"flex", alignItems:"center", gap:12, width:"100%", padding:"12px 0"}}>
+                      <div style={{flexShrink:0, width:32, height:32, borderRadius:6, backgroundColor:T.cream, display:"flex", alignItems:"center", justifyContent:"center"}}>
+                        <IconLink color={T.slate}/>
+                      </div>
+                      <div style={{flex:1, minWidth:0, display:"flex", flexDirection:"column", gap:2}}>
+                        <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>{d.label}</p>
+                        <p style={{margin:0, fontSize:13, fontWeight:500, color:T.gray, lineHeight:1.3, letterSpacing:-0.5}}>{d.period}</p>
+                      </div>
+                      <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap", flexShrink:0}}>{d.pts}</p>
+                    </div>
+                    {i < deductions.length - 1 && <div style={{height:1, width:"100%", backgroundColor:T.gray}}/>}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              {/* Total Deducted row — slate top border */}
+              <div style={{display:"flex", alignItems:"center", width:"100%", paddingTop:16, borderTop:`1px solid ${T.slate}`}}>
+                <p style={{flex:1, minWidth:0, margin:0, fontSize:16, fontWeight:700, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Total Deducted from 25</p>
+                <p style={{margin:0, fontSize:16, fontWeight:700, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>-10 pts</p>
+              </div>
+
+              {/* Source line */}
+              <p style={{margin:0, fontSize:11, fontWeight:500, color:T.gray, lineHeight:1.3, letterSpacing:-0.25}}>Source: FEC filings and public disclosure records</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 
 const SECTIONS = [
 
@@ -6213,6 +7931,14 @@ const SECTIONS = [
     group: "Desktop", id: "Officials",
     components: [
       { id:"DesktopOfficials", label:"Desktop Officials", desc:"1280 · Officials list · Name/State tabs + search · alphabet header + 960w rows (party color box · avatar · name+tag · role+state · Beacon Score) + right-edge A–Z index bar" },
+      { id:"DesktopPoliticianProfileScreen", label:"Desktop Politician Profile", desc:"1280 · breadcrumb + profile+score dashboard + related pulse carousel + about section" },
+      { id:"DesktopParticipationScreen", label:"Desktop Participation", desc:"1280 · breadcrumb + time tabs + profile + participation score + overview + committees · Figma 7096-51510" },
+      { id:"DesktopVotingScreen", label:"Desktop Voting", desc:"1280 · breadcrumb + time tabs + profile + voting timeline bar chart + lean bar + recent votes list · Figma 7096-51473" },
+      { id:"DesktopCommitteesScreen", label:"Desktop Committees", desc:"1280 · breadcrumb + time tabs + profile + voting participation + committee breakdown list · Figma 7096-51445" },
+      { id:"DesktopConsistencyScreen", label:"Desktop Consistency", desc:"1280 · breadcrumb + time tabs + profile + Beacon Score (ConsistencyScoreCard) + Stances / Inconsistencies · Figma 7096-51420" },
+      { id:"DesktopInconsistenciesScreen", label:"Desktop Inconsistencies", desc:"1280 · breadcrumb (4) + time tabs + profile + Inconsistencies header/halves + Ethics bar + Contested Proposition + What Makes This Inconsistent + 3×2 Baseline/Inconsistencies grid · Figma 7096-51356" },
+      { id:"DesktopConductScreen", label:"Desktop Conduct", desc:"1280 · breadcrumb + time tabs + profile + ConductSummary (shield/bar/formula/sub-scores) + 4 violation cards (slate bar + Avg marker) + Methodology · Figma 7096-51315" },
+      { id:"DesktopCampaignFinanceScreen", label:"Desktop Campaign Finance", desc:"1280 · breadcrumb + time tabs + profile + Campaign Finance score/bar (white) + Deductions list + Total + Source (warmBg) · Figma 7096-51333" },
     ]
   },
 ];
@@ -6620,6 +8346,45 @@ function ComponentPreview({ id }) {
         </div>
       </div>
     );
+    case "DesktopPoliticianProfileScreen": return (
+      <DesktopPoliticianProfileScreen/>
+    );
+    case "DesktopParticipationScreen": return (
+      <DesktopParticipationScreen/>
+    );
+    case "DesktopVotingScreen": return (
+      <DesktopVotingScreen/>
+    );
+    case "DesktopCommitteesScreen": return (
+      <DesktopCommitteesScreen/>
+    );
+    case "DesktopConsistencyScreen": return (
+      <DesktopConsistencyScreen/>
+    );
+    case "DesktopConductScreen": return (
+      <DesktopConductScreen/>
+    );
+    case "DesktopCampaignFinanceScreen": return (
+      <DesktopCampaignFinanceScreen/>
+    );
+    case "DesktopInconsistenciesScreen": return (
+      <DesktopInconsistenciesScreen/>
+    );
+    case "DesktopPulseCard": return (
+      <div className="canvas-wrap" style={{padding:20, background:T.cream, borderRadius:12}}>
+        <DesktopPulseCard/>
+      </div>
+    );
+    case "DesktopRelatedPulse": return (
+      <div className="canvas-wrap" style={{padding:20, background:T.cream, borderRadius:12, width:996}}>
+        <DesktopRelatedPulse/>
+      </div>
+    );
+    case "DesktopAboutSection": return (
+      <div className="canvas-wrap" style={{padding:20, background:T.cream, borderRadius:12, width:996}}>
+        <DesktopAboutSection/>
+      </div>
+    );
     case "DesktopBreadcrumb": return (
       <div className="canvas-wrap" style={{width:996}}>
         <DesktopBreadcrumb items={[{label:"Officials",href:"#"},{label:"Lauren Boebert"}]}/>
@@ -6705,9 +8470,9 @@ function ComponentPreview({ id }) {
   }
 }
 
-const ANIMATED_IDS = new Set(["PollCard","PollResultsCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","ReactionInteraction","DesktopPoliticianProfileCard","DesktopScoreDashboard","PulseSurveyFlow","PulseSurveyResults","DesktopPulseSurveyResults"]);
+const ANIMATED_IDS = new Set(["PollCard","PollResultsCard","ScoreItem","DataDetails","ConductDrillDownCard","ScoreDetail","CommitteeBreakdownCard","PoliticalLeaning","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","ReactionInteraction","DesktopPoliticianProfileCard","DesktopScoreDashboard","PulseSurveyFlow","PulseSurveyResults","DesktopPulseSurveyResults","DesktopParticipationScreen","DesktopVotingScreen","DesktopCommitteesScreen","DesktopConsistencyScreen","DesktopInconsistenciesScreen","DesktopConductScreen","DesktopCampaignFinanceScreen","ParticipationScreen","VotingScreen"]);
 
-const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen","DesktopActiveIssuesScreen","DesktopIssueDetailScreen","DesktopPulseSurveysScreen","DesktopPulseSurveyFlow","DesktopPulseSurveyResults","DesktopOfficials"]);
+const FULLSCREEN_IDS = new Set(["HomeScreen","ActiveIssuesScreen","IssueDetailScreen","OfficialsScreen","OfficialProfileScreen","ScoreInfoModalScreen","ParticipationScreen","VotingScreen","CommitteesScreen","ConsistencyScreen","StancesScreen","InconsistenciesScreen","ConductScreen","ConductDrillDownScreen","IssueShareScreen","PulseSurveys","PulseSurveyFlow","PulseSurveyResults","DesktopHomeScreen","DesktopActiveIssuesScreen","DesktopIssueDetailScreen","DesktopPulseSurveysScreen","DesktopPulseSurveyFlow","DesktopPulseSurveyResults","DesktopOfficials","DesktopPoliticianProfileScreen","DesktopParticipationScreen","DesktopVotingScreen","DesktopCommitteesScreen","DesktopConsistencyScreen","DesktopInconsistenciesScreen","DesktopConductScreen","DesktopCampaignFinanceScreen"]);
 function ComponentCard({comp}) {
   const [replayKey, setReplayKey] = React.useState(0);
   const hasAnim = ANIMATED_IDS.has(comp.id);
