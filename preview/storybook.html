@@ -51,6 +51,24 @@ function useReveal(duration) {
   return p;
 }
 
+/* Page-level fade-in + slide-up transition.
+   Matches the pulse-survey entry feel: opacity 0→1, translateY(8px→0),
+   0.45s ease. Kicks off ~80ms after mount so it reads as a transition
+   rather than a static initial state. */
+function usePageFadeIn(delay) {
+  var d = delay == null ? 80 : delay;
+  var [visible, setVisible] = React.useState(false);
+  React.useEffect(function() {
+    var t = setTimeout(function() { setVisible(true); }, d);
+    return function() { clearTimeout(t); };
+  }, []);
+  return {
+    opacity: visible ? 1 : 0,
+    transform: visible ? "translateY(0)" : "translateY(8px)",
+    transition: "opacity 0.45s ease, transform 0.45s ease",
+  };
+}
+
 /* ═══════════════════════════════════════════════
    SVG ICONS (Figma-extracted)
    ═══════════════════════════════════════════════ */
@@ -3252,8 +3270,9 @@ function DesktopHomeScreen() {
     { name:"Suzanne Bonamici", party:"D", role:"U.S. Representative", state:"Oregon", score:91, status:"TRACKED",
       avatarUrl:"https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=200" },
   ];
+  const fade = usePageFadeIn();
   return (
-    <div style={{position:"relative", width:1280, height:1890, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", overflow:"hidden"}}>
+    <div style={{position:"relative", width:1280, height:1890, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", overflow:"hidden", ...fade}}>
       <DesktopNavBar activeTab="none"/>
       <div style={{paddingLeft:142, paddingRight:142, paddingTop:72, boxSizing:"border-box"}}>
         <div style={{width:996, display:"flex", flexDirection:"column", gap:80}}>
@@ -3322,8 +3341,9 @@ function DesktopActiveIssuesScreen() {
       description:"Thousands gathered in downtown Los Angeles for the opening rally of a nationwide protest coalition organizing around executive accountability.",
       imgUrl:"https://images.pexels.com/photos/3944454/pexels-photo-3944454.jpeg?auto=compress&cs=tinysrgb&w=1000" },
   ];
+  const fade = usePageFadeIn();
   return (
-    <div style={{position:"relative", width:1280, height:1165, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", overflow:"hidden"}}>
+    <div style={{position:"relative", width:1280, height:1165, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", overflow:"hidden", ...fade}}>
       <DesktopNavBar activeTab="Issues"/>
       <div style={{paddingLeft:142, paddingRight:142, paddingTop:72, boxSizing:"border-box"}}>
         <div style={{width:996, display:"flex", flexDirection:"column", gap:20}}>
@@ -3655,6 +3675,7 @@ function DesktopPulseSurveysScreen() {
   const [tab, setTab]         = React.useState("active");
   const [visible, setVisible] = React.useState(true);
   const [infoOpen, setInfoOpen] = React.useState(false);
+  const pageFade = usePageFadeIn();
   const switchTab = (next) => {
     if (next === tab) return;
     setVisible(false);
@@ -3684,7 +3705,7 @@ function DesktopPulseSurveysScreen() {
   );
 
   return (
-    <div style={{width:1280, minHeight:1053, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", position:"relative"}}>
+    <div style={{width:1280, minHeight:1053, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", position:"relative", ...pageFade}}>
       <DesktopNavBar activeTab="Pulse"/>
 
       <div style={{width:996, margin:"72px auto 0", paddingBottom:80}}>
@@ -4257,12 +4278,14 @@ function OfficialsIndexBar({ activeLetter="B" }) {
 
 function DesktopOfficials() {
   const [tab, setTab] = React.useState("Name"); // "Name" | "State"
-  const [expanded, setExpanded] = React.useState("Alabama"); // which state is expanded
+  const [expanded, setExpanded] = React.useState(null); // which state is expanded
+  const fade = usePageFadeIn();
   return (
     <div style={{
       width:1280, minHeight:1032, backgroundColor:T.cream,
       display:"flex", flexDirection:"column", alignItems:"center",
       gap:72, fontFamily:"Inter,sans-serif",
+      ...fade,
     }}>
       <DesktopNavBar activeTab="Officials"/>
 
@@ -4398,6 +4421,7 @@ function ExpertProfileCard({
 function DesktopIssueDetailScreen() {
   const [tab, setTab]         = React.useState("consensus");
   const [visible, setVisible] = React.useState(true);
+  const pageFade = usePageFadeIn();
   const switchTab = (next) => {
     if (next === tab) return;
     setVisible(false);
@@ -4493,7 +4517,7 @@ function DesktopIssueDetailScreen() {
               : <ExpertPanel/>;
 
   return (
-    <div style={{position:"relative", width:1280, minHeight:1526, backgroundColor:T.cream, fontFamily:"Inter,sans-serif"}}>
+    <div style={{position:"relative", width:1280, minHeight:1526, backgroundColor:T.cream, fontFamily:"Inter,sans-serif", ...pageFade}}>
       <DesktopNavBar activeTab="Issues"/>
       {/* Back chevron row */}
       <div style={{paddingLeft:142, paddingRight:142, paddingTop:24, boxSizing:"border-box"}}>
