@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Beacon · Why advisory rules fail · Blocking-hook flow</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+<style>
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #fff9ed; color: #141810; max-width: 1200px; margin: 40px auto; padding: 0 32px; line-height: 1.5; }
+  h1 { font-weight: 800; letter-spacing: -0.5px; margin-bottom: 4px; }
+  h2 { margin-top: 48px; font-weight: 700; }
+  .sub { color: #999; margin-top: 0; }
+  .mermaid { background: white; padding: 24px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); margin: 24px 0; }
+  .legend { background: #f0e8d8; padding: 16px 20px; border-radius: 8px; font-size: 14px; }
+  code { background: #e9e1d3; padding: 2px 6px; border-radius: 4px; font-size: 13px; }
+  .red { color: #de0100; font-weight: 600; }
+  .green { color: #39503d; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<h1>Why advisory rules failed tonight</h1>
+<p class="sub">Postmortem: Buttons & Links catalog session, Apr 24</p>
+
+<h2>Flow A - Current state (advisory only)</h2>
+<p>Skills and memory files load into context as prose. Hooks fire as <em>reminders</em>. Nothing actually blocks the bad output. This is what produced tonight.</p>
+
+<div class="mermaid">
+flowchart TD
+    A[User: design task] --> B[Claude generates output]
+    B --> C{Skill loaded<br/>in context?}
+    C -->|Yes, but skimmed| D[Output ships<br/>w/ invented details]
+    C -->|Yes, followed| E[Output is correct]
+    D --> F[PostEdit hook fires<br/>reminder text]
+    F --> G[Claude generates more text<br/>claims DIFF: none]
+    G --> H[User catches errors]
+    H --> I[User corrects, asks fix]
+    I --> B
+
+    style D fill:#fde0e0,stroke:#de0100
+    style F fill:#fff3cd,stroke:#cc9900
+    style G fill:#fde0e0,stroke:#de0100
+    style H fill:#fff3cd,stroke:#cc9900
+    style E fill:#d4edda,stroke:#39503d
+</div>
+
+<div class="legend">
+<strong class="red">Red</strong> = failure modes. <strong style="color:#cc9900">Yellow</strong> = "reminder" steps that don't enforce. <strong class="green">Green</strong> = correct path (rare without scaffolding).
+</div>
+
+<h2>Flow B - With blocking hooks (proposed)</h2>
+<p>Each hook is a <code>PreToolUse</code> or <code>PreCommit</code> shell script that <em>rejects</em> the action until the gate's condition is satisfied. Reminders become walls.</p>
+
+<div class="mermaid">
+flowchart TD
+    A[User: design task] --> B[Claude attempts Edit]
+    B --> G1{Pre-edit hook 1<br/>em-dash scan}
+    G1 -->|- found| R1[REJECT<br/>fix and retry]
+    R1 --> B
+    G1 -->|clean| G2{Pre-edit hook 2<br/>localhost: scan}
+    G2 -->|localhost: found| R2[REJECT<br/>download asset first]
+    R2 --> B
+    G2 -->|clean| G3{Pre-edit hook 3<br/>hand-drawn svg scan}
+    G3 -->|svg w/o asset ref| R3[REJECT<br/>pull from Figma]
+    R3 --> B
+    G3 -->|clean| G4{Pre-edit hook 4<br/>QA artifact exists?}
+    G4 -->|no qa/pending/X.md| R4[REJECT<br/>write spec card first]
+    R4 --> B
+    G4 -->|present| EDIT[Edit allowed]
+    EDIT --> G5{Post-edit hook<br/>screenshot saved?}
+    G5 -->|no| R5[BLOCK next Edit<br/>until screenshot]
+    R5 --> SCRN[Screenshot + DIFF list]
+    SCRN --> G5
+    G5 -->|yes| G6{Pre-commit hook<br/>DIFF: none verified?}
+    G6 -->|no| R6[BLOCK commit<br/>until DIFF clean]
+    R6 --> EDIT
+    G6 -->|yes| C[Commit allowed]
+
+    style R1 fill:#fde0e0,stroke:#de0100,color:#000
+    style R2 fill:#fde0e0,stroke:#de0100,color:#000
+    style R3 fill:#fde0e0,stroke:#de0100,color:#000
+    style R4 fill:#fde0e0,stroke:#de0100,color:#000
+    style R5 fill:#fde0e0,stroke:#de0100,color:#000
+    style R6 fill:#fde0e0,stroke:#de0100,color:#000
+    style EDIT fill:#d4edda,stroke:#39503d
+    style C fill:#39503d,stroke:#39503d,color:#fff
+</div>
+
+<h2>What each gate would have caught tonight</h2>
+
+<div class="mermaid">
+flowchart LR
+    F1[Tune icon redrawn] --> H3[Pre-edit hook 3<br/>hand-drawn svg scan]
+    F2[Copy Link icon wrong] --> H3
+    F3[Share-small icon wrong] --> H3
+    F4[245 em-dashes] --> H1[Pre-edit hook 1<br/>em-dash scan]
+    F5[Toggle split into 2 rows] --> H4[Pre-edit hook 4<br/>QA spec card<br/>required]
+    F6[View All no underline] --> H4
+    F7[News Article icon stayed dark] --> H4
+    F8[Button Small Default wrong fill] --> H4
+    F9[Preview window resized] --> H7[Pre-tool hook<br/>preview_resize blocked]
+    F10[Claimed DIFF: none w/o screenshot] --> H5[Post-edit hook<br/>screenshot required]
+
+    style F1 fill:#fde0e0
+    style F2 fill:#fde0e0
+    style F3 fill:#fde0e0
+    style F4 fill:#fde0e0
+    style F5 fill:#fde0e0
+    style F6 fill:#fde0e0
+    style F7 fill:#fde0e0
+    style F8 fill:#fde0e0
+    style F9 fill:#fde0e0
+    style F10 fill:#fde0e0
+    style H1 fill:#d4edda,stroke:#39503d
+    style H3 fill:#d4edda,stroke:#39503d
+    style H4 fill:#d4edda,stroke:#39503d
+    style H5 fill:#d4edda,stroke:#39503d
+    style H7 fill:#d4edda,stroke:#39503d
+</div>
+
+<h2>Leverage ranking</h2>
+
+<div class="mermaid">
+flowchart TD
+    L1[Blocking hooks<br/>HIGH leverage]
+    L2[Smaller task scopes<br/>MEDIUM leverage]
+    L3[Structured prompt templates<br/>MEDIUM leverage]
+    L4[Worktree isolation<br/>LOW leverage but high safety]
+    L5[Skill files as prose<br/>LOW leverage<br/>proven tonight]
+    L6[Trust 'I'll be careful'<br/>ZERO leverage<br/>broken twice tonight]
+
+    L1 --> L2 --> L3 --> L4 --> L5 --> L6
+
+    style L1 fill:#39503d,stroke:#39503d,color:#fff
+    style L2 fill:#7a8a78,stroke:#39503d,color:#fff
+    style L3 fill:#7a8a78,stroke:#39503d,color:#fff
+    style L4 fill:#c9c0ae
+    style L5 fill:#fff3cd,stroke:#cc9900
+    style L6 fill:#fde0e0,stroke:#de0100
+</div>
+
+<h2>Bottom line</h2>
+<p>The skill is good. The memory file is good. What's missing is the <strong>enforcement layer</strong> - shell hooks in <code>.claude/hooks/</code> that take what's currently advisory and convert it into a wall. The wall is what would have made tonight a 30-minute task instead of a 90-minute one.</p>
+
+<script>
+  mermaid.initialize({ startOnLoad: true, theme: 'default', flowchart: { htmlLabels: true, curve: 'basis' } });
+</script>
+
+</body>
+</html>
