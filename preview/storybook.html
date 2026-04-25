@@ -105,7 +105,7 @@ function usePageFadeIn() {
     var DUR = "0.55s";
     function play() {
       // Snap to initial state with transitions OFF, force reflow, then apply
-      // the target state WITH transitions — guarantees a transition, never
+      // the target state WITH transitions - guarantees a transition, never
       // a jump-cut.
       el.style.transition = "none";
       el.style.opacity = "0";
@@ -163,7 +163,7 @@ function IconSearch({color="#141810"}){return <svg width="24" height="24" viewBo
 function IconVerify({color="#141810"}){return <svg width="24" height="25" viewBox="0 0 24 25" fill="none"><path d="M18.0091 14.2817L20.6455 11.6454L18.0091 9.00902V5.28175H14.2819L11.6455 2.64539L9.00914 5.28175H5.28187V9.00902L2.64551 11.6454L5.28187 14.2817V18.009H9.00914L11.6455 20.6454L14.2819 18.009H18.0091V14.2817Z" stroke={color} strokeMiterlimit="10" strokeLinecap="round"/><path d="M8.36377 11.2182L10.9638 13.8182L15.5092 9.27271" stroke={color} strokeWidth="0.909091" strokeMiterlimit="10" strokeLinecap="round"/></svg>}
 function IconMagicShield({color="#141810"}){return <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3.12183L4 5.87389C4 18.2656 12 21.1218 12 21.1218C12 21.1218 20 18.2656 20 5.87389L12 3.12183Z" stroke={color} strokeWidth="1.3" strokeLinejoin="round"/><path d="M12 8.81702C12.5192 9.79225 13.3198 10.5936 14.2949 11.1129C13.32 11.6321 12.5192 12.4329 12 13.4078C11.4807 12.4327 10.6793 11.6321 9.7041 11.1129C10.6796 10.5936 11.4807 9.79249 12 8.81702Z" stroke={color} strokeWidth="1.3"/></svg>}
 
-/* Social share icons — Figma-extracted for IssueShareScreen */
+/* Social share icons - Figma-extracted for IssueShareScreen */
 function IconFacebook(){return <svg width="32" height="32" viewBox="0 0 40 40" fill="none"><g clipPath="url(#fbClip)"><path d="M20 0C8.9544 0 0 8.9544 0 20C0 29.3792 6.4576 37.2496 15.1688 39.4112V26.112H11.0448V20H15.1688V17.3664C15.1688 10.5592 18.2496 7.404 24.9328 7.404C26.2 7.404 28.3864 7.6528 29.2808 7.9008V13.4408C28.8088 13.3912 27.9888 13.3664 26.9704 13.3664C23.6912 13.3664 22.424 14.6088 22.424 17.8384V20H28.9568L27.8344 26.112H22.424V39.8536C32.3272 38.6576 40.0008 30.2256 40.0008 20C40 8.9544 31.0456 0 20 0Z" fill="#141810"/></g><defs><clipPath id="fbClip"><rect width="40" height="40" fill="white"/></clipPath></defs></svg>}
 function IconTwitter(){return <svg width="32" height="32" viewBox="0 0 40 40" fill="none"><path d="M30.5438 3.1731H36.1662L23.8828 17.2122L38.3333 36.3164H27.0187L18.1567 24.7298L8.01654 36.3164H2.39068L15.529 21.2999L1.66663 3.1731H13.2685L21.279 13.7636L30.5438 3.1731ZM28.5705 32.9511H31.6859L11.5756 6.36165H8.2324L28.5705 32.9511Z" fill="#141810"/></svg>}
 function IconLinkedIn(){return <svg width="32" height="32" viewBox="0 0 38 38" fill="none"><g clipPath="url(#liClip)"><path d="M35.1871 0H2.80547C1.2543 0 0 1.22461 0 2.73867V35.2539C0 36.768 1.2543 38 2.80547 38H35.1871C36.7383 38 38 36.768 38 35.2613V2.73867C38 1.22461 36.7383 0 35.1871 0ZM11.2738 32.3816H5.6332V14.2426H11.2738V32.3816ZM8.45352 11.7711C6.64258 11.7711 5.18047 10.309 5.18047 8.50547C5.18047 6.70195 6.64258 5.23984 8.45352 5.23984C10.257 5.23984 11.7191 6.70195 11.7191 8.50547C11.7191 10.3016 10.257 11.7711 8.45352 11.7711ZM32.3816 32.3816H26.7484V23.5645C26.7484 21.4641 26.7113 18.7551 23.8168 18.7551C20.8852 18.7551 20.4398 21.0484 20.4398 23.416V32.3816H14.8141V14.2426H20.2172V16.7215H20.2914C21.041 15.2965 22.8816 13.7898 25.6203 13.7898C31.3277 13.7898 32.3816 17.5359 32.3816 22.4066V32.3816Z" fill="#141810"/></g><defs><clipPath id="liClip"><rect width="38" height="38" fill="white"/></clipPath></defs></svg>}
@@ -171,7 +171,7 @@ function IconEmail(){return <svg width="32" height="22" viewBox="0 0 40 26" fill
 function IconMessages(){return <svg width="28" height="25" viewBox="0 0 34 30" fill="none"><path d="M0.921907 29.9963C0.400407 29.9553-0.00194294 29.5198 7.05786e-06 28.9965V5.99927C7.05786e-06 2.69302 2.69336 0 6.00001 0H28C31.3066 0 34 2.69302 34 5.99927V16.9979C34 20.3042 31.3066 22.9972 28 22.9972H9.3905L1.65601 29.7619C1.45288 29.9337 1.18756 30.0198 0.921907 29.9963ZM2.00001 26.7936L8.34401 21.2473C8.52565 21.0872 8.75807 20.9973 9.00026 20.9973H28.0002C30.2327 20.9973 32.0003 19.2299 32.0003 16.9978V5.99917C32.0003 3.76704 30.2327 1.99966 28.0002 1.99966H6.00026C3.76786 1.99966 2.00026 3.76704 2.00026 5.99917L2.00001 26.7936Z" fill="#141810"/><circle cx="9" cy="11.5" r="2" fill="#141810"/><circle cx="17" cy="11.5" r="2" fill="#141810"/><circle cx="25" cy="11.5" r="2" fill="#141810"/></svg>}
 function IconCloseLarge(){return <svg width="30" height="30" viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="15" fill="rgba(0,0,0,0.4)"/><path d="M10 10L20 20M20 10L10 20" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>}
 
-/* Nav icons — exact Figma behavior:
+/* Nav icons - exact Figma behavior:
    ALL icons are OUTLINES (never filled).
    Inactive: stroke #999. Active: stroke #141810 + orange branding dot (#f80).
    Home always uses #141810 stroke + orange dot. */
@@ -312,8 +312,8 @@ function BackHeader({title}) {
 
 /* ── 4. ZipCodeCTA ── */
 /* Figma: #39503d bg. Two variants:
-   - "mobile"  (default) — Figma 5935:28321 — 393w, px-36 py-24, full-bleed.
-   - "desktop" — Figma 7096:50794 — 319×383, px-36, justify-center, rounded,
+   - "mobile"  (default) - Figma 5935:28321 - 393w, px-36 py-24, full-bleed.
+   - "desktop" - Figma 7096:50794 - 319×383, px-36, justify-center, rounded,
                  text column 155w wraps narrower, input gap 10. */
 function ZipCodeCTA({active=false, variant="mobile"}) {
   const isDesktop = variant === "desktop";
@@ -363,7 +363,7 @@ function ZipCodeCTA({active=false, variant="mobile"}) {
    Divider: 1px solid #f0e8d8 (T.cream).
    Actions row: gap 24, each = icon 24px + label SemiBold 11px #999 ls -0.25, gap 4.
      Pulses (pulse waveform icon), Share (send icon), React (cream circle + smiley, right-aligned). */
-/* ── Shared: IconReactButton — cream circle bg + slate smiley+plus ── */
+/* ── Shared: IconReactButton - cream circle bg + slate smiley+plus ── */
 function IconReactButton() {
   return (
     <svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -377,7 +377,7 @@ function IconReactButton() {
   );
 }
 
-/* ── Shared: IconShareAction — slate paper plane ── */
+/* ── Shared: IconShareAction - slate paper plane ── */
 function IconShareAction() {
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -390,8 +390,8 @@ function IconShareAction() {
 }
 
 /* ── 5. EngagementBar ──
-   variant="full"  — stats row (Pulses • Shares | reaction icons + count) + divider + Pulses + Share + React
-   variant="slim"  — share count + Share btn + React btn (PollCard style, no stats row)
+   variant="full"  - stats row (Pulses • Shares | reaction icons + count) + divider + Pulses + Share + React
+   variant="slim"  - share count + Share btn + React btn (PollCard style, no stats row)
 */
 function EngagementBar({pulses=6, shares=421, reactions="1.4k", variant="full",
   hidePulses=false, horizontal=false,
@@ -510,7 +510,7 @@ function EngagementBar({pulses=6, shares=421, reactions="1.4k", variant="full",
 /* ── 6. PostArticle ── */
 /* Figma (5935:34517) Mobile variant:
    Card w:373 radius:10 overflow:hidden.
-   IMAGE SECTION h:275 — bg cover, gradient: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 75%).
+   IMAGE SECTION h:275 - bg cover, gradient: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.6) 40%, rgba(0,0,0,0) 75%).
      pt:18 px:18. Badge top-right: h:29 w:120 r:3 bg rgba(20,24,16,0.5) border 0.5px #f0e8d8,
      text SemiBold 9px #f0e8d8 ls:0.5 uppercase.
      Headline bottom: pr:80 pb:18 gap:8.
@@ -532,7 +532,7 @@ function PostArticle({
   if (variant === "slim") {
     return (
       <div style={{width,borderRadius:10,overflow:"hidden",fontFamily:"Inter,sans-serif",backgroundColor:T.warmBg}}>
-        {/* Image — 128px, badge top-right, subtle bottom gradient */}
+        {/* Image - 128px, badge top-right, subtle bottom gradient */}
         <div style={{position:"relative",height:128,backgroundImage:`url('${imgUrl}')`,backgroundSize:"cover",backgroundPosition:"center"}}>
           <div style={{position:"absolute",inset:0,pointerEvents:"none",background:"linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 80%)"}}/>
           <div style={{position:"absolute",top:18,right:18,height:29,width:120,borderRadius:3,backgroundColor:"rgba(20,24,16,0.5)",border:"0.5px solid #f0e8d8",display:"flex",alignItems:"center",justifyContent:"center"}}>
@@ -662,7 +662,7 @@ function ScoreItem({icon, title, score, maxScore, avgPercent, noBorder=false}) {
         </div>
         {/* Avg marker: top:0 = starts 4px above bar.
             1px dark #111 tick (23px). White "Reverse Color" at top:4 h:6
-            inverts the tick on the dark bar — exactly as Figma. */}
+            inverts the tick on the dark bar - exactly as Figma. */}
         {avgPercent != null && (
           <div style={{position:"absolute",left:`${avgPercent}%`,top:0,transform:"translateX(-50%)"}}>
             <div style={{position:"absolute",top:0,left:0,width:1,height:23,backgroundColor:"#111"}}/>
@@ -720,7 +720,7 @@ function StateRow({name}) {
 }
 
 /* ── 9. StatSummaryCard ── */
-/* Merged from StancesCard + CommitteeSummaryCard — same structure, two variants:
+/* Merged from StancesCard + CommitteeSummaryCard - same structure, two variants:
    showChevron=true → stances-style (tappable header, no outer border)
    hasBorder=true   → committee-style (bordered card, no chevron)
    title: Inter ExtraBold 18px ls -0.5 · subtitle: Regular 14px lh 140% ls -0.25
@@ -832,7 +832,7 @@ function IconAddReaction({color=T.slate}){
     </svg>
   );
 }
-/* Donut chart SVG — green (#39503d) is "oppose/majority", gold (#c89b3c) is minority */
+/* Donut chart SVG - green (#39503d) is "oppose/majority", gold (#c89b3c) is minority */
 function DonutChart({pct=73, size=121}) {
   const r = 44; const cx = size/2; const cy = size/2;
   const circ = 2 * Math.PI * r;
@@ -1102,7 +1102,7 @@ function PostImageOnly({
           <span style={{color:"#f0e8d8",fontSize:13,fontWeight:600,lineHeight:"110%",letterSpacing:-0.5}}>{timeAgo}</span>
         </div>
       </div>
-      {/* Engagement on dark bg — white/light text */}
+      {/* Engagement on dark bg - white/light text */}
       <div style={{display:"flex",flexDirection:"column",gap:8,position:"relative",zIndex:1}}>
         {/* Stats row */}
         <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -1138,7 +1138,7 @@ function PostImageOnly({
 }
 
 /* ── 17. PostHomeSlim ── */
-/* Figma 5935:28431 — 333px wide, 128px image top, warm-bg body, title+date+engagement */
+/* Figma 5935:28431 - 333px wide, 128px image top, warm-bg body, title+date+engagement */
 function PostHomeSlim({
   title="No Kings' protest begin nationwide with flagship rally in LA",
   category="FOREIGN POLICY",
@@ -1151,7 +1151,7 @@ function PostHomeSlim({
 }) {
   return (
     <div style={{width,borderRadius:10,overflow:"hidden",boxShadow:"0 4px 15px rgba(0,0,0,0.15)",display:"flex",flexDirection:"column",fontFamily:"Inter,sans-serif",flexShrink:0}}>
-      {/* Image top — 128px */}
+      {/* Image top - 128px */}
       <div style={{position:"relative",height:128,flexShrink:0}}>
         <div style={{position:"absolute",inset:0,background:`url('${imgUrl}') center/cover`}}/>
         <div style={{position:"absolute",inset:0,background:"linear-gradient(to top, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 80%)"}}/>
@@ -1367,7 +1367,7 @@ function PoliticalLeaning({
 /* X-circle icon header + body copy explaining the inconsistency */
 function InconsistencyDetail({
   title="What Makes This Inconsistent:",
-  body="Copy TBD.  Signal over noise. Proof, not opinion. Every vote, every dollar, every promise — tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story. Beacon turns public records into plain language. No spin, no algorithm gaming, no agenda. Just the data your representatives wish you weren't paying attention to. One score. Five dimensions. Zero guesswork. Built for the 2026 midterms and every election after. Because accountability shouldn't require a law degree. Clear signal. Shared reality. Tap to verify."
+  body="Copy TBD.  Signal over noise. Proof, not opinion. Every vote, every dollar, every promise - tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story. Beacon turns public records into plain language. No spin, no algorithm gaming, no agenda. Just the data your representatives wish you weren't paying attention to. One score. Five dimensions. Zero guesswork. Built for the 2026 midterms and every election after. Because accountability shouldn't require a law degree. Clear signal. Shared reality. Tap to verify."
 }) {
   return (
     <div style={{width:"100%",borderRadius:10,backgroundColor:T.warmBg,border:"1px solid "+T.creamBorder,padding:16,display:"flex",flexDirection:"column",gap:16,fontFamily:"Inter,sans-serif"}}>
@@ -1567,7 +1567,7 @@ function ConductDrillDownCard({
 }
 
 /* ═══════════════════════════════════════════════
-   GRID APP — section-based layout, no sidebar
+   GRID APP - section-based layout, no sidebar
    ═══════════════════════════════════════════════ */
 
 
@@ -1661,7 +1661,7 @@ function ReactionInteraction() {
   return (
     <div style={{position:"relative", width:357, fontFamily:"Inter,sans-serif"}}>
 
-      {/* ── Reaction strip — behind card, stretches to card height ── */}
+      {/* ── Reaction strip - behind card, stretches to card height ── */}
       <div style={{
         position:"absolute", right:0, top:0, bottom:0, width:SLIDE_W,
         display:"flex", flexDirection:"column", gap:10,
@@ -1700,7 +1700,7 @@ function ReactionInteraction() {
         })}
       </div>
 
-      {/* ── Sliding PollCard — z:2, clips and translates ── */}
+      {/* ── Sliding PollCard - z:2, clips and translates ── */}
       <div style={{
         position:"relative", zIndex:2,
         borderRadius:10, overflow:"hidden",
@@ -1758,9 +1758,9 @@ function CorroborationCard({ level="high", sourceCount=10 }) {
           <span style={{flex:1, fontSize:14, fontWeight:600, color:level==="high" ? T.slate : T.gray, letterSpacing:-0.5, lineHeight:1.3, textAlign:"right"}}>High</span>
         </div>
       </div>
-      {/* News source logos — assets saved locally in assets/icons/logos/ */}
+      {/* News source logos - assets saved locally in assets/icons/logos/ */}
       <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", width:"100%"}}>
-        {/* Reuters — 5 dot-ring layers assembled via absolute positioning */}
+        {/* Reuters - 5 dot-ring layers assembled via absolute positioning */}
         <div style={{position:"relative", width:29.8, height:28, flexShrink:0}}>
           {[
             ["../assets/icons/logos/reuters-layer5.svg","0%","0%","0%","0%"],
@@ -1877,7 +1877,7 @@ function PollResultsCard({
         </div>
       </div>
 
-      {/* Anonymous button — no divider above, same section as official */}
+      {/* Anonymous button - no divider above, same section as official */}
       <div style={{paddingBottom:14, paddingLeft:18, paddingRight:18}}>
         <button style={{
           height:24, borderRadius:4, paddingLeft:40, paddingRight:40,
@@ -1936,10 +1936,10 @@ function PollResultsCard({
 
 
 /* ═══════════════════════════════════════════════
-   SCREENS — full-screen mobile layouts (393×852)
+   SCREENS - full-screen mobile layouts (393×852)
    ═══════════════════════════════════════════════ */
 
-/* ShareButton — 88×88 cream tile used inside IssueShareScreen */
+/* ShareButton - 88×88 cream tile used inside IssueShareScreen */
 function ShareButton({label, icon}) {
   return (
     <div style={{width:88,height:88,backgroundColor:"rgba(255,249,237,0.8)",borderRadius:10,boxShadow:T.shadow,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:6,cursor:"pointer"}}>
@@ -1951,7 +1951,7 @@ function ShareButton({label, icon}) {
   );
 }
 
-/* IssueShareScreen — share sheet overlay on full-bleed article image */
+/* IssueShareScreen - share sheet overlay on full-bleed article image */
 function IssueShareScreen() {
   return (
     <div style={{width:393,height:852,position:"relative",overflow:"hidden",fontFamily:"Inter, sans-serif",backgroundColor:"#111"}}>
@@ -1972,16 +1972,16 @@ function IssueShareScreen() {
       <div style={{position:"absolute",top:120,left:36,right:58,zIndex:10}}>
         <h1 style={{fontSize:46,fontWeight:900,color:"#ffffff",lineHeight:"108%",letterSpacing:-1.5,margin:0}}>US and Israel Attack Iran for 10th Day</h1>
       </div>
-      {/* Share panel — y=384, h=239 per Figma */}
+      {/* Share panel - y=384, h=239 per Figma */}
       <div style={{position:"absolute",top:384,left:0,right:0,height:239,zIndex:10}}>
         <p style={{fontSize:18,fontWeight:600,color:"rgba(250,250,250,1)",letterSpacing:-0.5,lineHeight:"130%",margin:0,paddingLeft:44,marginBottom:0}}>Share this issue:</p>
-        {/* Row 1 — y=43 within panel */}
+        {/* Row 1 - y=43 within panel */}
         <div style={{display:"flex",position:"absolute",top:43,left:44,gap:20}}>
           <ShareButton label="Facebook" icon={<IconFacebook/>}/>
           <ShareButton label="Twitter ;-)" icon={<IconTwitter/>}/>
           <ShareButton label="LinkedIn" icon={<IconLinkedIn/>}/>
         </div>
-        {/* Row 2 — y=151 within panel */}
+        {/* Row 2 - y=151 within panel */}
         <div style={{display:"flex",position:"absolute",top:151,left:44,gap:20}}>
           <ShareButton label="Copy Link" icon={<svg width="30" height="30" viewBox="3 3 10 10" fill="none"><path d="M8.08387 10.0419L6.75435 11.3714C6.16769 11.9581 5.21529 11.9581 4.62862 11.3714C4.04196 10.7847 4.04196 9.83235 4.62862 9.24569L6.39624 7.47806C6.98291 6.89139 7.93531 6.89139 8.52197 7.47806" stroke={T.slate} strokeWidth="0.6" strokeMiterlimit="10" strokeLinecap="round"/><path d="M7.91613 5.95809L9.24565 4.62857C9.83231 4.0419 10.7847 4.0419 11.3714 4.62857C11.958 5.21523 11.958 6.16762 11.3714 6.75428L9.60374 8.52191C9.01708 9.10858 8.06468 9.10858 7.47802 8.52191" stroke={T.slate} strokeWidth="0.6" strokeMiterlimit="10" strokeLinecap="round"/></svg>}/>
           <ShareButton label="Email" icon={<IconEmail/>}/>
@@ -1992,7 +1992,7 @@ function IssueShareScreen() {
   );
 }
 
-/* HomeScreen — full scrollable home page, 393×852 */
+/* HomeScreen - full scrollable home page, 393×852 */
 function HomeScreen() {
   return (
     <div style={{width:393,height:852,position:"relative",overflow:"hidden",fontFamily:"Inter,sans-serif",backgroundColor:T.warmBg}}>
@@ -2076,7 +2076,7 @@ function HomeScreen() {
 }
 
 
-/* ── ActiveIssuesScreen — Figma 5935:34517 ── */
+/* ── ActiveIssuesScreen - Figma 5935:34517 ── */
 /* 393×852 full-screen · cream bg · status bar · "Active Issues" header · 5 PostArticle cards · Issues tab active */
 function ActiveIssuesScreen() {
   return (
@@ -2090,7 +2090,7 @@ function ActiveIssuesScreen() {
           <span style={{fontSize:12,fontWeight:700,color:T.slate}}>5G ▪▪▪ 🔋</span>
         </div>
 
-        {/* Section header — beacon dot + "Active Issues" + info icon */}
+        {/* Section header - beacon dot + "Active Issues" + info icon */}
         <div style={{padding:"12px 18px",display:"flex",alignItems:"center",gap:10}}>
           <IconBeaconDot/>
           <span style={{flex:1,fontSize:18,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5}}>Active Issues</span>
@@ -2127,7 +2127,7 @@ function ActiveIssuesScreen() {
         </div>
       </div>
 
-      {/* Fixed tab bar — Issues active */}
+      {/* Fixed tab bar - Issues active */}
       <div style={{position:"absolute",bottom:0,left:0,right:0,zIndex:20}}>
         <BottomTabBar activeTab="issues"/>
       </div>
@@ -2136,7 +2136,7 @@ function ActiveIssuesScreen() {
 }
 
 
-/* ── DetailAccordion — controlled accordion for IssueDetailScreen ── */
+/* ── DetailAccordion - controlled accordion for IssueDetailScreen ── */
 function DetailAccordion({icon, title, isOpen, onToggle, children}) {
   const [height, setHeight] = React.useState(isOpen ? null : 0);
   const contentRef = React.useRef(null);
@@ -2173,7 +2173,7 @@ function DetailAccordion({icon, title, isOpen, onToggle, children}) {
   );
 }
 
-/* ── ContentionSubRow — nested expand/collapse row inside Contention Points ── */
+/* ── ContentionSubRow - nested expand/collapse row inside Contention Points ── */
 function ContentionSubRow({title, defaultOpen=false, isLast=false}) {
   const [open, setOpen] = React.useState(defaultOpen);
   const [height, setHeight] = React.useState(defaultOpen ? null : 0);
@@ -2225,7 +2225,7 @@ function ContentionSubRow({title, defaultOpen=false, isLast=false}) {
   );
 }
 
-/* ── IssueDetailScreen — Figma 5935:34543/34571/34588 ── */
+/* ── IssueDetailScreen - Figma 5935:34543/34571/34588 ── */
 /* Article detail · hero image · engagement · 3 accordions (consensus open by default) · no tab bar */
 function IssueDetailScreen() {
   const [openSection, setOpenSection] = useState("consensus");
@@ -2361,7 +2361,7 @@ function IssueDetailScreen() {
         </div>{/* end content below hero */}
       </div>
 
-      {/* Fixed tab bar — Issues active */}
+      {/* Fixed tab bar - Issues active */}
       <div style={{position:"absolute",bottom:0,left:0,right:0,zIndex:20}}>
         <BottomTabBar activeTab="issues"/>
       </div>
@@ -2530,7 +2530,7 @@ function DesktopNavBar({ activeTab = "Officials" }) {
       boxSizing:"border-box",
       fontFamily:"Inter,sans-serif",
     }}>
-      {/* Branding — wordmark + floating orange dot */}
+      {/* Branding - wordmark + floating orange dot */}
       <div style={{position:"relative", width:112, height:32, flexShrink:0}}>
         <img src="../assets/icons/beacon-wordmark.svg"
              style={{position:"absolute", left:0, top:8.45, width:102.662, height:23.554, display:"block"}}
@@ -2564,7 +2564,7 @@ function DesktopNavBar({ activeTab = "Officials" }) {
         })}
       </div>
 
-      {/* Account — isolated right */}
+      {/* Account - isolated right */}
       <div style={{
         display:"flex", gap:4, alignItems:"center",
         height:"100%", boxSizing:"border-box",
@@ -2680,7 +2680,7 @@ function DesktopBeaconScoreHeader({ score=81, subtitle="A three-part signal on c
 
 
 /* ── DesktopPulseCard ──
-   Figma 7096:51582 — 333×296 pulse survey card used in Related Pulse carousel.
+   Figma 7096:51582 - 333×296 pulse survey card used in Related Pulse carousel.
    3-band stack: content (headline + category + PUBLIC badge), news-link row, actions row.
    Bg T.warmBg, radius 10, shadow, Inter fonts. */
 function DesktopPulseCard({
@@ -2730,14 +2730,14 @@ function DesktopPulseCard({
           </div>
         </div>
       </div>
-      {/* Middle section — news link */}
+      {/* Middle section - news link */}
       <div style={{padding:"10px 18px", display:"flex", alignItems:"center", gap:8}}>
         <div style={{backgroundColor:T.cream, borderRadius:5, padding:4, display:"flex", alignItems:"center", justifyContent:"center"}}>
           <IconLink/>
         </div>
         <span style={{fontSize:13, fontWeight:600, color:T.slate, lineHeight:1.1, letterSpacing:-0.5}}>{newsLink}</span>
       </div>
-      {/* Bottom section — actions (only when showActions) */}
+      {/* Bottom section - actions (only when showActions) */}
       {showActions && (
       <div style={{
         borderTop:`1px solid ${T.creamBorder}`,
@@ -2759,7 +2759,7 @@ function DesktopPulseCard({
 
 
 /* ── DesktopRelatedPulse ──
-   Figma 7096:51571 — Related Pulse section (996×382)
+   Figma 7096:51571 - Related Pulse section (996×382)
    Header: orange dot + "Pulse Pulse" Black 20 + "View All" right
    Tab menu: Active / Complete, center justified, 28px gap, 1px bottom border slate
    Carousel row of DesktopPulseCards (333×296, 20px gap) */
@@ -2806,7 +2806,7 @@ function DesktopRelatedPulse() {
           <IconChevronForward/>
         </div>
       </div>
-      {/* Tab menu — center justified */}
+      {/* Tab menu - center justified */}
       <div style={{padding:"0 18px"}}>
         <div style={{
           width:"100%", height:37, display:"flex", alignItems:"center", justifyContent:"center",
@@ -2854,7 +2854,7 @@ function DesktopRelatedPulse() {
 
 
 /* ── DesktopAboutSection ──
-   Figma 7096:51588 — 996×208, 3 columns x 300w, 24px gap, no bg.
+   Figma 7096:51588 - 996×208, 3 columns x 300w, 24px gap, no bg.
    Each block: heading Inter SemiBold 18/1.3/-0.5 slate, body Inter Regular 14/1.3/-0.5 black. */
 function DesktopAboutBlock({ title, children }) {
   return (
@@ -2918,7 +2918,7 @@ function DesktopAboutSection() {
 
 
 /* ── BeaconScoreInfoModal ──
-   Figma 7096-51552 — Beacon Score™ info modal overlay.
+   Figma 7096-51552 - Beacon Score™ info modal overlay.
    Behaves like PulseInfoModal (RAF-gated reveal, 220ms cubic-bezier fade/scale,
    backdrop blur fade, click-outside-to-close). Vertically centered. */
 function BeaconScoreInfoModal({ onClose }) {
@@ -2953,7 +2953,7 @@ function BeaconScoreInfoModal({ onClose }) {
         transform: shown ? "translateY(0) scale(1)" : "translateY(8px) scale(0.98)",
         transition:`opacity 220ms ${EASE}, transform 220ms ${EASE}`,
       }}>
-        {/* Close row — 24px X top-right */}
+        {/* Close row - 24px X top-right */}
         <div style={{display:"flex", justifyContent:"flex-end", width:"100%"}}>
           <div onClick={handleClose} style={{
             width:24, height:24, cursor:"pointer",
@@ -2964,7 +2964,7 @@ function BeaconScoreInfoModal({ onClose }) {
             </svg>
           </div>
         </div>
-        {/* Title + body — gap 32 */}
+        {/* Title + body - gap 32 */}
         <div style={{display:"flex", flexDirection:"column", gap:32, width:"100%", alignItems:"flex-start"}}>
           <p style={{
             margin:0, fontFamily:"Inter,sans-serif", fontWeight:800,
@@ -2975,7 +2975,7 @@ function BeaconScoreInfoModal({ onClose }) {
             margin:0, fontFamily:"Inter,sans-serif", fontWeight:400,
             fontSize:16, lineHeight:1.3, letterSpacing:-0.5, color:T.slate,
             width:"100%", whiteSpace:"pre-wrap",
-          }}>{`Copy TBD. The Beacon Score is a 0–100 metric that measures whether an official's actions match their words — built entirely from verifiable public data like voting records, FEC filings, and financial disclosures. \n\nIt's a composite of five sub-scores (Participation, Consistency, Transparency, Follow-Through, and Independence), so the single number is always backed by visible reasoning and primary sources. No opinion, no sentiment, no user ratings — every claim must be defensible with a direct link to the proof.`}</p>
+          }}>{`Copy TBD. The Beacon Score is a 0–100 metric that measures whether an official's actions match their words - built entirely from verifiable public data like voting records, FEC filings, and financial disclosures. \n\nIt's a composite of five sub-scores (Participation, Consistency, Transparency, Follow-Through, and Independence), so the single number is always backed by visible reasoning and primary sources. No opinion, no sentiment, no user ratings - every claim must be defensible with a direct link to the proof.`}</p>
         </div>
       </div>
     </div>
@@ -2983,7 +2983,7 @@ function BeaconScoreInfoModal({ onClose }) {
 }
 
 /* ── DesktopPoliticianProfileScreen ──
-   Figma 7096-51558 — full page composition.
+   Figma 7096-51558 - full page composition.
    1280×1421 screen with 996 content: Breadcrumb, Dashboard (Profile + Score),
    Related Pulse, About Section. */
 function DesktopPoliticianProfileScreen({
@@ -3008,7 +3008,7 @@ function DesktopPoliticianProfileScreen({
       position:"relative",
     }}>
       <DesktopNavBar activeTab="Officials"/>
-      {/* Content column — 996 wide, centered; carousel breaks out visually */}
+      {/* Content column - 996 wide, centered; carousel breaks out visually */}
       <div style={{width:996, display:"flex", flexDirection:"column", gap:24, paddingTop:32, paddingBottom:60}}>
         <DesktopBreadcrumb items={[{label:"Officials", href:"#"},{label:name}]}/>
         <DesktopPoliticianProfileCard
@@ -3029,8 +3029,8 @@ function DesktopPoliticianProfileScreen({
 
 /* ── DesktopPoliticianProfileCard ──
    Desktop variant of PoliticianProfileCard. 996px wide, two-column layout.
-   Left 326px: party color panel — 79×79 avatar + name + role + info + term badges
-   Right 670px: white — time tabs + Beacon Score™ header + score items + engagement bar */
+   Left 326px: party color panel - 79×79 avatar + name + role + info + term badges
+   Right 670px: white - time tabs + Beacon Score™ header + score items + engagement bar */
 function DesktopPoliticianProfileCard({
   name="Lauren Boebert",
   role="U.S. Representative",
@@ -3052,7 +3052,7 @@ function DesktopPoliticianProfileCard({
       backgroundColor:"transparent", borderRadius:T.radius,
       fontFamily:"Inter,sans-serif",
     }}>
-      {/* LEFT COLUMN — 326 wide, left-only radius */}
+      {/* LEFT COLUMN - 326 wide, left-only radius */}
       <div style={{
         width:326, flexShrink:0,
         borderTopLeftRadius:T.radius, borderBottomLeftRadius:T.radius,
@@ -3101,7 +3101,7 @@ function DesktopPoliticianProfileCard({
         </div>
       </div>
 
-      {/* RIGHT COLUMN — 670 wide, right-only radius */}
+      {/* RIGHT COLUMN - 670 wide, right-only radius */}
       <div style={{
         flex:1, minWidth:0,
         borderTopRightRadius:T.radius, borderBottomRightRadius:T.radius,
@@ -3267,9 +3267,9 @@ function DesktopOfficialRow({
 
       {/* Name + Score */}
       <div style={{flex:"1 0 0", minWidth:0, display:"flex", alignItems:"center", gap:40}}>
-        {/* Name+Role — horizontal flex, gap 2px */}
+        {/* Name+Role - horizontal flex, gap 2px */}
         <div style={{flex:"1 0 0", minWidth:0, display:"flex", gap:2, alignItems:"flex-start"}}>
-          {/* Name + Badge — vertical */}
+          {/* Name + Badge - vertical */}
           <div style={{flex:"1 0 0", minWidth:0, display:"flex", flexDirection:"column", gap:4}}>
             <span style={{fontWeight:800, fontSize:18, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>{name}</span>
             <div style={{paddingBottom:4}}>
@@ -3291,13 +3291,13 @@ function DesktopOfficialRow({
               </div>
             </div>
           </div>
-          {/* Role + State — two lines, whitespace-pre-wrap per Figma */}
+          {/* Role + State - two lines, whitespace-pre-wrap per Figma */}
           <div style={{flex:"1 0 0", minWidth:0, fontWeight:400, fontSize:13, letterSpacing:-0.5, color:"rgba(20,24,16,0.6)", lineHeight:0, whiteSpace:"pre-wrap"}}>
             <p style={{margin:0, lineHeight:1.3}}>{role} - {party}{"  "}</p>
             <p style={{margin:0, lineHeight:1.3}}>{state}</p>
           </div>
         </div>
-        {/* Beacon Score — always rendered to keep layout stable; opacity:0 when pending */}
+        {/* Beacon Score - always rendered to keep layout stable; opacity:0 when pending */}
         <div style={{flexShrink:0, display:"flex", alignItems:"center", gap:8, color:T.slate, whiteSpace:"nowrap", fontWeight:700, opacity: score != null ? 1 : 0}}>
           <span style={{fontSize:14, lineHeight:1.3, letterSpacing:-0.5}}>Beacon Score™</span>
           <div style={{display:"flex", flexDirection:"column", justifyContent:"center", lineHeight:0, textAlign:"right"}}>
@@ -3381,7 +3381,7 @@ function DesktopIssueCard({
               letterSpacing:0.5, textTransform:"uppercase"}}>{badge}</span>
           </div>
         </div>
-        {/* Headline + timestamp — justify-end anchors timestamp at pb:32; headline clamps to 3 lines */}
+        {/* Headline + timestamp - justify-end anchors timestamp at pb:32; headline clamps to 3 lines */}
         <div style={{position:"relative", flex:1, display:"flex", flexDirection:"column",
           justifyContent:"flex-end", gap:8, paddingTop:40, paddingBottom:32, paddingRight:16,
           minHeight:0, overflow:"hidden"}}>
@@ -3429,10 +3429,10 @@ function DesktopHeroIssueCard({
       {/* BG image */}
       <div style={{position:"absolute", inset:0, zIndex:0,
         background:`url('${imgUrl}') center/cover`}}/>
-      {/* Gradient — dark at bottom 15.6% → transparent at 80% (matches Figma) */}
+      {/* Gradient - dark at bottom 15.6% → transparent at 80% (matches Figma) */}
       <div style={{position:"absolute", inset:0, zIndex:0,
         background:"linear-gradient(to top, rgba(0,0,0,0.8) 15.636%, rgba(0,0,0,0) 80%)"}}/>
-      {/* Badge — top right */}
+      {/* Badge - top right */}
       <div style={{position:"relative", zIndex:1, display:"flex", justifyContent:"flex-end"}}>
         <div style={{width:120, height:29, borderRadius:3,
           backgroundColor:"rgba(20,24,16,0.5)", border:"0.5px solid #f0e8d8",
@@ -3441,7 +3441,7 @@ function DesktopHeroIssueCard({
             letterSpacing:0.5, textTransform:"uppercase", lineHeight:"15px"}}>{badge}</span>
         </div>
       </div>
-      {/* Headline + timestamp — flex:1, LEFT column (pr:640) */}
+      {/* Headline + timestamp - flex:1, LEFT column (pr:640) */}
       <div style={{position:"relative", zIndex:1, flex:1, display:"flex",
         alignItems:"flex-end", paddingBottom:18, paddingRight:640}}>
         <div style={{display:"flex", flexDirection:"column", gap:8,
@@ -3454,7 +3454,7 @@ function DesktopHeroIssueCard({
             lineHeight:"1.1", letterSpacing:-0.5}}>{timeAgo}</p>
         </div>
       </div>
-      {/* Engagement bar — LEFT column (pr:680) */}
+      {/* Engagement bar - LEFT column (pr:680) */}
       <div style={{position:"relative", zIndex:1, display:"flex",
         flexDirection:"column", gap:8, paddingRight:680}}>
         {/* Responses */}
@@ -3716,7 +3716,7 @@ function DesktopActiveIssuesScreen() {
       <DesktopNavBar activeTab="Issues"/>
       <div ref={fadeRef} style={{paddingLeft:142, paddingRight:142, paddingTop:72, boxSizing:"border-box", ...fade}}>
         <div style={{width:996, display:"flex", flexDirection:"column", gap:20}}>
-          {/* Title row — Beacon dot + "Active Issues" + Info icon */}
+          {/* Title row - Beacon dot + "Active Issues" + Info icon */}
           <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", padding:"12px 0"}}>
             <div style={{display:"flex", alignItems:"center", gap:10}}>
               <IconBeaconDot/>
@@ -3753,7 +3753,7 @@ function DesktopConsensusHero({
         background:`url('${imgUrl}') center/cover`}}/>
       <div style={{position:"absolute", inset:0, zIndex:0,
         background:"linear-gradient(to top, rgba(0,0,0,0.5) 15.636%, rgba(0,0,0,0) 80%)"}}/>
-      {/* Badge — top right */}
+      {/* Badge - top right */}
       <div style={{position:"relative", zIndex:1, display:"flex", justifyContent:"flex-end"}}>
         <div style={{width:120, height:29, borderRadius:3,
           backgroundColor:"rgba(20,24,16,0.5)", border:"0.5px solid #f0e8d8",
@@ -3762,7 +3762,7 @@ function DesktopConsensusHero({
             letterSpacing:0.5, textTransform:"uppercase", lineHeight:"15px"}}>{badge}</span>
         </div>
       </div>
-      {/* Headline + date — LEFT 480w column */}
+      {/* Headline + date - LEFT 480w column */}
       <div style={{position:"relative", zIndex:1, flex:1, display:"flex", alignItems:"stretch", minHeight:0}}>
         <div style={{width:480, display:"flex", flexDirection:"column", gap:8,
           justifyContent:"flex-end", paddingTop:40, paddingBottom:32, paddingRight:16,
@@ -4112,7 +4112,7 @@ function DesktopPulseSurveysScreen() {
           <Tab value="complete" label="Complete"/>
         </div>
 
-        {/* Card grid — 180ms crossfade on tab swap */}
+        {/* Card grid - 180ms crossfade on tab swap */}
         <div style={{
           marginTop:20,
           opacity: visible ? 1 : 0,
@@ -4198,7 +4198,7 @@ function DesktopPulseSurveyQuestion({
           {/* Steps */}
           <div style={{display:"flex", flexDirection:"column", alignItems:"center", gap:4, width:"100%"}}>
             <div style={{display:"flex", alignItems:"center", gap:24, width:"100%"}}>
-              {/* ChevronBack — invisible spacer on step 1 */}
+              {/* ChevronBack - invisible spacer on step 1 */}
               <div
                 onClick={step > 1 ? onBack : undefined}
                 style={{width:24, height:24, display:"flex", alignItems:"center", justifyContent:"center",
@@ -4412,7 +4412,7 @@ function DesktopPulseSurveyResults({ onReturn=null }={}) {
             <h2 style={{margin:0, fontFamily:"Inter,sans-serif", fontWeight:900, fontSize:18, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>What you just did matters!</h2>
             <p style={{margin:0, fontFamily:"Inter,sans-serif", fontWeight:400, fontSize:14, lineHeight:1.3, letterSpacing:-0.5, color:T.slate}}>Your response contributes to a shared civic signal that drives accountability.</p>
           </div>
-          {/* Card — conditional mount so useReveal (donut + % + count) fires
+          {/* Card - conditional mount so useReveal (donut + % + count) fires
               when the card is visible, matching mobile's feel. */}
           <div style={{width:"100%", minHeight:611}}>
             {cardMounted && <PollResultsCard width={596}/>}
@@ -4430,7 +4430,7 @@ function DesktopPulseSurveyResults({ onReturn=null }={}) {
 }
 
 /* ── DesktopOfficials ── Figma 7096:51644
-   1.0 Officials — alphabetized list of tracked officials.
+   1.0 Officials - alphabetized list of tracked officials.
    1280w frame, cream bg, top nav + 996w content column w/ tab menu (Name/State),
    alphabet header, official cards (960×100), and right-edge A–Z index bar.
    Each card: 102w party color box + 64×64 avatar + name/tag + role/state + score.
@@ -4494,7 +4494,7 @@ function DesktopOfficialListRow({ official }) {
 
       {/* Name + Score */}
       <div style={{flex:"1 1 0", minWidth:0, display:"flex", alignItems:"center", gap:40}}>
-        {/* Name+Role row — items-start so Name top aligns with Role top */}
+        {/* Name+Role row - items-start so Name top aligns with Role top */}
         <div style={{flex:"1 1 0", minWidth:0, display:"flex", gap:2, alignItems:"flex-start"}}>
           {/* Name/tag column (flex-1) */}
           <div style={{flex:"1 1 0", minWidth:0, display:"flex", flexDirection:"column", gap:4, alignItems:"flex-start"}}>
@@ -4507,7 +4507,7 @@ function DesktopOfficialListRow({ official }) {
               <OfficialStatusTag kind={official.tag}/>
             </div>
           </div>
-          {/* Role / state (flex-1) — top-aligned with name */}
+          {/* Role / state (flex-1) - top-aligned with name */}
           <div style={{
             flex:"1 1 0", minWidth:0,
             fontFamily:"Inter,sans-serif", fontWeight:400,
@@ -4518,7 +4518,7 @@ function DesktopOfficialListRow({ official }) {
             <p style={{margin:0}}>{official.state}</p>
           </div>
         </div>
-        {/* Score — always reserves width so center column aligns across rows */}
+        {/* Score - always reserves width so center column aligns across rows */}
         <div style={{
           display:"flex", alignItems:"center", gap:8, flexShrink:0,
           fontFamily:"Inter,sans-serif", fontWeight:700, color:T.slate,
@@ -4533,7 +4533,7 @@ function DesktopOfficialListRow({ official }) {
   );
 }
 
-/* State tab data — 10 states w/ flag images. Alabama expands to show delegates. */
+/* State tab data - 10 states w/ flag images. Alabama expands to show delegates. */
 const STATES_DATA = [
   { name:"Alabama",     flag:"../assets/flags/alabama.png",
     senators:[{name:"John Boozman", role:"Senior Senator"}, {name:"Tom Cotton", role:"Senior Senator"}],
@@ -4637,7 +4637,7 @@ function StateListRow({ state, expanded, onToggle }) {
           <path d="M6 9l6 6 6-6" stroke="#141810" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
         </svg>
       </div>
-      {/* Drill-down — height-animated wrapper */}
+      {/* Drill-down - height-animated wrapper */}
       {canExpand && (
         <div
           ref={contentRef}
@@ -4696,9 +4696,9 @@ function DesktopOfficials() {
 
       {/* Content column */}
       <div ref={fadeRef} style={{width:996, display:"flex", flexDirection:"column", alignItems:"stretch", paddingBottom:60, ...fade}}>
-        {/* Tab menu — uses shared DesktopTabRow/DesktopTab */}
+        {/* Tab menu - uses shared DesktopTabRow/DesktopTab */}
         <DesktopTabRow style={{justifyContent:"space-between"}}>
-          {/* left spacer — balances the search icon on the right */}
+          {/* left spacer - balances the search icon on the right */}
           <div style={{width:36, height:36, flexShrink:0}} />
           {/* center tabs */}
           <div style={{display:"flex", gap:16, alignItems:"center", justifyContent:"center", height:"100%"}}>
@@ -4714,7 +4714,7 @@ function DesktopOfficials() {
           </div>
         </DesktopTabRow>
 
-        {/* List + index bar row — tab-switch crossfade wrapper */}
+        {/* List + index bar row - tab-switch crossfade wrapper */}
         <div style={{
           opacity: visible ? 1 : 0,
           transform: visible ? "translateY(0)" : "translateY(6px)",
@@ -4736,7 +4736,7 @@ function DesktopOfficials() {
                 <DesktopOfficialListRow key={i} official={o}/>
               ))}
             </div>
-            {/* Index bar — 12w, padded from list by remaining 24px.
+            {/* Index bar - 12w, padded from list by remaining 24px.
                paddingTop = 48 (B header) + 10 (gap) so "#" aligns with first card top. */}
             <div style={{width:24, flexShrink:0}} />
             <div style={{paddingTop:58}}>
@@ -5102,7 +5102,7 @@ function OfficialsScreen() {
         <span style={{fontSize:12,fontWeight:700,color:T.slate}}>▲▲▲ 5G 🔋</span>
       </div>
 
-      {/* ── Tab row — hidden in search view ── */}
+      {/* ── Tab row - hidden in search view ── */}
       {view!=="search" && (
         <div style={{backgroundColor:T.cream,borderBottom:"1px solid #141810",flexShrink:0,position:"relative"}}>
           {/* Centered tabs */}
@@ -5113,14 +5113,14 @@ function OfficialsScreen() {
               </div>
             ))}
           </div>
-          {/* Search icon — absolute right */}
+          {/* Search icon - absolute right */}
           <div onClick={()=>setView("search")} style={{position:"absolute",right:16,top:0,bottom:0,display:"flex",alignItems:"center",cursor:"pointer",paddingBottom:2}}>
             <IconSearch color={T.slate}/>
           </div>
         </div>
       )}
 
-      {/* ── Sticky alpha index — only in name view ── */}
+      {/* ── Sticky alpha index - only in name view ── */}
       {view==="name" && (
         <div style={{position:"absolute",right:5,top:100,bottom:75,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:3,zIndex:30,pointerEvents:"none"}}>
           {alpha.map(l=>(
@@ -5165,7 +5165,7 @@ function OfficialsScreen() {
         </div>
       )}
 
-      {/* ── Search view — no tab row, full-bleed warmBg ── */}
+      {/* ── Search view - no tab row, full-bleed warmBg ── */}
       {view==="search" && (
         <div className="hide-scrollbar" style={{flex:1,backgroundColor:T.warmBg,overflowY:"auto",scrollbarWidth:"none"}}>
           <div style={{padding:"16px 18px 24px"}}>
@@ -5285,7 +5285,7 @@ function OfficialProfileScreen() {
       {/* Scrollable body */}
       <div className="hide-scrollbar" style={{flex:1,overflowY:"auto",overflowX:"hidden",scrollbarWidth:"none"}}>
 
-        {/* Profile Card — white card, z:2 so its shadow paints over the score items below */}
+        {/* Profile Card - white card, z:2 so its shadow paints over the score items below */}
         <div style={{margin:"8px 18px 0",position:"relative",zIndex:2,borderRadius:"10px 10px 0 0",overflow:"hidden",backgroundColor:T.warmBg,boxShadow:"0 4px 15px rgba(0,0,0,0.15)"}}>
           <PoliticianProfileCard
             width={357}
@@ -5303,14 +5303,14 @@ function OfficialProfileScreen() {
             headerColor="#de0100"
           />
         </div>
-        {/* Score Breakdown — separate div below, z:1 so profile card shadow drapes over it */}
+        {/* Score Breakdown - separate div below, z:1 so profile card shadow drapes over it */}
         <div style={{margin:"0 18px",position:"relative",zIndex:1,borderRadius:"0 0 10px 10px",overflow:"hidden",backgroundColor:T.warmBg,display:"flex",flexDirection:"column",gap:2,paddingTop:20}}>
           <ScoreItem icon={<IconMagicShield/>} title="Participation" score={16} maxScore={20} avgPercent={55} noBorder/>
           <ScoreItem icon={<IconUpDown/>}      title="Consistency"   score={34} maxScore={40} avgPercent={70} noBorder/>
           <ScoreItem icon={<IconVerify/>}      title="Conduct"       score={31} maxScore={40} avgPercent={62} noBorder/>
         </div>
 
-        {/* Divider before Beacon Pulse — 40px above, 40px below per Figma */}
+        {/* Divider before Beacon Pulse - 40px above, 40px below per Figma */}
         <div style={{height:1,backgroundColor:T.creamBorder,margin:"40px 18px"}}/>
 
         {/* Beacon Pulse */}
@@ -5334,7 +5334,7 @@ function OfficialProfileScreen() {
           <div style={{width:18,flexShrink:0}}/>
         </div>
 
-        {/* Divider before About — 40px above, 40px below per Figma (y=1378 in Content frame) */}
+        {/* Divider before About - 40px above, 40px below per Figma (y=1378 in Content frame) */}
         <div style={{height:1,backgroundColor:T.creamBorder,margin:"40px 18px"}}/>
         {/* About */}
         <div style={{paddingTop:16,paddingLeft:36,paddingRight:36,paddingBottom:100}}>
@@ -5373,11 +5373,11 @@ function OfficialProfileScreen() {
 function ScoreInfoModalScreen() {
   return (
     <div style={{width:393,height:852,position:"relative",backgroundColor:T.warmBg,overflow:"hidden"}}>
-      {/* Blurred background — OfficialProfileScreen behind */}
+      {/* Blurred background - OfficialProfileScreen behind */}
       <div style={{position:"absolute",inset:0,filter:"blur(6px)",transform:"scale(1.04)",pointerEvents:"none"}}>
         <OfficialProfileScreen/>
       </div>
-      {/* Scrim — subtle darken over the blurred content, does not cover tab bar */}
+      {/* Scrim - subtle darken over the blurred content, does not cover tab bar */}
       <div style={{position:"absolute",top:0,left:0,right:0,height:777,backgroundColor:"rgba(240,232,216,0.35)"}}/>
       {/* Modal */}
       <div style={{position:"absolute",top:133,left:24,width:345,backgroundColor:"#ffffff",borderRadius:10,paddingTop:24,paddingLeft:24,paddingRight:24,paddingBottom:64,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8,boxSizing:"border-box"}}>
@@ -5389,7 +5389,7 @@ function ScoreInfoModalScreen() {
             </svg>
           </div>
         </div>
-        {/* Title and Description — gap 32 */}
+        {/* Title and Description - gap 32 */}
         <div style={{display:"flex",flexDirection:"column",alignItems:"flex-start",gap:32,width:"100%"}}>
           {/* Heading */}
           <div style={{display:"flex",gap:8,alignItems:"flex-start",width:"100%"}}>
@@ -5397,9 +5397,9 @@ function ScoreInfoModalScreen() {
           </div>
           {/* Body */}
           <p style={{fontFamily:"Inter",fontWeight:400,fontSize:16,lineHeight:1.3,letterSpacing:-0.5,color:"#141810",margin:0,whiteSpace:"pre-wrap",width:"100%"}}>
-            {`Copy TBD. The Beacon Score is a 0–100 metric that measures whether an official's actions match their words — built entirely from verifiable public data like voting records, FEC filings, and financial disclosures. `}
+            {`Copy TBD. The Beacon Score is a 0–100 metric that measures whether an official's actions match their words - built entirely from verifiable public data like voting records, FEC filings, and financial disclosures. `}
             <br/><br/>
-            {`It's a composite of five sub-scores (Participation, Consistency, Transparency, Follow-Through, and Independence), so the single number is always backed by visible reasoning and primary sources. No opinion, no sentiment, no user ratings — every claim must be defensible with a direct link to the proof.`}
+            {`It's a composite of five sub-scores (Participation, Consistency, Transparency, Follow-Through, and Independence), so the single number is always backed by visible reasoning and primary sources. No opinion, no sentiment, no user ratings - every claim must be defensible with a direct link to the proof.`}
           </p>
         </div>
       </div>
@@ -5493,7 +5493,7 @@ function ParticipationScreen() {
               <button key={t} onClick={()=>setTab(t)} style={{padding:8,fontSize:16,fontWeight:600,color:T.slate,backgroundColor:"transparent",border:"none",borderBottom:tab===t?"4px solid #141810":"4px solid transparent",cursor:"pointer",textAlign:"center",lineHeight:"130%",letterSpacing:-0.5}}>{t}</button>
             ))}
           </div>
-          {/* Overview — single wrapping card: DataDetails + voting rows + vote grid. Figma: bg warmBg, p 16, gap 16, rounded 10 */}
+          {/* Overview - single wrapping card: DataDetails + voting rows + vote grid. Figma: bg warmBg, p 16, gap 16, rounded 10 */}
           <div style={{width:357,backgroundColor:T.warmBg,borderRadius:10,padding:16,display:"flex",flexDirection:"column",gap:16,boxSizing:"border-box"}}>
             <DataDetails width="100%" padding={0} paddingBottom={18}/>
             <DataDetailCell title="Voting Participation"    value="693" suffix=" /702" rightValue="99%"/>
@@ -5540,7 +5540,7 @@ function StancesScreen() {
       <div className="hide-scrollbar" style={{position:"absolute",top:98,bottom:75,left:0,right:0,overflowY:"auto"}}>
         <div style={{padding:"8px 18px 100px",display:"flex",flexDirection:"column",gap:24}}>
           <PoliticianProfileCard compact width={357}/>
-          {/* Stances summary — NO chevron, Medium 14 subtitle */}
+          {/* Stances summary - NO chevron, Medium 14 subtitle */}
           <StanceSummaryCard
             title="Stances"
             subtitle="Their positions on key issues, derived from votes and public statements."
@@ -5548,7 +5548,7 @@ function StancesScreen() {
             showChevron={false}
             subtitleVariant="medium"
           />
-          {/* Top Stances wrapper — bg warmBg, p 16, gap 16, rounded 10, title ExtraBold 18 */}
+          {/* Top Stances wrapper - bg warmBg, p 16, gap 16, rounded 10, title ExtraBold 18 */}
           <div style={{width:"100%",backgroundColor:T.warmBg,borderRadius:10,padding:16,display:"flex",flexDirection:"column",gap:16,boxSizing:"border-box"}}>
             <p style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>Top Stances</p>
             {stances.map((s,i)=>(
@@ -5568,7 +5568,7 @@ function StancesScreen() {
    Top: UpDown icon + Consistency title + Info icon + description + right 36/40.
    Middle: 1px black divider + subtitle + orange bar with deep-green fill (pr 32px),
            labels "90" (white left) and "-10" (white right), Consistency / Inconsistency below.
-   Bottom: Overall Consistency × Weight = Rounded Score — three boxed cells. */
+   Bottom: Overall Consistency × Weight = Rounded Score - three boxed cells. */
 function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", rounded=36 }) {
   const p = useReveal(900);
   return (
@@ -5595,12 +5595,12 @@ function ConsistencyScoreCard({ score=36, max=40, overall=90, weight="40%", roun
           </p>
         </div>
       </div>
-      {/* Center — divider + subtitle + graph */}
+      {/* Center - divider + subtitle + graph */}
       <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:16,width:"100%"}}>
         <div style={{height:1,backgroundColor:T.slate,width:"100%"}}/>
         <p style={{fontSize:11,fontWeight:400,color:T.slate,lineHeight:1.4,letterSpacing:-0.5,textAlign:"center",margin:0,width:291}}>Scale starts at 100. Each inconsistency deducts 10 points.</p>
         <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:4,width:"100%"}}>
-          {/* Bar — orange bg, deep-green fill (full width minus 32px), labels overlaid */}
+          {/* Bar - orange bg, deep-green fill (full width minus 32px), labels overlaid */}
           <div style={{position:"relative",width:"100%",height:24,backgroundColor:"#f80",overflow:"hidden"}}>
             <div style={{width:`calc((100% - 32px) * ${p})`,height:"100%",backgroundColor:T.deepGreen}}/>
             <span style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",fontSize:11,fontWeight:600,color:T.white,lineHeight:1,width:32}}>{Math.round(overall * p)}</span>
@@ -5686,7 +5686,7 @@ function PulseSurveys() {
           <IconBeaconDot/>
           <span style={{flex:1,fontSize:18,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5}}>Beacon Pulse</span>
           <div style={{display:"flex",alignItems:"center",gap:24}}>
-            {/* Discover tune icon — from assets/icons/discover_tune.svg */}
+            {/* Discover tune icon - from assets/icons/discover_tune.svg */}
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{display:"block"}}>
               <path d="M7 4.75L7 8.25" stroke="#999999" strokeWidth="1.3"/>
               <path d="M17 19.25L17 15.75" stroke="#999999" strokeWidth="1.3"/>
@@ -5815,7 +5815,7 @@ function PulseSurveyQuestion({
           </p>
         </div>
 
-        {/* Answer cards — stagger fade in top → bottom */}
+        {/* Answer cards - stagger fade in top → bottom */}
         <div style={{padding:"32px 18px 0",display:"flex",flexDirection:"column",gap:20}}>
           {options.map((text,i)=>{
             const visible = mounted && !leaving;
@@ -5863,7 +5863,7 @@ function PulseSurveyQuestion({
         </div>
       </div>
 
-      {/* Tab bar — Pulse active */}
+      {/* Tab bar - Pulse active */}
       <div style={{position:"absolute",bottom:0,left:0,right:0,zIndex:20}}>
         <BottomTabBar activeTab="pulse"/>
       </div>
@@ -5944,7 +5944,7 @@ function PulseSurveyResults({ onReturn=null }={}) {
           <p style={{fontSize:14,fontWeight:400,color:T.slate,lineHeight:"1.4",letterSpacing:-0.25,margin:0,paddingRight:24}}>Your response contributes to a shared civic signal that drives accountability.</p>
         </div>
 
-        {/* Result card — reuse existing PollResultsCard */}
+        {/* Result card - reuse existing PollResultsCard */}
         <div style={{padding:"0 18px"}}>
           <PollResultsCard/>
         </div>
@@ -5953,10 +5953,10 @@ function PulseSurveyResults({ onReturn=null }={}) {
 
       {/* Fixed Return to Feed CTA */}
       <div style={{position:"absolute",bottom:75,left:0,right:0,padding:"12px 18px",backgroundColor:T.cream,zIndex:15}}>
-        <button onClick={onReturn} style={{width:"100%",height:55,borderRadius:10,backgroundColor:T.slate,color:"#fff",fontFamily:"Inter,sans-serif",fontSize:18,fontWeight:700,letterSpacing:-0.5,border:"none",cursor:"pointer"}}>Return to Feed</button>
+        <button onClick={onReturn} style={{width:"100%",height:47,borderRadius:10,backgroundColor:T.slate,color:"#fff",fontFamily:"Inter,sans-serif",fontSize:18,fontWeight:800,letterSpacing:-0.5,border:"none",cursor:"pointer"}}>Return to Feed</button>
       </div>
 
-      {/* Tab bar — Pulse active */}
+      {/* Tab bar - Pulse active */}
       <div style={{position:"absolute",bottom:0,left:0,right:0,zIndex:20}}>
         <BottomTabBar activeTab="pulse"/>
       </div>
@@ -6180,7 +6180,7 @@ function SeverityBar({ fillPct=75, avgPct=81, duration=900 }) {
    Consistency wrapper (Ethics severity bar + Contested Proposition +
    What Makes This Inconsistent + Examples 3×2 grid). */
 function InconsistenciesScreen() {
-  const body = "Copy TBD. Signal over noise. Proof, not opinion. Every vote, every dollar, every promise — tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story.";
+  const body = "Copy TBD. Signal over noise. Proof, not opinion. Every vote, every dollar, every promise - tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story.";
   const longBody = body + " Beacon turns public records into plain language. No spin, no algorithm gaming, no agenda. Just the data your representatives wish you weren't paying attention to. One score. Five dimensions. Zero guesswork. Built for the 2026 midterms and every election after. Because accountability shouldn't require a law degree. Clear signal. Shared reality. Tap to verify.";
   const rows = [0,1,2];
   return (
@@ -6225,7 +6225,7 @@ function InconsistenciesScreen() {
               </div>
               <p style={{fontSize:13,fontWeight:400,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>{body}</p>
             </div>
-            {/* What Makes This Inconsistent — inline (X-circle icon) */}
+            {/* What Makes This Inconsistent - inline (X-circle icon) */}
             <div style={{width:"100%",backgroundColor:T.warmBg,border:`1px solid ${T.creamBorder}`,borderRadius:10,padding:16,display:"flex",flexDirection:"column",gap:16,boxSizing:"border-box"}}>
               <div style={{display:"flex",alignItems:"center",gap:4,width:"100%"}}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" style={{flexShrink:0}}>
@@ -6237,7 +6237,7 @@ function InconsistenciesScreen() {
               </div>
               <p style={{fontSize:13,fontWeight:400,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>{longBody}</p>
             </div>
-            {/* Examples — 2-column grid with labels */}
+            {/* Examples - 2-column grid with labels */}
             <div style={{width:"100%",display:"flex",flexDirection:"column",gap:16}}>
               <div style={{display:"flex",gap:16,width:"100%"}}>
                 <div style={{flex:1,minWidth:0,padding:"0 16px",display:"flex",alignItems:"center",justifyContent:"center",height:28}}>
@@ -6317,7 +6317,7 @@ function CommitteesScreen() {
         <div style={{padding:"8px 18px 100px",display:"flex",flexDirection:"column",gap:24}}>
           {/* Compact profile card */}
           <PoliticianProfileCard compact width={357}/>
-          {/* Committees summary — bg warmBg, p 16, gap 16, rounded 10. Title ExtraBold 18 + desc Regular 14. 2 DataDetailCells. */}
+          {/* Committees summary - bg warmBg, p 16, gap 16, rounded 10. Title ExtraBold 18 + desc Regular 14. 2 DataDetailCells. */}
           <div style={{width:"100%",backgroundColor:T.warmBg,borderRadius:10,padding:16,display:"flex",flexDirection:"column",gap:16,boxSizing:"border-box"}}>
             <div style={{display:"flex",flexDirection:"column",width:"100%"}}>
               <p style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0,width:"100%"}}>Committees</p>
@@ -6378,7 +6378,7 @@ function VotingScreen() {
           </div>
           {/* Voting Timeline */}
           <VotingTimeline/>
-          {/* Lean card — bg warmBg p 16 gap 16 rounded 10. Title ExtraBold 16. Bar gradient #005ebc → #ff1b1a. Dot 8×8 slate with 2px warmBg border. */}
+          {/* Lean card - bg warmBg p 16 gap 16 rounded 10. Title ExtraBold 16. Bar gradient #005ebc → #ff1b1a. Dot 8×8 slate with 2px warmBg border. */}
           <div style={{width:"100%",backgroundColor:T.warmBg,borderRadius:10,padding:16,display:"flex",flexDirection:"column",gap:16,boxSizing:"border-box"}}>
             <p style={{fontSize:16,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>Lean</p>
             <div style={{display:"flex",flexDirection:"column",gap:8,width:"100%"}}>
@@ -6393,7 +6393,7 @@ function VotingScreen() {
               </div>
             </div>
           </div>
-          {/* Recent Votes wrapper — bg warmBg p 16 gap 16 rounded 10. Items py-12 with 2px #f0e8d8 dividers. */}
+          {/* Recent Votes wrapper - bg warmBg p 16 gap 16 rounded 10. Items py-12 with 2px #f0e8d8 dividers. */}
           <div style={{width:"100%",backgroundColor:T.warmBg,borderRadius:10,padding:16,display:"flex",flexDirection:"column",gap:16,boxSizing:"border-box"}}>
             <p style={{fontSize:18,fontWeight:800,color:T.slate,lineHeight:1.3,letterSpacing:-0.5,margin:0}}>Recent Votes</p>
             <div style={{display:"flex",flexDirection:"column",width:"100%"}}>
@@ -6416,7 +6416,7 @@ function VotingScreen() {
 }
 
 /* ── DesktopParticipationScreen ──
-   Figma 7096:51510 — 1280×1189 participation drill-down page.
+   Figma 7096:51510 - 1280×1189 participation drill-down page.
    DesktopNavBar + 996w content column: Breadcrumb, 370w Time tab menu centered,
    Dashboard row (326 DesktopOfficialCard + 670 right side: Beacon Score header
    card + split bar/formula block + Overview breakdown + Committees block). */
@@ -6441,7 +6441,7 @@ function DesktopParticipationScreen() {
     }}>
       <DesktopNavBar activeTab="Officials"/>
 
-      {/* Content column — 996w, centered, 32px top pad from 80h nav */}
+      {/* Content column - 996w, centered, 32px top pad from 80h nav */}
       <div style={{
         width:996, paddingTop:32, paddingBottom:60,
         display:"flex", flexDirection:"column",
@@ -6456,7 +6456,7 @@ function DesktopParticipationScreen() {
           {label:"Participation"},
         ]}/>
 
-        {/* Time tabs row — 370w Tab Menu centered within 996; tab height is content-driven (~41px incl. 4px underline) */}
+        {/* Time tabs row - 370w Tab Menu centered within 996; tab height is content-driven (~41px incl. 4px underline) */}
         <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
           <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
             {tabs.map(t => (
@@ -6478,18 +6478,18 @@ function DesktopParticipationScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left card + 670 right side, no gap */}
+        {/* Dashboard row - 326 left card + 670 right side, no gap */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
-          {/* LEFT 326 — only left corners rounded (right side abuts the right column) */}
+          {/* LEFT 326 - only left corners rounded (right side abuts the right column) */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — 2px gap between stacked blocks reveals cream page bg */}
+          {/* RIGHT 670 - 2px gap between stacked blocks reveals cream page bg */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
-            {/* ── Beacon Score block — 670×314, rounded top-right ── */}
+            {/* ── Beacon Score block - 670×314, rounded top-right ── */}
             <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
-              {/* Header Data Detail — 670×114, white bg, px 20 py 16 */}
+              {/* Header Data Detail - 670×114, white bg, px 20 py 16 */}
               <div style={{
                 width:670, backgroundColor:T.white,
                 padding:"16px 20px", boxSizing:"border-box",
@@ -6518,7 +6518,7 @@ function DesktopParticipationScreen() {
                 </div>
               </div>
 
-              {/* Split bar + formula — 670×160, white bg, pb 18 px 20, gap 24 */}
+              {/* Split bar + formula - 670×160, white bg, pb 18 px 20, gap 24 */}
               <div style={{
                 width:670, backgroundColor:T.white,
                 padding:"0 20px 18px", boxSizing:"border-box",
@@ -6561,7 +6561,7 @@ function DesktopParticipationScreen() {
               </div>
             </div>
 
-            {/* ── Overview block — 670×408 — warmBg outer with p 16 gap 16 (638 inner) ── */}
+            {/* ── Overview block - 670×408 - warmBg outer with p 16 gap 16 (638 inner) ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:16, boxSizing:"border-box",
@@ -6579,14 +6579,14 @@ function DesktopParticipationScreen() {
               </div>
             </div>
 
-            {/* ── Committees block — 670×219, warmBg, px 20 py 24, gap 16, rounded bottom-right ── */}
+            {/* ── Committees block - 670×219, warmBg, px 20 py 24, gap 16, rounded bottom-right ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:"24px 20px", boxSizing:"border-box",
               display:"flex", flexDirection:"column", gap:16,
               borderRadius:"0 0 10px 0",
             }}>
-              {/* Heading row — 634w Participation Detail */}
+              {/* Heading row - 634w Participation Detail */}
               <div style={{display:"flex", gap:24, alignItems:"center", width:"100%"}}>
                 <div style={{flex:1, minWidth:0}}>
                   <span style={{fontSize:18, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Committees</span>
@@ -6595,7 +6595,7 @@ function DesktopParticipationScreen() {
                   <IconChevronForward color={T.slate}/>
                 </div>
               </div>
-              {/* Description Data Detail — 614w, bg warmBg, radius 5, no border/padding per spec */}
+              {/* Description Data Detail - 614w, bg warmBg, radius 5, no border/padding per spec */}
               <div style={{
                 width:"100%", backgroundColor:T.warmBg, borderRadius:5,
                 display:"flex", flexDirection:"column", gap:4,
@@ -6603,7 +6603,7 @@ function DesktopParticipationScreen() {
                 <p style={{margin:0, fontSize:16, fontWeight:600, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>69% committee attendance across 5 committees.</p>
                 <p style={{margin:0, fontSize:13, fontWeight:400, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Score 69% from 48 reported meetings.</p>
               </div>
-              {/* Half row — 309w each gap 16 (634w total) */}
+              {/* Half row - 309w each gap 16 (634w total) */}
               <div style={{display:"flex", gap:16, width:"100%"}}>
                 <ParticipationDataDetail title="Vote"       value="94%" half filled/>
                 <ParticipationDataDetail title="Committees" value="69%" half filled/>
@@ -6634,7 +6634,7 @@ function ParticipationScoreBox({ value, label, filled }) {
   );
 }
 
-/* Data Detail cell — matches Figma 7096:51534/51537/51549.
+/* Data Detail cell - matches Figma 7096:51534/51537/51549.
    Border creamBorder, radius 5, p 12, gap 8. Title SemiBold 16 ls-0.5.
    Score row SemiBold 22, optional right value, optional colored value, half=flex equally. */
 function ParticipationDataDetail({ title, value, suffix, rightValue, valueColor, half=false, filled=false }) {
@@ -6664,10 +6664,10 @@ function ParticipationDataDetail({ title, value, suffix, rightValue, valueColor,
 }
 
 /* ── DesktopVotingTimeline ──
-   Figma 7096:51485 — widened desktop variant of mobile VotingTimeline.
+   Figma 7096:51485 - widened desktop variant of mobile VotingTimeline.
    White bg, px 20 py 16, gap 24. Bar col: flex:1 with px 16, bar width = col inner.
    Bar H 160. Stacked bars: green (Yea) bottom, orange (Nay) middle, gray (Absent) above,
-   deepteal (Not Voting) top. Mobile chart only modeled Yea/Nay — we carry 4 stacks per Figma legend. */
+   deepteal (Not Voting) top. Mobile chart only modeled Yea/Nay - we carry 4 stacks per Figma legend. */
 function DesktopVotingTimeline({
   bars = [
     {month:"Sep", year:"'25", yea:0.30, nay:0.70, absent:0,    notVoting:0},
@@ -6704,7 +6704,7 @@ function DesktopVotingTimeline({
           const notVotingH = Math.round(BAR_H * notVoting * p);
           return (
             <div key={i} style={{flex:"1 0 0", minWidth:0, display:"flex", flexDirection:"column", gap:8, alignItems:"center", padding:"0 16px", boxSizing:"border-box"}}>
-              {/* Stacked bar col — flex column, justify-end so empty space is on top */}
+              {/* Stacked bar col - flex column, justify-end so empty space is on top */}
               <div style={{width:"100%", height:BAR_H, display:"flex", flexDirection:"column", justifyContent:"flex-end", borderRadius:1, overflow:"hidden"}}>
                 {notVotingH > 0 && <div style={{height:notVotingH, backgroundColor:COLORS.notVoting}}/>}
                 {absentH    > 0 && <div style={{height:absentH,    backgroundColor:COLORS.absent}}/>}
@@ -6733,7 +6733,7 @@ function DesktopVotingTimeline({
 }
 
 /* ── DesktopVoteRow ──
-   Figma 7096:51500/51502/51508 — single recent vote row.
+   Figma 7096:51500/51502/51508 - single recent vote row.
    warmBg (container supplies), py 12, gap 16. Vote/Result column w-80.
    Pill: rounded 24, px 12 py 2, SemiBold 14, color warmBg.
    Yea=#00b34a, Nay=#ff5500, No Vote=#999. */
@@ -6792,7 +6792,7 @@ function DesktopVoteRow({
 }
 
 /* ── DesktopVotingScreen ──
-   Figma 7096:51473 — 1280×1316 voting drill-down page.
+   Figma 7096:51473 - 1280×1316 voting drill-down page.
    Same shell as DesktopParticipationScreen (nav + 996 col + breadcrumb + time tabs +
    326 profile card + 670 right column: Voting Participation + Lean + Recent Votes). */
 function DesktopVotingScreen() {
@@ -6824,7 +6824,7 @@ function DesktopVotingScreen() {
     }}>
       <DesktopNavBar activeTab="Officials"/>
 
-      {/* Content column — 996w, centered, 32px top pad from 80h nav */}
+      {/* Content column - 996w, centered, 32px top pad from 80h nav */}
       <div style={{
         width:996, paddingTop:32, paddingBottom:60,
         display:"flex", flexDirection:"column",
@@ -6832,7 +6832,7 @@ function DesktopVotingScreen() {
         transform: visible ? "translateY(0)" : "translateY(6px)",
         transition: "opacity 180ms ease, transform 180ms ease",
       }}>
-        {/* Breadcrumb — 4 items */}
+        {/* Breadcrumb - 4 items */}
         <DesktopBreadcrumb items={[
           {label:"Officials", href:"#"},
           {label:"Lauren Boebert", href:"#"},
@@ -6840,7 +6840,7 @@ function DesktopVotingScreen() {
           {label:"Voting"},
         ]}/>
 
-        {/* Time tabs row — centered, no fixed height */}
+        {/* Time tabs row - centered, no fixed height */}
         <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
           <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
             {tabs.map(t => (
@@ -6862,19 +6862,19 @@ function DesktopVotingScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left + 670 right */}
+        {/* Dashboard row - 326 left + 670 right */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
           {/* LEFT 326 */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — three stacked blocks, 2px gap */}
+          {/* RIGHT 670 - three stacked blocks, 2px gap */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
 
-            {/* ── Voting Participation block — 670×425, white bg, rounded top-right ── */}
+            {/* ── Voting Participation block - 670×425, white bg, rounded top-right ── */}
             <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
-              {/* Header — 670×66, white bg, pl 20 pr 10 py 16 */}
+              {/* Header - 670×66, white bg, pl 20 pr 10 py 16 */}
               <div style={{
                 width:670, backgroundColor:T.white,
                 padding:"16px 10px 16px 20px", boxSizing:"border-box",
@@ -6882,11 +6882,11 @@ function DesktopVotingScreen() {
               }}>
                 <span style={{fontSize:26, fontWeight:800, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>Voting Participation</span>
               </div>
-              {/* Voting Timeline — 670×319 */}
+              {/* Voting Timeline - 670×319 */}
               <DesktopVotingTimeline/>
             </div>
 
-            {/* ── Lean block — 670×109, warmBg ── */}
+            {/* ── Lean block - 670×109, warmBg ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:"16px 20px", boxSizing:"border-box",
@@ -6906,7 +6906,7 @@ function DesktopVotingScreen() {
               </div>
             </div>
 
-            {/* ── Recent Votes block — 670×698, warmBg, rounded bottom-right ── */}
+            {/* ── Recent Votes block - 670×698, warmBg, rounded bottom-right ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:"16px 20px", boxSizing:"border-box",
@@ -6932,7 +6932,7 @@ function DesktopVotingScreen() {
 }
 
 /* ── DesktopCommitteeRow ──
-   Figma 7096:51466/51468/51470 — single committee row inside the warmBg block.
+   Figma 7096:51466/51468/51470 - single committee row inside the warmBg block.
    Structure: top row (info left + percent right), then bar, then caption.
    Flush (no bg/padding) so it lives inside a shared warmBg container with dividers between. */
 function DesktopCommitteeRow({ name, code, percent, attendance }) {
@@ -6955,7 +6955,7 @@ function DesktopCommitteeRow({ name, code, percent, attendance }) {
 }
 
 /* ── DesktopCommitteesScreen ──
-   Figma 7096:51445 — 1280 committees drill-down page.
+   Figma 7096:51445 - 1280 committees drill-down page.
    Same shell as DesktopParticipationScreen / DesktopVotingScreen.
    Right column has TWO blocks: Voting Participation (white) + Committee Breakdown (warmBg). */
 function DesktopCommitteesScreen() {
@@ -6989,7 +6989,7 @@ function DesktopCommitteesScreen() {
         transform: visible ? "translateY(0)" : "translateY(6px)",
         transition: "opacity 180ms ease, transform 180ms ease",
       }}>
-        {/* Breadcrumb — 4 items */}
+        {/* Breadcrumb - 4 items */}
         <DesktopBreadcrumb items={[
           {label:"Officials", href:"#"},
           {label:"Lauren Boebert", href:"#"},
@@ -6997,7 +6997,7 @@ function DesktopCommitteesScreen() {
           {label:"Committees"},
         ]}/>
 
-        {/* Time tabs row — centered, no fixed height */}
+        {/* Time tabs row - centered, no fixed height */}
         <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
           <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
             {tabs.map(t => (
@@ -7019,19 +7019,19 @@ function DesktopCommitteesScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left + 670 right */}
+        {/* Dashboard row - 326 left + 670 right */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
           {/* LEFT 326 */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          {/* RIGHT 670 - two stacked blocks, 2px gap */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
 
-            {/* ── Voting Participation block — 670×220, white bg, rounded top-right ── */}
+            {/* ── Voting Participation block - 670×220, white bg, rounded top-right ── */}
             <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
-              {/* Header Data Detail — white bg, pl 20 pr 40 pt 16 pb 20 */}
+              {/* Header Data Detail - white bg, pl 20 pr 40 pt 16 pb 20 */}
               <div style={{
                 width:670, backgroundColor:T.white,
                 padding:"16px 40px 20px 20px", boxSizing:"border-box",
@@ -7042,7 +7042,7 @@ function DesktopCommitteesScreen() {
                   How often they show up and engage in the committee work that shapes legislation.
                 </p>
               </div>
-              {/* Breakdown row — white bg, px 20 pb 20, two halves gap 16 */}
+              {/* Breakdown row - white bg, px 20 pb 20, two halves gap 16 */}
               <div style={{
                 width:670, backgroundColor:T.white,
                 padding:"0 20px 20px", boxSizing:"border-box",
@@ -7053,7 +7053,7 @@ function DesktopCommitteesScreen() {
               </div>
             </div>
 
-            {/* ── Committee Breakdown block — warmBg, rounded bottom-right ── */}
+            {/* ── Committee Breakdown block - warmBg, rounded bottom-right ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:"16px 20px", boxSizing:"border-box",
@@ -7081,7 +7081,7 @@ function DesktopCommitteesScreen() {
 }
 
 /* ── DesktopConsistencyScreen ──
-   Figma 7096:51420 — 1280 consistency drill-down page.
+   Figma 7096:51420 - 1280 consistency drill-down page.
    Same shell as DesktopCommitteesScreen / DesktopParticipationScreen.
    Right column has TWO blocks:
      1) Beacon Score (white, ConsistencyScoreCard at 670w)
@@ -7119,7 +7119,7 @@ function DesktopConsistencyScreen() {
           {label:"Consistency"},
         ]}/>
 
-        {/* Time tabs row — centered, no fixed height */}
+        {/* Time tabs row - centered, no fixed height */}
         <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
           <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
             {tabs.map(t => (
@@ -7141,17 +7141,17 @@ function DesktopConsistencyScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left + 670 right */}
+        {/* Dashboard row - 326 left + 670 right */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
           {/* LEFT 326 */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          {/* RIGHT 670 - two stacked blocks, 2px gap */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
 
-            {/* ── Beacon Score block — 670w, white bg, rounded top-right ── */}
+            {/* ── Beacon Score block - 670w, white bg, rounded top-right ── */}
             <div style={{
               width:670, backgroundColor:T.white,
               padding:"16px 20px 20px", boxSizing:"border-box",
@@ -7160,7 +7160,7 @@ function DesktopConsistencyScreen() {
               <ConsistencyScoreCard score={34} max={40} overall={90} weight="40%" rounded={36}/>
             </div>
 
-            {/* ── Stances + Inconsistencies block — 670w, warmBg, rounded bottom-right ── */}
+            {/* ── Stances + Inconsistencies block - 670w, warmBg, rounded bottom-right ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:"16px 0", boxSizing:"border-box",
@@ -7209,7 +7209,7 @@ function DesktopConsistencyScreen() {
 }
 
 /* ── DesktopInconsistenciesScreen ──
-   Figma 7096:51356 — 1280 inconsistencies drill-down page.
+   Figma 7096:51356 - 1280 inconsistencies drill-down page.
    Same shell as DesktopConsistencyScreen.
    Right column: Block 1 Beacon Score (Inconsistencies title + desc + Inconsistencies/Stances halves).
    Block 2 warmBg stack: Ethics bar card · Contested Proposition · What Makes This Inconsistent · Examples 3×2 grid. */
@@ -7243,7 +7243,7 @@ function DesktopInconsistenciesScreen() {
         transform: visible ? "translateY(0)" : "translateY(6px)",
         transition: "opacity 180ms ease, transform 180ms ease",
       }}>
-        {/* Breadcrumb — 4 items */}
+        {/* Breadcrumb - 4 items */}
         <DesktopBreadcrumb items={[
           {label:"Officials", href:"#"},
           {label:"Lauren Boebert", href:"#"},
@@ -7251,7 +7251,7 @@ function DesktopInconsistenciesScreen() {
           {label:"Inconsistencies"},
         ]}/>
 
-        {/* Time tabs row — centered, no fixed height */}
+        {/* Time tabs row - centered, no fixed height */}
         <div style={{width:"100%", display:"flex", alignItems:"center", justifyContent:"center"}}>
           <div style={{display:"flex", gap:28, alignItems:"center", justifyContent:"center"}}>
             {tabs.map(t => (
@@ -7273,17 +7273,17 @@ function DesktopInconsistenciesScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left + 670 right */}
+        {/* Dashboard row - 326 left + 670 right */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
           {/* LEFT 326 */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          {/* RIGHT 670 - two stacked blocks, 2px gap */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
 
-            {/* ── Block 1: Beacon Score — 670w, white bg, rounded top-right ── */}
+            {/* ── Block 1: Beacon Score - 670w, white bg, rounded top-right ── */}
             <div style={{width:670, display:"flex", flexDirection:"column", borderRadius:"0 10px 0 0", overflow:"hidden"}}>
               {/* Header Title + Description */}
               <div style={{
@@ -7296,7 +7296,7 @@ function DesktopInconsistenciesScreen() {
                   Where what they say and how they vote don't line up.
                 </p>
               </div>
-              {/* Breakdown row — white bg, px 20 pb 20, two halves gap 16 */}
+              {/* Breakdown row - white bg, px 20 pb 20, two halves gap 16 */}
               <div style={{
                 width:670, backgroundColor:T.white,
                 padding:"0 20px 20px", boxSizing:"border-box",
@@ -7315,7 +7315,7 @@ function DesktopInconsistenciesScreen() {
               borderRadius:"0 0 10px 0",
             }}>
 
-              {/* 1. Ethics card — warmBg, no border, title + severity + SeverityBar */}
+              {/* 1. Ethics card - warmBg, no border, title + severity + SeverityBar */}
               <div style={{width:"100%", backgroundColor:T.warmBg, display:"flex", flexDirection:"column", gap:16, fontFamily:"Inter,sans-serif"}}>
                 <div style={{display:"flex", flexDirection:"column", gap:8, width:"100%"}}>
                   <div style={{display:"flex", alignItems:"center", width:"100%"}}>
@@ -7327,7 +7327,7 @@ function DesktopInconsistenciesScreen() {
                 <SeverityBar fillPct={fillPct} avgPct={avgPct}/>
               </div>
 
-              {/* 2. Contested Proposition card — warmBg with border, IconContention + chevron + copy */}
+              {/* 2. Contested Proposition card - warmBg with border, IconContention + chevron + copy */}
               <div style={{width:"100%", borderRadius:10, backgroundColor:T.warmBg, border:`1px solid ${T.creamBorder}`, padding:16, display:"flex", flexDirection:"column", gap:16, fontFamily:"Inter,sans-serif"}}>
                 <div style={{display:"flex", alignItems:"center", gap:4, width:"100%"}}>
                   <div style={{width:24, height:24, flexShrink:0, display:"flex", alignItems:"center", justifyContent:"center"}}>
@@ -7337,14 +7337,14 @@ function DesktopInconsistenciesScreen() {
                   <IconChevronForward color={T.gray}/>
                 </div>
                 <p style={{margin:0, fontSize:13, fontWeight:400, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>
-                  Copy TBD. Signal over noise. Proof, not opinion. Every vote, every dollar, every promise — tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story.
+                  Copy TBD. Signal over noise. Proof, not opinion. Every vote, every dollar, every promise - tracked, sourced, and accountable. This is what democracy looks like when the receipts travel with the story.
                 </p>
               </div>
 
-              {/* 3. What Makes This Inconsistent — reuse InconsistencyDetail */}
+              {/* 3. What Makes This Inconsistent - reuse InconsistencyDetail */}
               <InconsistencyDetail/>
 
-              {/* 4. Examples grid — labels + 3 rows × 2 cols */}
+              {/* 4. Examples grid - labels + 3 rows × 2 cols */}
               <div style={{display:"flex", flexDirection:"column", gap:16, width:"100%"}}>
                 {/* Labels */}
                 <div style={{display:"flex", gap:16, width:"100%"}}>
@@ -7408,7 +7408,7 @@ function DesktopViolationCard({ title, weight="Weight: 25%", percent="00%", fill
 }
 
 /* ── DesktopConductScreen ──
-   Figma 7096:51315 — 1280 conduct drill-down page. Same shell as DesktopConsistencyScreen.
+   Figma 7096:51315 - 1280 conduct drill-down page. Same shell as DesktopConsistencyScreen.
    Right column: Block 1 Beacon Score (ConductSummary with shield/bar/formula/sub-scores/Combined).
    Block 2 warmBg stack: 4 DesktopViolationCards + Methodology block. */
 function DesktopConductScreen() {
@@ -7450,7 +7450,7 @@ function DesktopConductScreen() {
         transform: visible ? "translateY(0)" : "translateY(6px)",
         transition: "opacity 180ms ease, transform 180ms ease",
       }}>
-        {/* Breadcrumb — 3 items */}
+        {/* Breadcrumb - 3 items */}
         <DesktopBreadcrumb items={[
           {label:"Officials", href:"#"},
           {label:"Lauren Boebert", href:"#"},
@@ -7479,17 +7479,17 @@ function DesktopConductScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left + 670 right */}
+        {/* Dashboard row - 326 left + 670 right */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
           {/* LEFT 326 */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          {/* RIGHT 670 - two stacked blocks, 2px gap */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
 
-            {/* ── Block 1: Beacon Score — 670w, white bg, rounded top-right ── */}
+            {/* ── Block 1: Beacon Score - 670w, white bg, rounded top-right ── */}
             <div style={{
               width:670, backgroundColor:T.white,
               padding:"16px 20px 20px", boxSizing:"border-box",
@@ -7498,7 +7498,7 @@ function DesktopConductScreen() {
               <ConductSummary bg="transparent" description="A contrast of their current actions against historical positions."/>
             </div>
 
-            {/* ── Block 2: Conduct violations stack — 670w, warmBg, rounded bottom-right ── */}
+            {/* ── Block 2: Conduct violations stack - 670w, warmBg, rounded bottom-right ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:16, boxSizing:"border-box",
@@ -7509,7 +7509,7 @@ function DesktopConductScreen() {
                 <DesktopViolationCard key={i} {...v}/>
               ))}
 
-              {/* Methodology block — warmBg continuation, no card bg */}
+              {/* Methodology block - warmBg continuation, no card bg */}
               <div style={{display:"flex", flexDirection:"column", gap:4, width:"100%"}}>
                 <p style={{margin:0, fontSize:13, fontWeight:400, color:"#666", lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"pre-wrap"}}>
                   <span style={{fontWeight:600}}>Methodology: </span>
@@ -7527,9 +7527,9 @@ function DesktopConductScreen() {
 }
 
 /* ── DesktopCampaignFinanceScreen ──
-   Figma 7096:51333 — 1280 Campaign Finance drill-down page. Same shell as DesktopConductScreen.
-   Right column: Block 1 white bg — title + desc + score/25 + chevron + animated slate progress bar.
-   Block 2 warmBg — "Deductions" label, 2 deduction rows (IconLink + title/period + -pts),
+   Figma 7096:51333 - 1280 Campaign Finance drill-down page. Same shell as DesktopConductScreen.
+   Right column: Block 1 white bg - title + desc + score/25 + chevron + animated slate progress bar.
+   Block 2 warmBg - "Deductions" label, 2 deduction rows (IconLink + title/period + -pts),
    Total Deducted row with top border, source line. */
 function DesktopCampaignFinanceScreen() {
   const [tab, setTab] = React.useState("6M");
@@ -7565,7 +7565,7 @@ function DesktopCampaignFinanceScreen() {
         transform: visible ? "translateY(0)" : "translateY(6px)",
         transition: "opacity 180ms ease, transform 180ms ease",
       }}>
-        {/* Breadcrumb — 3 items */}
+        {/* Breadcrumb - 3 items */}
         <DesktopBreadcrumb items={[
           {label:"Officials", href:"#"},
           {label:"Lauren Boebert", href:"#"},
@@ -7594,17 +7594,17 @@ function DesktopCampaignFinanceScreen() {
           </div>
         </div>
 
-        {/* Dashboard row — 326 left + 670 right */}
+        {/* Dashboard row - 326 left + 670 right */}
         <div style={{width:996, display:"flex", alignItems:"flex-start"}}>
           {/* LEFT 326 */}
           <div style={{width:326, flexShrink:0}}>
             <DesktopOfficialCard rightSquare/>
           </div>
 
-          {/* RIGHT 670 — two stacked blocks, 2px gap */}
+          {/* RIGHT 670 - two stacked blocks, 2px gap */}
           <div style={{width:670, display:"flex", flexDirection:"column", gap:2}}>
 
-            {/* ── Block 1: Beacon Score — 670w, white bg, rounded top-right ── */}
+            {/* ── Block 1: Beacon Score - 670w, white bg, rounded top-right ── */}
             <div style={{
               width:670, backgroundColor:T.white,
               padding:"16px 20px", boxSizing:"border-box",
@@ -7627,13 +7627,13 @@ function DesktopCampaignFinanceScreen() {
                   <IconChevronForward color={T.gray}/>
                 </div>
               </div>
-              {/* Progress bar — slate fill on cream track */}
+              {/* Progress bar - slate fill on cream track */}
               <div style={{width:"100%", height:6, borderRadius:50, backgroundColor:T.creamBorder, overflow:"hidden"}}>
                 <div style={{height:"100%", width:`${fillPct*p}%`, backgroundColor:T.slate, borderRadius:50}}/>
               </div>
             </div>
 
-            {/* ── Block 2: Deductions — 670w, warmBg, rounded bottom-right ── */}
+            {/* ── Block 2: Deductions - 670w, warmBg, rounded bottom-right ── */}
             <div style={{
               width:670, backgroundColor:T.warmBg,
               padding:"16px 20px", boxSizing:"border-box",
@@ -7662,7 +7662,7 @@ function DesktopCampaignFinanceScreen() {
                 ))}
               </div>
 
-              {/* Total Deducted row — slate top border */}
+              {/* Total Deducted row - slate top border */}
               <div style={{display:"flex", alignItems:"center", width:"100%", paddingTop:16, borderTop:`1px solid ${T.slate}`}}>
                 <p style={{flex:1, minWidth:0, margin:0, fontSize:16, fontWeight:700, color:T.slate, lineHeight:1.3, letterSpacing:-0.5}}>Total Deducted from 25</p>
                 <p style={{margin:0, fontSize:16, fontWeight:700, color:T.slate, lineHeight:1.3, letterSpacing:-0.5, whiteSpace:"nowrap"}}>-10 pts</p>
@@ -7681,10 +7681,10 @@ function DesktopCampaignFinanceScreen() {
 
 
 // Inline wordmark path so we can re-color it (source asset has fill="#39503D" baked in).
-// Path extracted verbatim from assets/icons/beacon-wordmark.svg — do not modify.
+// Path extracted verbatim from assets/icons/beacon-wordmark.svg - do not modify.
 const BEACON_WORDMARK_PATH = "M43.2266 6.46875C46.9601 6.46875 49.7686 8.20762 49.7686 12.0117V20.5713C49.7687 21.7844 50.2314 22.5048 51.2559 22.833V23.2275H46.8604C46.1342 23.2274 45.9033 22.9972 45.9033 22.21V21.1611C44.9121 22.7681 43.4245 23.5547 41.1123 23.5547C37.8112 23.5547 35.3874 22.0384 35.043 19.5781C33.5171 22.2286 31.2095 23.5547 28.0967 23.5547C23.075 23.5545 19.4075 19.9407 19.4072 14.9795C19.4072 10.0179 23.141 6.46878 28.5596 6.46875C32.1275 6.46875 34.6062 7.88152 34.6064 10.2471C34.6064 12.0539 33.1524 14.0587 27.6348 15.7012L23.7686 16.8516C24.495 20.203 26.6106 22.3388 29.5508 22.3389V22.3398C31.8745 22.3398 33.8075 20.8837 35.0146 18.5674C35.408 13.0143 44.1585 14.8031 45.8701 10.7314C45.7047 8.30489 44.6477 6.96094 42.8633 6.96094C40.815 6.96104 39.361 9.05961 38.8984 11.8799L36.0566 10.6992C37.5764 7.8466 39.9223 6.46878 43.2266 6.46875ZM60.1465 6.46875C63.2383 6.46875 65.5171 7.75032 66.8184 10.1816L63.9873 11.5283H63.9219C63.2054 8.44011 61.969 6.96094 60.1143 6.96094C57.6083 6.96121 55.7209 10.1809 55.7207 14.0576C55.7207 19.3148 57.8684 22.5352 61.6768 22.5352C63.8572 22.5351 65.6795 21.0561 66.5908 18.7568L67.0137 18.8887C65.9723 21.9444 63.4661 23.5547 60.1465 23.5547C55.037 23.5546 51.5879 20.137 51.5879 14.9131C51.5881 9.98496 55.135 6.46882 60.1465 6.46875ZM75.627 6.63477C80.8488 6.63477 84.2528 9.92723 84.2529 15.0459C84.2529 20.1647 80.8489 23.5547 75.627 23.5547C70.4052 23.5545 67.002 20.1967 67.002 15.0459C67.0021 9.89525 70.4062 6.63494 75.627 6.63477ZM5.34473 8.36719C6.89566 6.95068 8.54538 6.25879 10.4258 6.25879C14.7148 6.25897 17.915 9.78377 17.915 14.8232C17.9149 20.2258 13.9555 23.3877 8.80859 23.3877C6.10388 23.3876 4.88329 22.1046 3.2002 22.1045C2.54039 22.1045 1.9795 22.4996 1.97949 23.0596H1.48438V3.09766C1.48438 2.4721 1.18733 2.14163 0.725586 2.1416C0.49427 2.1416 0.263752 2.17539 0 2.30664V1.91113L4.94922 0H5.34473V8.36719ZM95.4287 6.46875C99.2427 6.46879 101.182 8.76905 101.182 13.2363V20.6279C101.182 21.7443 101.609 22.5326 102.662 22.8281V23.2227H95.8887V22.8281C96.9082 22.5326 97.3359 21.7775 97.3359 20.6934V12.8096C97.3359 9.4589 96.2505 7.71781 94.1133 7.71777C92.4697 7.71777 91.351 8.43998 89.5762 10.5752V20.6279C89.5763 21.7441 90.0033 22.5325 91.0225 22.8281V23.2227H84.25V22.8281C85.3017 22.5326 85.7294 21.7442 85.7295 20.6279V9.7207C85.7294 9.16224 85.4993 8.90039 85.0723 8.90039C84.8422 8.90043 84.5789 8.96563 84.251 9.09668V8.70215L89.1172 6.79688H89.5771V9.68652C91.3193 7.55242 93.2597 6.46875 95.4287 6.46875ZM75.627 7.15625C72.9169 7.15659 71.1993 10.4168 71.1992 15.0449C71.1992 19.6733 72.9177 23.0319 75.627 23.0322C78.3373 23.0322 80.0557 19.7394 80.0557 15.0449C80.0556 10.3506 78.3372 7.15625 75.627 7.15625ZM45.9033 11.75C44.4161 14.5372 39.0635 13.456 39.0635 18.998C39.0635 21.2605 40.4175 22.7685 42.2354 22.7686C43.8545 22.7686 45.0441 22.0144 45.9033 20.1123V11.75ZM8.94043 7.44434C7.62082 7.44434 6.59764 7.93923 5.34375 9.22363V19.3037C5.34383 21.3457 6.69748 22.7617 8.64355 22.7617C11.6453 22.7615 13.7235 20.1924 13.7236 15.1201C13.7236 10.0474 12.107 7.44443 8.94043 7.44434ZM27.8652 6.99609C25.0899 6.99643 23.4708 9.88716 23.4707 14.1582C23.4707 14.9137 23.5371 15.6372 23.6689 16.3271H23.6699L26.1807 15.4395C29.2201 14.3549 30.5088 12.3514 30.5088 10.248C30.5087 8.47362 29.5169 6.99609 27.8652 6.99609Z";
 
-// Full wordmark — viewBox spans the entire glyph string.
+// Full wordmark - viewBox spans the entire glyph string.
 function BeaconWordmark({ color="#39503D", height=48 }) {
   return (
     <svg viewBox="0 0 102.662 23.5547" style={{height, width:"auto", display:"block"}} xmlns="http://www.w3.org/2000/svg">
@@ -7693,7 +7693,7 @@ function BeaconWordmark({ color="#39503D", height=48 }) {
   );
 }
 
-// Monogram — same path, viewBox cropped to the "b" glyph (approx x 0–18 of 102.662).
+// Monogram - same path, viewBox cropped to the "b" glyph (approx x 0–18 of 102.662).
 // Clipping is the default SVG behavior when overflow is not set to "visible".
 function BeaconMonogram({ color="#39503D", height=48 }) {
   return (
@@ -7712,7 +7712,7 @@ function BeaconDotInline({ size=10 }) {
   );
 }
 
-// Lockup — dot sits above & to the right of the last letter, top-aligned with the ascender.
+// Lockup - dot sits above & to the right of the last letter, top-aligned with the ascender.
 function BeaconLockup({ variant="dark", type="wordmark", height=48 }) {
   const color = variant === "cream" ? T.warmBg : "#39503D";
   const Mark = type === "monogram" ? BeaconMonogram : BeaconWordmark;
@@ -7764,8 +7764,302 @@ function BeaconBranding() {
 }
 
 
+/* ── ButtonsAndLinks ──
+   Catalog of every button + link shape in the app, sourced from Figma node 8327-34480
+   (file: Beacon, page: Buttons and Links).
+   Rows = component (top-to-bottom by Figma Y position).
+   Columns = Default | Hover | Active | Disabled.
+   '-' = state does not exist on the Figma component (intentional, not TBD). */
+function ButtonsAndLinks() {
+  const dash = <span style={{color:"#c9c0ae",fontSize:14,fontWeight:500}}>-</span>;
+
+  // 1. Primary CTA - 160×47, r10, py12, gap4, Inter ExtraBold 18 / -0.5
+  const PrimaryCTA = ({state}) => {
+    const bg = state==="Disabled" ? "rgba(153,153,153,0.5)"
+             : (state==="Hover"||state==="Active") ? "#434640"
+             : T.slate;
+    const opacity = state==="Disabled" ? 0.5 : 1;
+    return (
+      <div style={{display:"inline-flex",gap:4,alignItems:"center",justifyContent:"center",padding:"12px 24px",borderRadius:10,minWidth:160,backgroundColor:bg}}>
+        <span style={{fontFamily:"Inter,sans-serif",fontWeight:800,fontSize:18,letterSpacing:-0.5,color:"#fff",lineHeight:1.3,opacity}}>Button</span>
+      </div>
+    );
+  };
+
+  // 2. Button Small - 69×34, r5, 1px cream border, px10 py4, Inter Black 14 / -0.5
+  const ButtonSmall = ({state}) => {
+    const bg = (state==="Hover"||state==="Active") ? T.slate : "rgba(20,24,16,0.6)";
+    const opacity = state==="Disabled" ? 0.5 : 1;
+    return (
+      <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",height:34,padding:"4px 10px",borderRadius:5,border:`1px solid ${T.cream}`,backgroundColor:bg,opacity,boxSizing:"border-box"}}>
+        <span style={{fontFamily:"Inter,sans-serif",fontWeight:900,fontSize:14,letterSpacing:-0.5,color:T.white,lineHeight:1.1,whiteSpace:"nowrap"}}>Update</span>
+      </div>
+    );
+  };
+
+  // 3. Tab - Active variant - Inter SemiBold 16 / -0.5, p8, 4px slate border-bottom (none on Disabled)
+  const TabActiveVariant = ({state}) => {
+    const isDisabled = state==="Disabled";
+    return (
+      <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",padding:8,borderBottom:isDisabled?"4px solid transparent":`4px solid ${T.slate}`,boxSizing:"border-box"}}>
+        <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:16,letterSpacing:-0.5,lineHeight:1.3,color:isDisabled?T.gray:T.slate,opacity:isDisabled?0.5:1}}>text</span>
+      </div>
+    );
+  };
+
+  // 4. Tab - Default variant - same type, border only on Hover/Active
+  const TabDefaultVariant = ({state}) => {
+    const isDisabled = state==="Disabled";
+    const showBorder = state==="Hover"||state==="Active";
+    return (
+      <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",padding:8,borderBottom:showBorder?`4px solid ${T.slate}`:"4px solid transparent",boxSizing:"border-box"}}>
+        <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:16,letterSpacing:-0.5,lineHeight:1.3,color:isDisabled?T.gray:T.slate,opacity:isDisabled?0.5:1}}>Text</span>
+      </div>
+    );
+  };
+
+  // 5. Add Reaction - 24×24 circle. Default cream bg; Hover/Active white bg.
+  const AddReaction = ({state}) => {
+    const bg = (state==="Hover"||state==="Active") ? T.white : T.cream;
+    return (
+      <div style={{width:24,height:24,borderRadius:48,border:`1px solid ${bg}`,backgroundColor:bg,display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",boxSizing:"border-box"}}>
+        <div style={{width:18,height:18,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <IconAddReaction color={T.slate}/>
+        </div>
+      </div>
+    );
+  };
+
+  // 6. Share - small (24×24). All states render the same icon (no Disabled in Figma).
+  // Real Figma SVG (paper-plane) from preview/assets/buttons-icons/share-small.svg.
+  const ShareSmall = () => (
+    <div style={{width:24,height:24,display:"inline-flex",alignItems:"center",justifyContent:"center"}}>
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+        <path d="M18.0491 0.584064L1.80671 4.85955C0.396244 5.2342 0.109743 7.03035 1.26677 8.18737L5.76264 12.6832L11.8894 8.12125L7.32737 14.248L11.8232 18.7438C12.9803 19.9009 14.7764 19.6144 15.1511 18.2039L19.4265 1.96147C19.6469 1.13503 18.8866 0.374697 18.0602 0.595083L18.0491 0.584064Z" stroke="#141810" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  );
+
+  // 7. Button Close - 28×28, r32, p2, IconCloseLarge inside.
+  //    Default bg rgba(20,24,16,0.5); Hover/Active slate; Disabled is invisible (opacity 0).
+  const BtnClose = ({state}) => {
+    const bg = (state==="Hover"||state==="Active") ? T.slate : "rgba(20,24,16,0.5)";
+    const opacity = state==="Disabled" ? 0 : 1;
+    return (
+      <div style={{display:"inline-flex",alignItems:"center",padding:2,borderRadius:32,backgroundColor:bg,opacity,boxSizing:"border-box"}}>
+        <div style={{width:24,height:24,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <svg width="13.5" height="13.5" viewBox="0 0 14 14" fill="none"><path d="M2 2L12 12M12 2L2 12" stroke="white" strokeWidth="2" strokeLinecap="round"/></svg>
+        </div>
+      </div>
+    );
+  };
+
+  // 8. Icon Button (Tune) - 24×24, gray default, slate on Hover/Active. (No Disabled in Figma.)
+  // Real Figma SVG (vertical equalizer/tune) from preview/assets/buttons-icons/tune.svg.
+  const IconBtnTune = ({state}) => {
+    const color = (state==="Hover"||state==="Active") ? T.slate : T.gray;
+    return (
+      <div style={{width:24,height:24,display:"inline-flex",alignItems:"center",justifyContent:"center"}}>
+        <svg width="16" height="14.5" viewBox="0 0 16 14.5" fill="none">
+          <path d="M3 1.19209e-07L3 3.5" stroke={color} strokeWidth="1.3"/>
+          <path d="M13 14.5L13 11" stroke={color} strokeWidth="1.3"/>
+          <line x1="0.65" y1="6.35" x2="5.35" y2="6.35" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+          <path d="M3 7L3 14.5" stroke={color} strokeWidth="1.3"/>
+          <line x1="0.65" y1="-0.65" x2="5.35" y2="-0.65" transform="matrix(1 0 0 -1 10 7.5)" stroke={color} strokeWidth="1.3" strokeLinecap="round"/>
+          <path d="M13 7.5L13 1.19209e-07" stroke={color} strokeWidth="1.3"/>
+        </svg>
+      </div>
+    );
+  };
+
+  // 9. Toggle - 51×31, gray gradient bg (off) / deepGreen (on), 27×27 white knob with shadow.
+  const Toggle = ({on}) => (
+    <div style={{position:"relative",width:51,height:31,borderRadius:100,backgroundColor:on?T.deepGreen:"#7f7c76",overflow:"hidden"}}>
+      <div style={{position:"absolute",top:2,left:on?22:2,width:27,height:27,borderRadius:100,backgroundColor:"white",boxShadow:"0px 3px 8px rgba(0,0,0,0.15), 0px 3px 1px rgba(0,0,0,0.06)"}}/>
+    </div>
+  );
+
+  // 10. Link - News Article - 16×16 cream tile (cream + 20% black overlay on Hover/Active) + 12×12 chain icon, 13/600 slate label.
+  //     Hover/Active underline label. Disabled is invisible (opacity 0).
+  //     Real Figma SVG (chain link) from preview/assets/buttons-icons/link-chain-default.svg.
+  const LinkNews = ({state}) => {
+    const isHoverActive = state==="Hover"||state==="Active";
+    const opacity = state==="Disabled" ? 0 : 1;
+    const tileBg = isHoverActive
+      ? "linear-gradient(90deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.2) 100%), linear-gradient(90deg, #f0e8d8 0%, #f0e8d8 100%)"
+      : T.cream;
+    const tileStyle = isHoverActive
+      ? {backgroundImage: tileBg}
+      : {backgroundColor: T.cream};
+    return (
+      <div style={{display:"inline-flex",alignItems:"center",gap:8,opacity}}>
+        <div style={{display:"inline-flex",alignItems:"center",justifyContent:"center",padding:4,borderRadius:5,boxSizing:"border-box",...tileStyle}}>
+          <svg width="12" height="12" viewBox="0 0 12.4342 12.4343" fill="none">
+            <path d="M6.34286 9.27999L4.34857 11.2743C3.46857 12.1543 2.04 12.1543 1.16 11.2743C0.28 10.3943 0.28 8.9657 1.16 8.0857L3.81143 5.43427C4.69143 4.55427 6.12 4.55427 7 5.43427" stroke={isHoverActive?"#FAFAFA":"#141810"} strokeMiterlimit="10" strokeLinecap="round"/>
+            <path d="M6.09129 3.15429L8.08558 1.16C8.96558 0.28 10.3942 0.28 11.2742 1.16C12.1542 2.04 12.1542 3.46857 11.2742 4.34857L8.62272 7C7.74272 7.88 6.31415 7.88 5.43415 7" stroke={isHoverActive?"#FAFAFA":"#141810"} strokeMiterlimit="10" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span style={{fontFamily:"Inter,sans-serif",fontSize:13,fontWeight:600,color:T.slate,letterSpacing:-0.5,lineHeight:1.1,textDecoration:isHoverActive?"underline":"none"}}>Link to News Article</span>
+      </div>
+    );
+  };
+
+  // 11. Link - View All - Inter SemiBold 14 / -0.5 + 16×16 chevron.
+  //     Default no underline · Hover/Active underline on text only · Disabled gray + 30% opacity, no underline.
+  const LinkViewAll = ({state}) => {
+    const isDisabled = state==="Disabled";
+    const isHoverActive = state==="Hover"||state==="Active";
+    return (
+      <div style={{display:"inline-flex",alignItems:"center",gap:4,paddingTop:4,opacity:isDisabled?0.3:1}}>
+        <span style={{fontFamily:"Inter,sans-serif",fontSize:14,fontWeight:600,letterSpacing:-0.5,lineHeight:1.3,color:isDisabled?T.gray:T.slate,textDecoration:isHoverActive?"underline":"none"}}>View All</span>
+        <div style={{width:16,height:16,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <IconChevronForward color={isDisabled?T.gray:T.slate}/>
+        </div>
+      </div>
+    );
+  };
+
+  // 12. Link - Breadcrumb - Inter Medium 13 / -0.5, underlined.
+  //     Default rgba(0,0,0,.6); Hover/Active slate; Disabled 30% opacity, no underline.
+  const LinkBreadcrumb = ({state}) => {
+    const isHoverActive = state==="Hover"||state==="Active";
+    const isDisabled = state==="Disabled";
+    return (
+      <span style={{fontFamily:"Inter,sans-serif",fontSize:13,fontWeight:500,letterSpacing:-0.5,lineHeight:"15px",color:isHoverActive?T.slate:"rgba(0,0,0,0.6)",textDecoration:isDisabled?"none":"underline",opacity:isDisabled?0.3:1}}>Link</span>
+    );
+  };
+
+  // 13. Share - large (Copy Link) - 88×88, r10, shadow.
+  //     Default bg rgba(255,249,237,0.8); Hover/Active rgba(255,255,255,0.8). 36×36 IconLink + Copy Link 13/600 slate.
+  const ShareLarge = ({state}) => {
+    const isHoverActive = state==="Hover"||state==="Active";
+    return (
+      <div style={{width:88,height:88,borderRadius:10,backgroundColor:isHoverActive?"rgba(255,255,255,0.8)":"rgba(255,249,237,0.8)",boxShadow:"0px 4px 15px rgba(0,0,0,0.15)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",paddingTop:13,paddingBottom:7,boxSizing:"border-box"}}>
+        {/* Real Figma chain-link SVG from preview/assets/buttons-icons/copy-link.svg, 27×27 */}
+        <div style={{width:36,height:36,display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <svg width="27" height="27" viewBox="0 0 27.7268 27.7271" fill="none">
+            <path d="M14.1464 20.755L9.65929 25.2421C7.67929 27.2221 4.465 27.2221 2.485 25.2421C0.505 23.2621 0.505 20.0478 2.485 18.0678L8.45071 12.1021C10.4307 10.1221 13.645 10.1221 15.625 12.1021" stroke="#141810" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
+            <path d="M13.5804 6.97214L18.0676 2.485C20.0476 0.505 23.2618 0.505 25.2418 2.485C27.2218 4.465 27.2218 7.67929 25.2418 9.65929L19.2761 15.625C17.2961 17.605 14.0818 17.605 12.1018 15.625" stroke="#141810" strokeWidth="2" strokeMiterlimit="10" strokeLinecap="round"/>
+          </svg>
+        </div>
+        <span style={{fontFamily:"Inter,sans-serif",fontSize:13,fontWeight:600,letterSpacing:-0.5,lineHeight:1.3,color:T.slate}}>Copy Link</span>
+      </div>
+    );
+  };
+
+  // 14-18 Mobile Nav - 68×61 (Account 72×61), vertical icon+label.
+  //   Default no border; Hover/Active 4px slate border-bottom; Active fills color (gray→slate).
+  const NavMobile = ({Icon, label, state, width=68}) => {
+    const showBorder = state==="Hover"||state==="Active";
+    const isActive = state==="Active";
+    const py = showBorder ? {paddingTop:4,paddingBottom:8} : {paddingTop:4,paddingBottom:4};
+    return (
+      <div style={{width,height:61,display:"flex",flexDirection:"column",alignItems:"center",gap:4,...py,borderBottom:showBorder?`4px solid ${T.slate}`:"4px solid transparent",boxSizing:"border-box"}}>
+        <div style={{width:24,height:24,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon active={isActive}/></div>
+        <span style={{fontFamily:"Inter,sans-serif",fontSize:10,fontWeight:600,letterSpacing:-0.25,lineHeight:"15px",color:isActive?T.slate:T.gray,whiteSpace:"nowrap"}}>{label}</span>
+      </div>
+    );
+  };
+
+  // 19-22 Desktop Nav - 80h, horizontal icon+label gap-4.
+  //   Default no border; Hover/Active 4px slate border-bottom; Active fills color.
+  const NavDesktop = ({Icon, label, state, width=80}) => {
+    const showBorder = state==="Hover"||state==="Active";
+    const isActive = state==="Active";
+    return (
+      <div style={{width,height:80,display:"flex",alignItems:"center",justifyContent:"center",gap:4,padding:"4px 0",borderBottom:showBorder?`4px solid ${T.slate}`:"4px solid transparent",boxSizing:"border-box"}}>
+        <div style={{width:24,height:24,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon active={isActive}/></div>
+        <span style={{fontFamily:"Inter,sans-serif",fontSize:13,fontWeight:600,letterSpacing:-0.25,lineHeight:"15px",color:isActive?T.slate:T.gray,whiteSpace:"nowrap"}}>{label}</span>
+      </div>
+    );
+  };
+
+  // ── Rows (Figma top-to-bottom) ──
+  const states = ["Default","Hover","Active","Disabled"];
+  const rows = [
+    { name:"Primary CTA", spec:"160×47 · r10 · py12 · gap4 · Inter ExtraBold 18 / -0.5 · Default slate, Hover/Active #434640, Disabled rgba(153,153,153,.5) · text white",
+      cells: states.map(s => <PrimaryCTA state={s}/>) },
+    { name:"Button Small", spec:"69×34 · r5 · 1px cream border · px10 py4 · Inter Black 14 / -0.5 · Default rgba(20,24,16,.6), Hover/Active slate · Disabled 50%",
+      cells: states.map(s => <ButtonSmall state={s}/>) },
+    { name:"Tab - Active variant", spec:"Inter SemiBold 16 / -0.5 · p8 · 4px slate border-bottom · Disabled gray text 50%, no border",
+      cells: states.map(s => <TabActiveVariant state={s}/>) },
+    { name:"Tab - Default variant", spec:"Inter SemiBold 16 / -0.5 · p8 · border-bottom only on Hover/Active · Disabled gray 50%",
+      cells: states.map(s => <TabDefaultVariant state={s}/>) },
+    { name:"Add Reaction", spec:"24×24 circle · Default cream, Hover/Active white · IconAddReaction (slate)",
+      cells: [<AddReaction state="Default"/>,<AddReaction state="Hover"/>,<AddReaction state="Active"/>,dash] },
+    { name:"Share - small", spec:"24×24 · IconShareAction · same shape across states (no Disabled in Figma)",
+      cells: [<ShareSmall/>,<ShareSmall/>,<ShareSmall/>,dash] },
+    { name:"Button Close", spec:"28×28 outer · r32 · p2 · Default bg rgba(20,24,16,.5), Hover/Active slate · Disabled = invisible",
+      cells: states.map(s => <BtnClose state={s}/>) },
+    { name:"Icon Button", spec:"24×24 · Tune glyph · Default gray, Hover/Active slate (no Disabled)",
+      cells: [<IconBtnTune state="Default"/>,<IconBtnTune state="Hover"/>,<IconBtnTune state="Active"/>,dash] },
+    { name:"Toggle", spec:"51×31 · 27×27 white knob · shadow · Default(Off) = #7f7c76 bg, Active(On) = deepGreen bg",
+      cells: [<Toggle on={false}/>,dash,<Toggle on={true}/>,dash] },
+    { name:"Link - News Article", spec:"24×24 cream tile (+ overlay on Hover/Active) + IconLink · 13/600 slate label · underline on Hover/Active · Disabled invisible",
+      cells: states.map(s => <LinkNews state={s}/>) },
+    { name:"Link - View All", spec:"Inter SemiBold 14 / -0.5 · slate text + chevron · Disabled gray 30%",
+      cells: states.map(s => <LinkViewAll state={s}/>) },
+    { name:"Link - Breadcrumb", spec:"Inter Medium 13 / -0.5 · underlined · Default rgba(0,0,0,.6), Hover/Active slate · Disabled 30%, no underline",
+      cells: states.map(s => <LinkBreadcrumb state={s}/>) },
+    { name:"Share - large (Copy Link)", spec:"88×88 · r10 · shadow · Default bg rgba(255,249,237,.8), Hover/Active rgba(255,255,255,.8) · 36×36 IconLink + Copy Link 13/600 slate (no Disabled)",
+      cells: [<ShareLarge state="Default"/>,<ShareLarge state="Hover"/>,<ShareLarge state="Active"/>,dash] },
+    { name:"Nav - Home (Mobile)", spec:"68×61 · IconNavHome · 10/600 -0.25 · Active fills slate · 4px border on Hover/Active",
+      cells: [<NavMobile Icon={IconNavHome} label="Home" state="Default"/>,<NavMobile Icon={IconNavHome} label="Home" state="Hover"/>,<NavMobile Icon={IconNavHome} label="Home" state="Active"/>,dash] },
+    { name:"Nav - Issues (Mobile)", spec:"68×61 · IconNavIssues · 10/600 -0.25",
+      cells: [<NavMobile Icon={IconNavIssues} label="Issues" state="Default"/>,<NavMobile Icon={IconNavIssues} label="Issues" state="Hover"/>,<NavMobile Icon={IconNavIssues} label="Issues" state="Active"/>,dash] },
+    { name:"Nav - Pulse (Mobile)", spec:"68×61 · IconNavPulse · 10/600 -0.25",
+      cells: [<NavMobile Icon={IconNavPulse} label="Pulse" state="Default"/>,<NavMobile Icon={IconNavPulse} label="Pulse" state="Hover"/>,<NavMobile Icon={IconNavPulse} label="Pulse" state="Active"/>,dash] },
+    { name:"Nav - Officials (Mobile)", spec:"68×61 · IconNavOfficials · 10/600 -0.25",
+      cells: [<NavMobile Icon={IconNavOfficials} label="Officials" state="Default"/>,<NavMobile Icon={IconNavOfficials} label="Officials" state="Hover"/>,<NavMobile Icon={IconNavOfficials} label="Officials" state="Active"/>,dash] },
+    { name:"Nav - Account (Mobile)", spec:"72×61 · IconNavAccount · 10/600 -0.25",
+      cells: [<NavMobile Icon={IconNavAccount} label="Account" state="Default" width={72}/>,<NavMobile Icon={IconNavAccount} label="Account" state="Hover" width={72}/>,<NavMobile Icon={IconNavAccount} label="Account" state="Active" width={72}/>,dash] },
+    { name:"Nav - Issues (Desktop)", spec:"68×80 · horizontal · IconNavIssues + 13/600 -0.25",
+      cells: [<NavDesktop Icon={IconNavIssues} label="Issues" state="Default" width={68}/>,<NavDesktop Icon={IconNavIssues} label="Issues" state="Hover" width={68}/>,<NavDesktop Icon={IconNavIssues} label="Issues" state="Active" width={68}/>,dash] },
+    { name:"Nav - Pulse (Desktop)", spec:"62×80 · horizontal · IconNavPulse + 13/600 -0.25",
+      cells: [<NavDesktop Icon={IconNavPulse} label="Pulse" state="Default" width={62}/>,<NavDesktop Icon={IconNavPulse} label="Pulse" state="Hover" width={62}/>,<NavDesktop Icon={IconNavPulse} label="Pulse" state="Active" width={62}/>,dash] },
+    { name:"Nav - Officials (Desktop)", spec:"79×80 · horizontal · IconNavOfficials + 13/600 -0.25",
+      cells: [<NavDesktop Icon={IconNavOfficials} label="Officials" state="Default" width={79}/>,<NavDesktop Icon={IconNavOfficials} label="Officials" state="Hover" width={79}/>,<NavDesktop Icon={IconNavOfficials} label="Officials" state="Active" width={79}/>,dash] },
+    { name:"Nav - Account (Desktop)", spec:"80×80 · horizontal · IconNavAccount + 13/600 -0.25",
+      cells: [<NavDesktop Icon={IconNavAccount} label="Account" state="Default" width={80}/>,<NavDesktop Icon={IconNavAccount} label="Account" state="Hover" width={80}/>,<NavDesktop Icon={IconNavAccount} label="Account" state="Active" width={80}/>,dash] },
+  ];
+
+  const stateCols = ["Default","Hover","Active","Disabled"];
+  const headerCell = (label) => (
+    <div key={label} style={{padding:"8px 12px",fontFamily:"Inter,sans-serif",fontSize:11,fontWeight:700,color:T.gray,letterSpacing:0.5,textTransform:"uppercase",borderBottom:`1px solid ${T.creamBorder}`}}>{label}</div>
+  );
+  const labelCell = (row) => (
+    <div style={{padding:16,display:"flex",flexDirection:"column",gap:4,borderRight:`1px solid ${T.creamBorder}`,backgroundColor:T.warmBg}}>
+      <p style={{margin:0,fontFamily:"Inter,sans-serif",fontSize:13,fontWeight:700,color:T.slate,letterSpacing:-0.2,lineHeight:1.3}}>{row.name}</p>
+      <p style={{margin:0,fontFamily:"Inter,sans-serif",fontSize:11,fontWeight:500,color:T.gray,letterSpacing:-0.1,lineHeight:1.4}}>{row.spec}</p>
+    </div>
+  );
+  const stateCell = (content, isLast, k) => (
+    <div key={k} style={{padding:"20px 16px",display:"flex",alignItems:"center",justifyContent:"center",minHeight:100,backgroundColor:"#FFFFFF",borderRight:isLast?"none":`1px solid ${T.creamBorder}`}}>
+      {content}
+    </div>
+  );
+
+  return (
+    <div style={{width:"100%",fontFamily:"Inter,sans-serif"}}>
+      <div style={{border:`1px solid ${T.creamBorder}`,borderRadius:10,overflow:"hidden"}}>
+        <div style={{display:"grid",gridTemplateColumns:"280px repeat(4, 1fr)",backgroundColor:T.warmBg,borderBottom:`1px solid ${T.creamBorder}`}}>
+          {headerCell("Component")}
+          {stateCols.map(headerCell)}
+        </div>
+        {rows.map((row,i) => (
+          <div key={row.name} style={{display:"grid",gridTemplateColumns:"280px repeat(4, 1fr)",borderTop:i===0?"none":`1px solid ${T.creamBorder}`}}>
+            {labelCell(row)}
+            {row.cells.map((c,j) => stateCell(c, j===row.cells.length-1, j))}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+
 function IconStickerSheet() {
-  // All raw SVGs from assets/icons/ — Material-style uniform grid.
+  // All raw SVGs from assets/icons/ - Material-style uniform grid.
   const base = "../assets/icons";
   const icons = [
     ["Search",                 `${base}/Search.svg`],
@@ -7850,6 +8144,12 @@ const SECTIONS = [
     ]
   },
   {
+    group: "Components", id: "Buttons & Links",
+    components: [
+      { id:"ButtonsAndLinks",   label:"Buttons & Links",    desc:"Catalog of every button + link shape · Default / Hover / Active / Disabled states" },
+    ]
+  },
+  {
     group: "Components", id: "Shared",
     components: [
       { id:"IconStickerSheet",  label:"Icon Sticker Sheet", desc:"All raw SVGs from assets/icons/ in a labeled grid · reference for icon inventory" },
@@ -7868,7 +8168,7 @@ const SECTIONS = [
   {
     group: "Components", id: "Search",
     components: [
-      // Search primitives — to build
+      // Search primitives - to build
     ]
   },
   {
@@ -7924,7 +8224,7 @@ const SECTIONS = [
   {
     group: "Mobile", id: "Search",
     components: [
-      // Mobile search screens — to build
+      // Mobile search screens - to build
     ]
   },
   {
@@ -7970,7 +8270,7 @@ const SECTIONS = [
   {
     group: "Desktop", id: "Search",
     components: [
-      // Desktop search screens — to build
+      // Desktop search screens - to build
     ]
   },
   {
@@ -7983,7 +8283,7 @@ const SECTIONS = [
     group: "Desktop", id: "Issues",
     components: [
       { id:"DesktopActiveIssuesScreen",    label:"Desktop Active Issues",    desc:"1280×1165 · top nav (Issues active) · title row + 3× Desktop Issue Cards 996×275" },
-      { id:"DesktopIssueDetailScreen", label:"Desktop Issue — Detail", desc:"1280 · article detail · hero 996×300 + engagement + desc + 3 tabbed panels (Consensus/Contention/Expert) · click to swap with 180ms crossfade" },
+      { id:"DesktopIssueDetailScreen", label:"Desktop Issue - Detail", desc:"1280 · article detail · hero 996×300 + engagement + desc + 3 tabbed panels (Consensus/Contention/Expert) · click to swap with 180ms crossfade" },
     ]
   },
   {
@@ -8020,6 +8320,11 @@ function ComponentPreview({ id }) {
     case "BeaconBranding": return (
       <div className="canvas-wrap" style={{width:996,padding:0,background:"transparent"}}>
         <BeaconBranding/>
+      </div>
+    );
+    case "ButtonsAndLinks": return (
+      <div className="canvas-wrap" style={{width:996,padding:0,background:"transparent"}}>
+        <ButtonsAndLinks/>
       </div>
     );
     case "SectionTitle": return (
@@ -8061,11 +8366,11 @@ function ComponentPreview({ id }) {
     case "ZipCodeCTA": return (
       <div style={{display:"flex",flexDirection:"column",gap:16}}>
         <div>
-          <p className="variant-label">Default — no zip entered</p>
+          <p className="variant-label">Default - no zip entered</p>
           <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><ZipCodeCTA active={false}/></div>
         </div>
         <div>
-          <p className="variant-label">Active — zip entered</p>
+          <p className="variant-label">Active - zip entered</p>
           <div className="canvas-wrap" style={{padding:0,background:"transparent"}}><ZipCodeCTA active={true}/></div>
         </div>
       </div>
@@ -8073,13 +8378,13 @@ function ComponentPreview({ id }) {
     case "IssueCard": return (
       <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
         <div>
-          <p className="variant-label">Hero — overlay text + description</p>
+          <p className="variant-label">Hero - overlay text + description</p>
           <div className="canvas-wrap">
             <PostArticle variant="mobile" title="US and Israel Attack Iran for 10th Day" category="FOREIGN POLICY" timeAgo="1h ago" description="The ongoing war has involved strikes on Iranian sites and retaliatory actions, with reports of casualties among U.S. service members." imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
           </div>
         </div>
         <div>
-          <p className="variant-label">Slim — carousel card (image top + engagement)</p>
+          <p className="variant-label">Slim - carousel card (image top + engagement)</p>
           <div className="canvas-wrap" style={{padding:0,background:"transparent"}}>
             <PostHomeSlim title="DOJ says it erroneously relied on ICE memo to justify immigration courthouse arrests" category="DOMESTIC POLICY" date="Mar 11, 2026" imgUrl="https://images.pexels.com/photos/1105766/pexels-photo-1105766.jpeg?auto=compress&cs=tinysrgb&w=800"/>
           </div>
@@ -8131,13 +8436,13 @@ function ComponentPreview({ id }) {
     case "OfficialCard": return (
       <div style={{display:"flex",flexWrap:"wrap",gap:24,alignItems:"flex-start"}}>
         <div>
-          <p className="variant-label">Tracked — with score</p>
+          <p className="variant-label">Tracked - with score</p>
           <div className="canvas-wrap">
             <OfficialCard name="Suzanne Bonamici" role="U.S. Representative" location="Oregon" party="D" status="tracked" score={91} bgColor="#036" imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200"/>
           </div>
         </div>
         <div>
-          <p className="variant-label">Pending — no score yet</p>
+          <p className="variant-label">Pending - no score yet</p>
           <div className="canvas-wrap">
             <OfficialCard name="Lauren Boebert" role="U.S. Representative" location="Colorado" party="R" status="pending" score={null} bgColor="#de0100" imgUrl="https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=200"/>
           </div>
@@ -8678,7 +8983,7 @@ function App() {
                     }}
                   >
                     <span>{s.id}</span>
-                    <span style={{fontSize:11,color:T.gray,fontWeight:500}}>{s.components.length || "—"}</span>
+                    <span style={{fontSize:11,color:T.gray,fontWeight:500}}>{s.components.length || "-"}</span>
                   </button>
                 );
               })}
@@ -8707,7 +9012,7 @@ function App() {
                 ))}
               </div>
             ) : (
-              <p style={{color:T.gray,fontSize:14,fontStyle:"italic"}}>Nothing here yet — placeholder section.</p>
+              <p style={{color:T.gray,fontSize:14,fontStyle:"italic"}}>Nothing here yet - placeholder section.</p>
             )}
           </>
         ) : (
