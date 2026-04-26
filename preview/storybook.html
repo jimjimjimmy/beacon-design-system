@@ -202,12 +202,15 @@ function IconNavIssues({active}){
     </svg>
   );
 }
-function IconNavPulse({active}){
-  const c = active ? "#141810" : "#999";
+function IconNavPulse({active, color}){
+  // `color` overrides BOTH strokes (used by Eng Pulses / Eng Btn variants which are
+  // monochrome). Otherwise: inactive = gray, active = slate frame + orange pulse line.
+  const frame = color || (active ? "#141810" : "#999");
+  const pulse = color || (active ? "#FF8800" : "#999");
   return (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-      <path d="M8.96973 22H14.9698C19.9698 22 21.9698 20 21.9698 15V9C21.9698 4 19.9698 2 14.9698 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z" stroke={c} strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M1.96973 12.7001L7.96973 12.6801C8.71973 12.6801 9.55973 13.2501 9.83973 13.9501L10.9798 16.8301C11.2398 17.4801 11.6498 17.4801 11.9098 16.8301L14.1998 11.0201C14.4198 10.4601 14.8298 10.4401 15.1098 10.9701L16.1498 12.9401C16.4598 13.5301 17.2598 14.0101 17.9198 14.0101H21.9798" stroke={active ? "#FF8800" : "#999"} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M8.96973 22H14.9698C19.9698 22 21.9698 20 21.9698 15V9C21.9698 4 19.9698 2 14.9698 2H8.96973C3.96973 2 1.96973 4 1.96973 9V15C1.96973 20 3.96973 22 8.96973 22Z" stroke={frame} strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M1.96973 12.7001L7.96973 12.6801C8.71973 12.6801 9.55973 13.2501 9.83973 13.9501L10.9798 16.8301C11.2398 17.4801 11.6498 17.4801 11.9098 16.8301L14.1998 11.0201C14.4198 10.4601 14.8298 10.4401 15.1098 10.9701L16.1498 12.9401C16.4598 13.5301 17.2598 14.0101 17.9198 14.0101H21.9798" stroke={pulse} strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -7830,15 +7833,76 @@ function ButtonsAndLinks() {
     );
   };
 
-  // 6. Share - small (24×24). All states render the same icon (no Disabled in Figma).
-  // Real Figma SVG (paper-plane) from preview/assets/buttons-icons/share-small.svg.
-  const ShareSmall = () => (
-    <div style={{width:24,height:24,display:"inline-flex",alignItems:"center",justifyContent:"center"}}>
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <path d="M18.0491 0.584064L1.80671 4.85955C0.396244 5.2342 0.109743 7.03035 1.26677 8.18737L5.76264 12.6832L11.8894 8.12125L7.32737 14.248L11.8232 18.7438C12.9803 19.9009 14.7764 19.6144 15.1511 18.2039L19.4265 1.96147C19.6469 1.13503 18.8866 0.374697 18.0602 0.595083L18.0491 0.584064Z" stroke="#141810" strokeLinejoin="round"/>
-      </svg>
-    </div>
+  // 6a. Eng Pulses - Vertical (Figma node 8344:179451). Replaces Share - small.
+  //     Frame: 42x45 outer, vertical stack icon-over-text, gap:2, px:4. IconNavPulse 24x24 + Pulses 11/15 SemiBold -0.25 #999.
+  //     Hover: rgba(204,204,204,0.2) bg + 5px radius. Active: same as Default per Figma.
+  const EngPulsesVertical = ({state}) => {
+    const showHoverBg = state === "Hover";
+    return (
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,height:45,padding:"0 4px",backgroundColor:showHoverBg?"rgba(204,204,204,0.2)":"transparent",borderRadius:showHoverBg?5:0,boxSizing:"border-box"}}>
+        <div style={{width:24,height:24}}><IconNavPulse color={T.slate}/></div>
+        <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:11,lineHeight:"15px",letterSpacing:-0.25,color:T.gray,whiteSpace:"nowrap"}}>Pulses</span>
+      </div>
+    );
+  };
+  // 6b. Eng Btn - Horizontal (Figma node 8344:181991). Replaces Share - small.
+  //     Frame: 70x28 outer, h:28 px:4 wraps inner row 62 wide with gap:4 icon+text.
+  //     Hover: rgba(204,204,204,0.2) bg + 5px radius. Active: same as Default per Figma.
+  const EngPulsesHorizontal = ({state}) => {
+    const showHoverBg = state === "Hover";
+    return (
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:28,padding:"0 4px",backgroundColor:showHoverBg?"rgba(204,204,204,0.2)":"transparent",borderRadius:showHoverBg?5:0,boxSizing:"border-box"}}>
+        <div style={{display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"center",gap:4,width:62}}>
+          <div style={{width:24,height:24}}><IconNavPulse color={T.slate}/></div>
+          <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:11,lineHeight:"15px",letterSpacing:-0.25,color:T.gray,whiteSpace:"nowrap"}}>Pulses</span>
+        </div>
+      </div>
+    );
+  };
+  // 6c. Eng React - Vertical (Figma node 8346:98613). Add Reaction with text.
+  //     Frame: 38x45 outer, vertical stack icon-over-text, gap:2, px:4. 26x26 cream circle
+  //     wraps an 18x18 smile-plus icon. Text: React 11/600 -0.25 #999.
+  //     Hover: outer rgba(204,204,204,0.2) bg + 5r; cream circle becomes TRANSPARENT
+  //     (bg + border) so the cream doesn't fight the gray hover highlight.
+  //     Active: same as Default per Figma.
+  const ReactionGlyph = () => (
+    <svg width="18" height="18" viewBox="0 0 18.1433 18.1429" fill="none" style={{display:"block"}}>
+      <path d="M12.7058 12.7057C11.7715 13.64 10.4858 14.2142 9.07154 14.2142C7.65726 14.2142 6.36297 13.64 5.43726 12.7057" stroke={T.slate} strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M10.5457 0.637143C10.0657 0.551429 9.57714 0.5 9.07143 0.5C4.34 0.5 0.5 4.34 0.5 9.07143C0.5 13.8029 4.34 17.6429 9.07143 17.6429C13.8029 17.6429 17.6429 13.8029 17.6429 9.07143C17.6429 8.56571 17.5914 8.07714 17.5057 7.59714" stroke={T.slate} strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M12.5005 3.07137H17.6433" stroke={T.slate} strokeMiterlimit="10" strokeLinecap="round"/>
+      <path d="M15.0718 5.64287V0.500015" stroke={T.slate} strokeMiterlimit="10" strokeLinecap="round"/>
+    </svg>
   );
+  const EngReactVertical = ({state}) => {
+    const showHoverBg = state === "Hover";
+    const circleBg = showHoverBg ? "transparent" : T.cream;
+    const circleBorder = showHoverBg ? "transparent" : T.cream;
+    return (
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,height:45,padding:"0 4px",backgroundColor:showHoverBg?"rgba(204,204,204,0.2)":"transparent",borderRadius:showHoverBg?5:0,boxSizing:"border-box"}}>
+        <div style={{width:26,height:26,borderRadius:48,backgroundColor:circleBg,border:`1px solid ${circleBorder}`,display:"flex",alignItems:"center",justifyContent:"center",boxSizing:"border-box"}}>
+          <ReactionGlyph/>
+        </div>
+        <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:11,lineHeight:"15px",letterSpacing:-0.25,color:T.gray,whiteSpace:"nowrap"}}>React</span>
+      </div>
+    );
+  };
+  // 6d. Eng Reaction - Horizontal (Figma node 8346:98543). Add Reaction with text, side-by-side.
+  //     Frame: 70x28 outer, inner row 62w gap:4. Same hover behavior as Vertical.
+  const EngReactHorizontal = ({state}) => {
+    const showHoverBg = state === "Hover";
+    const circleBg = showHoverBg ? "transparent" : T.cream;
+    const circleBorder = showHoverBg ? "transparent" : T.cream;
+    return (
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:28,padding:"0 4px",backgroundColor:showHoverBg?"rgba(204,204,204,0.2)":"transparent",borderRadius:showHoverBg?5:0,boxSizing:"border-box"}}>
+        <div style={{display:"flex",flexDirection:"row",alignItems:"center",justifyContent:"center",gap:4,width:62}}>
+          <div style={{width:26,height:26,borderRadius:48,backgroundColor:circleBg,border:`1px solid ${circleBorder}`,display:"flex",alignItems:"center",justifyContent:"center",boxSizing:"border-box"}}>
+            <ReactionGlyph/>
+          </div>
+          <span style={{fontFamily:"Inter,sans-serif",fontWeight:600,fontSize:11,lineHeight:"15px",letterSpacing:-0.25,color:T.gray,whiteSpace:"nowrap"}}>React</span>
+        </div>
+      </div>
+    );
+  };
 
   // 7. Button Close - 28×28, r32, p2, IconCloseLarge inside.
   //    Default bg rgba(20,24,16,0.5); Hover/Active slate; Disabled is invisible (opacity 0).
@@ -7874,7 +7938,7 @@ function ButtonsAndLinks() {
 
   // 9. Toggle - 51×31, gray gradient bg (off) / deepGreen (on), 27×27 white knob with shadow.
   const Toggle = ({on}) => (
-    <div style={{position:"relative",width:51,height:31,borderRadius:100,backgroundColor:on?T.deepGreen:"#7f7c76",overflow:"hidden"}}>
+    <div style={{position:"relative",width:51,height:31,borderRadius:100,backgroundColor:on?T.deepGreen:"#CCCCCC",overflow:"hidden"}}>
       <div style={{position:"absolute",top:2,left:on?22:2,width:27,height:27,borderRadius:100,backgroundColor:"white",boxShadow:"0px 3px 8px rgba(0,0,0,0.15), 0px 3px 1px rgba(0,0,0,0.06)"}}/>
     </div>
   );
@@ -7974,6 +8038,38 @@ function ButtonsAndLinks() {
     );
   };
 
+  // ── Interactive sample wrapper for the Example column.
+  //    Hover -> Hover state. Mouse-down -> Active state. Mouse-up while still hovered
+  //    returns to Hover. Mouse-leave returns to Default. Click does NOT navigate.
+  const InteractiveSample = ({render}) => {
+    const [hover, setHover] = useState(false);
+    const [pressed, setPressed] = useState(false);
+    const state = pressed ? "Active" : hover ? "Hover" : "Default";
+    return (
+      <div
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => { setHover(false); setPressed(false); }}
+        onMouseDown={(e) => { e.preventDefault(); setPressed(true); }}
+        onMouseUp={() => setPressed(false)}
+        style={{display:"inline-flex",cursor:"pointer",userSelect:"none"}}
+      >
+        {render(state)}
+      </div>
+    );
+  };
+  // For Toggle (no state prop, uses on/off). Click toggles.
+  const InteractiveToggleSample = () => {
+    const [on, setOn] = useState(false);
+    return (
+      <div
+        onClick={() => setOn(o => !o)}
+        style={{display:"inline-flex",cursor:"pointer",userSelect:"none"}}
+      >
+        <Toggle on={on}/>
+      </div>
+    );
+  };
+
   // ── Rows (Figma top-to-bottom) ──
   const states = ["Default","Hover","Active","Disabled"];
   const rows = [
@@ -7987,13 +8083,19 @@ function ButtonsAndLinks() {
       cells: states.map(s => <TabDefaultVariant state={s}/>) },
     { name:"Add Reaction", spec:"24×24 circle · Default cream, Hover/Active white · IconAddReaction (slate)",
       cells: [<AddReaction state="Default"/>,<AddReaction state="Hover"/>,<AddReaction state="Active"/>,dash] },
-    { name:"Share - small", spec:"24×24 · IconShareAction · same shape across states (no Disabled in Figma)",
-      cells: [<ShareSmall/>,<ShareSmall/>,<ShareSmall/>,dash] },
+    { name:"Eng Pulses (Vertical)", spec:"42x45 · vertical · IconNavPulse 24 + Pulses 11/600 -0.25 #999 · gap:2 · px:4 · Hover: rgba(204,204,204,0.2) bg + 5r · Active = Default · Figma 8344:179451",
+      cells: [<EngPulsesVertical state="Default"/>,<EngPulsesVertical state="Hover"/>,<EngPulsesVertical state="Active"/>,dash] },
+    { name:"Eng Btn (Horizontal)", spec:"70x28 · horizontal row 62w · IconNavPulse 24 + Pulses 11/600 -0.25 #999 · gap:4 · px:4 · Hover: rgba(204,204,204,0.2) bg + 5r · Active = Default · Figma 8344:181991",
+      cells: [<EngPulsesHorizontal state="Default"/>,<EngPulsesHorizontal state="Hover"/>,<EngPulsesHorizontal state="Active"/>,dash] },
+    { name:"Eng React (Vertical)", spec:"38x45 · vertical · 26x26 cream circle (transparent on Hover) + 18 smile-plus + React 11/600 -0.25 #999 · gap:2 · px:4 · Hover: rgba(204,204,204,0.2) bg + 5r · Active = Default · Figma 8346:98613",
+      cells: [<EngReactVertical state="Default"/>,<EngReactVertical state="Hover"/>,<EngReactVertical state="Active"/>,dash] },
+    { name:"Eng React (Horizontal)", spec:"70x28 · horizontal row 62w · 26x26 cream circle (transparent on Hover) + 18 smile-plus + React 11/600 -0.25 #999 · gap:4 · px:4 · Hover: rgba(204,204,204,0.2) bg + 5r · Active = Default · Figma 8346:98543",
+      cells: [<EngReactHorizontal state="Default"/>,<EngReactHorizontal state="Hover"/>,<EngReactHorizontal state="Active"/>,dash] },
     { name:"Button Close", spec:"28×28 outer · r32 · p2 · Default bg rgba(20,24,16,.5), Hover/Active slate · Disabled = invisible",
       cells: states.map(s => <BtnClose state={s}/>) },
     { name:"Icon Button", spec:"24×24 · Tune glyph · Default gray, Hover/Active slate (no Disabled)",
       cells: [<IconBtnTune state="Default"/>,<IconBtnTune state="Hover"/>,<IconBtnTune state="Active"/>,dash] },
-    { name:"Toggle", spec:"51×31 · 27×27 white knob · shadow · Default(Off) = #7f7c76 bg, Active(On) = deepGreen bg",
+    { name:"Toggle", spec:"51×31 · 27×27 white knob · shadow · Default(Off) = #CCCCCC bg, Active(On) = deepGreen bg",
       cells: [<Toggle on={false}/>,dash,<Toggle on={true}/>,dash] },
     { name:"Link - News Article", spec:"24×24 cream tile (+ overlay on Hover/Active) + IconLink · 13/600 slate label · underline on Hover/Active · Disabled invisible",
       cells: states.map(s => <LinkNews state={s}/>) },
@@ -8039,15 +8141,35 @@ function ButtonsAndLinks() {
     </div>
   );
 
+  // Fixed column widths. 240px Example + 280px label + 4*240 state columns = 1480px.
+  // Each state column is 240px so the widest button (Primary CTA: 160 minWidth + 24*2
+  // padding = 208, plus 16*2 cell padding = 240) never gets clipped. Outer wrapper has
+  // overflowX:auto so a narrow viewport gets a horizontal scrollbar.
+  const gridCols = "240px 280px repeat(4, 240px)";
+
+  // Derive an interactive Example for each row from its Default cell. Toggle is
+  // special-cased (no `state` prop, click toggles on/off). For everything else we
+  // strip the `state` prop and re-render via InteractiveSample.
+  const exampleFor = (row) => {
+    const el = row.cells[0];
+    if (!el || !el.type) return null;
+    if (el.type === Toggle) return <InteractiveToggleSample/>;
+    const Component = el.type;
+    const baseProps = Object.assign({}, el.props);
+    delete baseProps.state;
+    return <InteractiveSample render={(s) => <Component {...baseProps} state={s}/>}/>;
+  };
   return (
-    <div style={{width:"100%",fontFamily:"Inter,sans-serif"}}>
-      <div style={{border:`1px solid ${T.creamBorder}`,borderRadius:10,overflow:"hidden"}}>
-        <div style={{display:"grid",gridTemplateColumns:"280px repeat(4, 1fr)",backgroundColor:T.warmBg,borderBottom:`1px solid ${T.creamBorder}`}}>
+    <div style={{width:"100%",fontFamily:"Inter,sans-serif",overflowX:"auto"}}>
+      <div style={{border:`1px solid ${T.creamBorder}`,borderRadius:10,overflow:"hidden",minWidth:"min-content"}}>
+        <div style={{display:"grid",gridTemplateColumns:gridCols,backgroundColor:T.warmBg,borderBottom:`1px solid ${T.creamBorder}`}}>
+          {headerCell("Example")}
           {headerCell("Component")}
           {stateCols.map(headerCell)}
         </div>
         {rows.map((row,i) => (
-          <div key={row.name} style={{display:"grid",gridTemplateColumns:"280px repeat(4, 1fr)",borderTop:i===0?"none":`1px solid ${T.creamBorder}`}}>
+          <div key={row.name} style={{display:"grid",gridTemplateColumns:gridCols,borderTop:i===0?"none":`1px solid ${T.creamBorder}`}}>
+            {stateCell(exampleFor(row), false, "example")}
             {labelCell(row)}
             {row.cells.map((c,j) => stateCell(c, j===row.cells.length-1, j))}
           </div>
