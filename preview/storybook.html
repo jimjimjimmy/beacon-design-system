@@ -8141,11 +8141,13 @@ function ButtonsAndLinks() {
     </div>
   );
 
-  // Fixed column widths. 240px Example + 280px label + 4*240 state columns = 1480px.
-  // Each state column is 240px so the widest button (Primary CTA: 160 minWidth + 24*2
-  // padding = 208, plus 16*2 cell padding = 240) never gets clipped. Outer wrapper has
-  // overflowX:auto so a narrow viewport gets a horizontal scrollbar.
-  const gridCols = "240px 280px repeat(4, 240px)";
+  // 240px Example + 280px Component label + 4 state columns. State columns use
+  // minmax(240px, 1fr) so they hold their minimum (240 = Primary CTA needs to not clip)
+  // when the viewport is narrow, but EXPAND to fill the available canvas width when
+  // there's room. This makes the table stretch to the right edge of its container.
+  // Outer wrapper has overflowX:auto so narrow viewports still scroll horizontally
+  // instead of clipping.
+  const gridCols = "240px 280px repeat(4, minmax(240px, 1fr))";
 
   // Derive an interactive Example for each row from its Default cell. Toggle is
   // special-cased (no `state` prop, click toggles on/off). For everything else we
@@ -8445,7 +8447,7 @@ function ComponentPreview({ id }) {
       </div>
     );
     case "ButtonsAndLinks": return (
-      <div className="canvas-wrap" style={{width:996,padding:0,background:"transparent"}}>
+      <div className="canvas-wrap" style={{width:"100%",padding:0,background:"transparent",display:"flex",boxSizing:"border-box"}}>
         <ButtonsAndLinks/>
       </div>
     );
